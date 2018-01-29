@@ -107,3 +107,10 @@ TEST(Saturating_times) {
     CHECK_EQUAL(S(INT_MIN), S(INT_MAX / -5) * 6);
     CHECK_EQUAL(S(INT_MAX), S(INT_MAX / -5) * -6);
 }
+
+TEST(Checked_left_shift) {
+    CHECK_EQUAL(C(1), C(1) << 0);
+    CHECK_EQUAL(C(2), C(1) << 1);
+    CHECK_EQUAL(C(4), C(1) << 2);
+    CHECK_THROW(C(INT_MAX) << 1, std::overflow_error);
+}

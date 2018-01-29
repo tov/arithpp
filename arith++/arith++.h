@@ -140,6 +140,14 @@ public:
         if (value_ == min_() && other.value_ == -1)
             return P::too_big("Checked::operator/");
 
+        if (other.value_ == 0) {
+            // In saturating mode, 0 / 0 is T_MAX.
+            if (value_ >= 0)
+                return P::too_big("Checked::operator/");
+            else
+                return P::too_small("Checked::operator/");
+        }
+
         return value_ / other.value_;
     }
 
@@ -149,6 +157,47 @@ public:
         return value_ % other.value_;
     }
 
+    Checked operator&(Checked other) const
+    {
+        return value_ & other.value_;
+    }
+
+    Checked operator|(Checked other) const
+    {
+        return value_ | other.value_;
+    }
+
+    Checked operator^(Checked other) const
+    {
+        return value_ ^ other.value_;
+    }
+
+    Checked operator~() const
+    {
+        return ~value_;
+    }
+
+    Checked operator<<(u_int8_t other) const
+    {
+        T mask = max_() - (max_() >> 1);
+        T result = value_;
+
+        // This is very inefficient.
+        while (other > 0) {
+            if (result & mask)
+                return P::too_big("Checked::operator<<");
+
+            result <<= 1;
+            --other;
+        }
+
+        return result;
+    }
+
+    Checked operator>>(u_int8_t other) const
+    {
+        return value_ >> other;
+    }
 };
 
 template <class T, class P>
