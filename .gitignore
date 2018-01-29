@@ -5,4 +5,4 @@ cmake-build*
 
 # CLion configuration
 .idea/workspace.xml
-./idea/
+.idea/
