@@ -234,16 +234,12 @@ public:
 
     unsigned_t abs() const
     {
-        if (std::is_signed<T>::value) {
-            if (value_ == min_()) {
-                return unsigned_t(std::numeric_limits<T>::max()) + 1;
-            } else if (value_ < 0) {
-                return unsigned_t(-value_);
-            } else {
-                return unsigned_t(value_);
-            }
+        if (value_ == min_()) {
+            return unsigned_t(std::numeric_limits<T>::max()) + 1;
+        } else if (value_ < 0) {
+            return unsigned_t(-value_);
         } else {
-            return value_;
+            return unsigned_t(value_);
         }
     }
 
