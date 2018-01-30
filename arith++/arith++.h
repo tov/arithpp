@@ -79,6 +79,7 @@ struct Convert;
 //    return static_cast<To>(from);
 //}
 
+// Checked is currently specialized based on signedness.
 template <class T, class P = Throwing_policy<T>, class Enable = void>
 class Checked;
 
@@ -309,6 +310,30 @@ public:
     {
         return get() >= other.get();
     }
+
+    Checked& operator++()
+    {
+        return *this += 1;
+    }
+
+    Checked& operator--()
+    {
+        return *this -= 1;
+    }
+
+    Checked& operator++(int)
+    {
+        Checked old = *this;
+        ++*this;
+        return old;
+    }
+
+    Checked& operator--(int)
+    {
+        Checked old = *this;
+        --*this;
+        return old;
+    }
 };
 
 template <class T, class P>
@@ -495,6 +520,30 @@ public:
     {
         return get() >= other.get();
     }
+
+    Checked& operator++()
+    {
+        return *this += 1;
+    }
+
+    Checked& operator--()
+    {
+        return *this -= 1;
+    }
+
+    Checked& operator++(int)
+    {
+        Checked old = *this;
+        ++*this;
+        return old;
+    }
+
+    Checked& operator--(int)
+    {
+        Checked old = *this;
+        --*this;
+        return old;
+    }
 };
 
 template <class T, class P>
@@ -680,6 +729,30 @@ public:
     bool operator>=(Wrapping other) const
     {
         return get() >= other.get();
+    }
+
+    Wrapping& operator++()
+    {
+        return *this += 1;
+    }
+
+    Wrapping& operator--()
+    {
+        return *this -= 1;
+    }
+
+    Wrapping& operator++(int)
+    {
+        Wrapping old = *this;
+        ++*this;
+        return old;
+    }
+
+    Wrapping& operator--(int)
+    {
+        Wrapping old = *this;
+        --*this;
+        return old;
     }
 };
 
