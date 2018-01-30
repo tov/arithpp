@@ -6,6 +6,21 @@
 
 namespace arithpp {
 
+struct overflow_too_large : std::overflow_error
+{
+    using overflow_error::overflow_error;
+};
+
+struct overflow_too_small : std::overflow_error
+{
+    using overflow_error::overflow_error;
+};
+
+struct overflow_div_zero : std::overflow_error
+{
+    using overflow_error::overflow_error;
+};
+
 template <class T>
 struct Saturating_policy
 {
@@ -18,6 +33,11 @@ struct Saturating_policy
     {
         return std::numeric_limits<T>::min();
     }
+
+    static T div_zero(const char* who)
+    {
+        throw overflow_div_zero(who);
+    }
 };
 
 template <class T>
@@ -25,12 +45,17 @@ struct Throwing_policy
 {
     static T too_large(const char* who)
     {
-        throw std::overflow_error(who);
+        throw overflow_too_large(who);
     }
 
     static T too_small(const char* who)
     {
-        throw std::overflow_error(who);
+        throw overflow_too_small(who);
+    }
+
+    static T div_zero(const char* who)
+    {
+        throw overflow_div_zero(who);
     }
 };
 
@@ -271,11 +296,7 @@ public:
             return policy_t::too_large("Checked::operator/");
 
         if (other.value_ == 0) {
-            // In saturating mode, 0 / 0 is T_MAX.
-            if (value_ >= 0)
-                return policy_t::too_large("Checked::operator/");
-            else
-                return policy_t::too_small("Checked::operator/");
+            return policy_t::div_zero("Checked::operator/");
         }
 
         return value_ / other.value_;
@@ -284,6 +305,10 @@ public:
     // Should this do some kind of checking?
     Checked operator%(Checked other) const
     {
+        if (other.value_ == 0) {
+            return policy_t::div_zero("Checked::operator%");
+        }
+
         return value_ % other.value_;
     }
 
@@ -511,11 +536,17 @@ public:
 
     Checked operator/(Checked other) const
     {
+        if (other.value_ == 0)
+            return policy_t::div_zero("Checked::operator/");
+
         return value_ / other.value_;
     }
 
     Checked operator%(Checked other) const
     {
+        if (other.value_ == 0)
+            return policy_t::div_zero("Checked::operator%");
+
         return value_ % other.value_;
     }
 
@@ -741,11 +772,17 @@ public:
 
     Wrapping operator/(Wrapping other) const
     {
+        if (other.value_ == 0)
+            throw overflow_div_zero("Wrapping::operator/");
+
         return Wrapping(value_ / other.value_);
     }
 
     Wrapping operator%(Wrapping other) const
     {
+        if (other.value_ == 0)
+            throw overflow_div_zero("Wrapping::operator%");
+
         return Wrapping(value_ % other.value_);
     }
 
