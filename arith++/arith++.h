@@ -551,8 +551,9 @@ public:
 #else
         if (value_ > max_() - other.value_)
             return policy_t::too_large("Checked::operator+(Checked)");
-#endif
+
         return value_ + other.value_;
+#endif
     }
 
     Checked operator-(Checked other) const
