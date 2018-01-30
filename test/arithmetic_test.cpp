@@ -5,17 +5,116 @@ using W = arithpp::Wrapping<int>;
 using C = arithpp::Checked<int>;
 using S = arithpp::Saturating<int>;
 
-//using arithpp::checked_convert;
-
 int main()
 {
     return UnitTest::RunAllTests();
 }
 
-TEST(checked_convert) {
-//    CHECK_EQUAL(5, checked_convert<unsigned int>(5));
-//    CHECK_EQUAL(INT_MAX, checked_convert<unsigned int>(INT_MAX));
-//    CHECK_THROW(checked_convert<unsigned int>(-1), std::overflow_error);
+TEST(convert_exn)
+{
+    using arithpp::convert_exn;;
+
+    short five = 5;
+    CHECK_EQUAL(5, convert_exn<char>(five));
+    CHECK_EQUAL(5, convert_exn<signed char>(five));
+    CHECK_EQUAL(5, convert_exn<unsigned char>(five));
+    CHECK_EQUAL(5, convert_exn<short>(five));
+    CHECK_EQUAL(5, convert_exn<unsigned short>(five));
+    CHECK_EQUAL(5, convert_exn<int>(five));
+    CHECK_EQUAL(5, convert_exn<unsigned int>(five));
+    CHECK_EQUAL(5, convert_exn<long>(five));
+    CHECK_EQUAL(5, convert_exn<unsigned long>(five));
+
+    unsigned short ufive = 5;
+    CHECK_EQUAL(5, convert_exn<char>(ufive));
+    CHECK_EQUAL(5, convert_exn<signed char>(ufive));
+    CHECK_EQUAL(5, convert_exn<unsigned char>(ufive));
+    CHECK_EQUAL(5, convert_exn<short>(ufive));
+    CHECK_EQUAL(5, convert_exn<unsigned short>(ufive));
+    CHECK_EQUAL(5, convert_exn<int>(ufive));
+    CHECK_EQUAL(5, convert_exn<unsigned int>(ufive));
+    CHECK_EQUAL(5, convert_exn<long>(ufive));
+    CHECK_EQUAL(5, convert_exn<unsigned long>(ufive));
+
+    short nfive = -5;
+    CHECK_EQUAL(-5, convert_exn<char>(nfive));
+    CHECK_EQUAL(-5, convert_exn<signed char>(nfive));
+    CHECK_THROW(convert_exn<unsigned char>(nfive), std::overflow_error);
+    CHECK_EQUAL(-5, convert_exn<short>(nfive));
+    CHECK_THROW(convert_exn<unsigned short>(nfive),
+                std::overflow_error);
+    CHECK_EQUAL(-5, convert_exn<int>(nfive));
+    CHECK_THROW(convert_exn<unsigned int>(nfive), std::overflow_error);
+    CHECK_EQUAL(-5, convert_exn<long>(nfive));
+    CHECK_THROW(convert_exn<unsigned long>(nfive), std::overflow_error);
+
+    CHECK_EQUAL(SCHAR_MAX, convert_exn<signed char>(short(SCHAR_MAX)));
+    CHECK_THROW(convert_exn<signed char>(short(SCHAR_MAX) + 1),
+                std::overflow_error);
+    CHECK_EQUAL(SCHAR_MIN, convert_exn<signed char>(short(SCHAR_MIN)));
+    CHECK_THROW(convert_exn<signed char>(short(SCHAR_MIN) - 1),
+                std::overflow_error);
+}
+
+TEST(convert_exn_2) {
+    using arithpp::convert_exn;;
+
+    // signed to unsigned, narrower, negative
+    CHECK_THROW(convert_exn<unsigned char>(short(-1)), std::overflow_error);
+    // signed to unsigned, narrower, non-negative
+    CHECK_EQUAL(1, convert_exn<unsigned char>(short(1)));
+    CHECK_EQUAL(UCHAR_MAX, convert_exn<unsigned char>(short(UCHAR_MAX)));
+    // signed to unsigned, narrower, too big
+    CHECK_THROW(convert_exn<unsigned char>(short(UCHAR_MAX) + 1),
+                std::overflow_error);
+    // signed to unsigned, same width, negative
+    CHECK_THROW(convert_exn<unsigned short>(short(-1)), std::overflow_error);
+    // signed to unsigned, same width, non-negative
+    CHECK_EQUAL(1, convert_exn<unsigned short>(short(1)));
+    // signed to unsigned, wider, negative
+    CHECK_THROW(convert_exn<unsigned long>(short(-1)), std::overflow_error);
+    // signed to unsigned, wider, non-negative
+    CHECK_EQUAL(1, convert_exn<unsigned long>(short(1)));
+
+    // signed to signed, narrower, fits
+    CHECK_EQUAL(1, convert_exn<signed char>(short(1)));
+    CHECK_EQUAL(SCHAR_MIN, convert_exn<signed char>(short(SCHAR_MIN)));
+    CHECK_EQUAL(SCHAR_MAX, convert_exn<signed char>(short(SCHAR_MAX)));
+    // signed to signed, narrower, too small
+    CHECK_THROW(convert_exn<signed char>(short(SCHAR_MIN) - 1), std::overflow_error);
+    // signed to signed, narrower, too big
+    CHECK_THROW(convert_exn<signed char>(short(SCHAR_MAX) + 1), std::overflow_error);
+    // signed to signed, same width
+    CHECK_EQUAL(1, convert_exn<short>(short(1)));
+    // signed to signed, wider
+    CHECK_EQUAL(1, convert_exn<long>(short(1)));
+
+    // unsigned to unsigned, narrower, fits
+    CHECK_EQUAL(1, convert_exn<unsigned char>((unsigned short)1));
+    CHECK_EQUAL(UCHAR_MAX,
+                convert_exn<unsigned char>((unsigned short)UCHAR_MAX));
+    // unsigned to unsigned, narrower, too big
+    CHECK_THROW(convert_exn<unsigned char>((unsigned short)(UCHAR_MAX) + 1),
+                std::overflow_error);
+    // unsigned to unsigned, same width
+    CHECK_EQUAL(1, convert_exn<unsigned short>((unsigned short)1));
+    // unsigned to unsigned, wider
+    CHECK_EQUAL(1, convert_exn<unsigned long>((unsigned short)1));
+
+    // unsigned to signed, narrower, fits
+    CHECK_EQUAL(1, convert_exn<signed char>((unsigned short) 1));
+    // unsigned to signed, narrower, doesn't fit
+    CHECK_THROW(convert_exn<signed char>((unsigned short) SCHAR_MAX + 1),
+                std::overflow_error);
+    // unsigned to signed, same width, fits
+    CHECK_EQUAL(1, convert_exn<signed short>((unsigned short) 1));
+    // unsigned to signed, same width, doesn't fit
+    CHECK_THROW(convert_exn<signed short>(
+            static_cast<unsigned short>(
+                    std::numeric_limits<signed short>::max()) + 1),
+                std::overflow_error);
+    // unsigned to signed, wider
+    CHECK_EQUAL(1, convert_exn<signed long>((unsigned short) 1));
 }
 
 TEST(Wrapping) {
