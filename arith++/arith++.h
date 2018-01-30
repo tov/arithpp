@@ -765,7 +765,8 @@ std::ostream& operator<<(std::ostream& o, Checked<T, P> a)
 }
 
 template <class T, template <class> class P>
-std::istream& operator>>(std::istream& i, Checked<T, P>& a) {
+std::istream& operator>>(std::istream& i, Checked<T, P>& a)
+{
     T temp;
     i >> temp;
     a = Checked<T, P>(temp);
@@ -999,7 +1000,8 @@ std::ostream& operator<<(std::ostream& o, Wrapping<T> a)
 }
 
 template <class T>
-std::istream& operator>>(std::istream& i, Wrapping<T>& a) {
+std::istream& operator>>(std::istream& i, Wrapping<T>& a)
+{
     T temp;
     i >> temp;
     a = Wrapping<T>(temp);
