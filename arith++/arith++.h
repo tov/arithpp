@@ -88,7 +88,7 @@ struct Convert<To, From, P,
 template <class To, class From, template <class> class P>
 struct Convert<To, From, P,
         std::enable_if_t<std::is_signed<From>::value ==
-                         std::is_signed<To>::value &&
+
                          sizeof(To) < sizeof(From)>>
 {
     static To convert(From from)
@@ -147,7 +147,7 @@ To convert_sat(From from)
 template <class To, class From>
 To convert_widen(From from)
 {
-    return Convert<To, From, Saturating_policy>::widen(from);
+    return Convert<To, From, Throwing_policy>::widen(from);
 };
 
 // Checked is currently specialized based on signedness.
