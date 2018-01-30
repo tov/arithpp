@@ -251,10 +251,10 @@ public:
     {
         if (other.value_ >= 0) {
             if (value_ > max_() - other.value_)
-                return policy_t::too_large("Checked::operator+");
+                return policy_t::too_large("Checked::operator+(Checked)");
         } else {
             if (value_ < min_() - other.value_)
-                return policy_t::too_small("Checked::operator+");
+                return policy_t::too_small("Checked::operator+(Checked)");
         }
 
         return value_ + other.value_;
@@ -264,10 +264,10 @@ public:
     {
         if (value_ >= 0) {
             if (other.value_ < value_ - max_())
-                return policy_t::too_large("Checked::operator-");
+                return policy_t::too_large("Checked::operator-(Checked)");
         } else {
             if (other.value_ > value_ - min_())
-                return policy_t::too_small("Checked::operator-");
+                return policy_t::too_small("Checked::operator-(Checked)");
         }
 
         return value_ - other.value_;
@@ -281,9 +281,9 @@ public:
             if (abs() > unsigned_t(max_()) / other.abs()) {
                 if ((value_ > 0 && other.value_ > 0) ||
                         (value_ < 0 && other.value_ < 0))
-                    return policy_t::too_large("Checked::operator*");
+                    return policy_t::too_large("Checked::operator*(Checked)");
                 else
-                    return policy_t::too_small("Checked::operator*");
+                    return policy_t::too_small("Checked::operator*(Checked)");
             }
         }
 
@@ -293,10 +293,10 @@ public:
     Checked operator/(Checked other) const
     {
         if (value_ == min_() && other.value_ == -1)
-            return policy_t::too_large("Checked::operator/");
+            return policy_t::too_large("Checked::operator/(Checked)");
 
         if (other.value_ == 0) {
-            return policy_t::div_zero("Checked::operator/");
+            return policy_t::div_zero("Checked::operator/(Checked)");
         }
 
         return value_ / other.value_;
@@ -306,7 +306,7 @@ public:
     Checked operator%(Checked other) const
     {
         if (other.value_ == 0) {
-            return policy_t::div_zero("Checked::operator%");
+            return policy_t::div_zero("Checked::operator%(Checked)");
         }
 
         return value_ % other.value_;
@@ -335,7 +335,7 @@ public:
         // This is very inefficient.
         while (other > 0) {
             if (result & mask)
-                return policy_t::too_large("Checked::operator<<");
+                return policy_t::too_large("Checked::operator<<(u_int8_t)");
 
             result <<= 1;
             --other;
@@ -509,7 +509,7 @@ public:
     Checked operator+(Checked other) const
     {
         if (value_ > max_() - other.value_)
-            return policy_t::too_large("Checked::operator+");
+            return policy_t::too_large("Checked::operator+(Checked)");
 
         return value_ + other.value_;
     }
@@ -517,7 +517,7 @@ public:
     Checked operator-(Checked other) const
     {
         if (other.value_ > value_)
-            return policy_t::too_small("Checked::operator-");
+            return policy_t::too_small("Checked::operator-(Checked)");
 
         return value_ - other.value_;
     }
@@ -528,7 +528,7 @@ public:
     {
         if (other.value_ != 0) {
             if (value_ > max_() / other.value_)
-                return policy_t::too_large("Checked::operator*");
+                return policy_t::too_large("Checked::operator*(Checked)");
         }
 
         return value_ * other.value_;
@@ -537,7 +537,7 @@ public:
     Checked operator/(Checked other) const
     {
         if (other.value_ == 0)
-            return policy_t::div_zero("Checked::operator/");
+            return policy_t::div_zero("Checked::operator/(Checked)");
 
         return value_ / other.value_;
     }
@@ -545,7 +545,7 @@ public:
     Checked operator%(Checked other) const
     {
         if (other.value_ == 0)
-            return policy_t::div_zero("Checked::operator%");
+            return policy_t::div_zero("Checked::operator%(Checked)");
 
         return value_ % other.value_;
     }
@@ -573,7 +573,7 @@ public:
         // This is very inefficient.
         while (other > 0) {
             if (result & mask)
-                return policy_t::too_large("Checked::operator<<");
+                return policy_t::too_large("Checked::operator<<(u_int8_t)");
 
             result <<= 1;
             --other;
@@ -773,7 +773,7 @@ public:
     Wrapping operator/(Wrapping other) const
     {
         if (other.value_ == 0)
-            throw overflow_div_zero("Wrapping::operator/");
+            throw overflow_div_zero("Wrapping::operator/(Wrapping)");
 
         return Wrapping(value_ / other.value_);
     }
@@ -781,7 +781,7 @@ public:
     Wrapping operator%(Wrapping other) const
     {
         if (other.value_ == 0)
-            throw overflow_div_zero("Wrapping::operator%");
+            throw overflow_div_zero("Wrapping::operator%(Wrapping)");
 
         return Wrapping(value_ % other.value_);
     }
