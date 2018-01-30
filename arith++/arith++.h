@@ -249,19 +249,42 @@ public:
 
     Checked operator+(Checked other) const
     {
-        if (other.value_ >= 0) {
-            if (value_ > max_() - other.value_)
+#if __has_builtin(__builtin_add_overflow)
+        Checked result;
+        if (__builtin_add_overflow(value_, other.value_, &result.value_)) {
+            if (value_ >= 0)
+                return policy_t::too_large("Checked::operator+(Checked)");
+            else
+                return policy_t::too_small("Checked::operator+(Checked)");
+        } else {
+            return result;
+        }
+#else
+        if (value_ >= 0) {
+            if (other.value_ > max_() - value_)
                 return policy_t::too_large("Checked::operator+(Checked)");
         } else {
-            if (value_ < min_() - other.value_)
+            if (other.value_ < min_() - value_)
                 return policy_t::too_small("Checked::operator+(Checked)");
         }
 
         return value_ + other.value_;
+#endif
     }
 
     Checked operator-(Checked other) const
     {
+#if __has_builtin(__builtin_sub_overflow)
+        Checked result;
+        if (__builtin_sub_overflow(value_, other.value_, &result.value_)) {
+            if (value_ >= 0)
+                return policy_t::too_large("Checked::operator-(Checked)");
+            else
+                return policy_t::too_small("Checked::operator-(Checked)");
+        } else {
+            return result;
+        }
+#else
         if (value_ >= 0) {
             if (other.value_ < value_ - max_())
                 return policy_t::too_large("Checked::operator-(Checked)");
@@ -271,23 +294,37 @@ public:
         }
 
         return value_ - other.value_;
+#endif
     }
 
-    // This is slow right now, because it does a division. There are better
-    // ways of doing it, depending on the size of T.
     Checked operator*(Checked other) const
     {
+        auto overflow = [=]() {
+            if ((value_ > 0 && other.value_ > 0) ||
+                (value_ < 0 && other.value_ < 0))
+                return policy_t::too_large("Checked::operator*(Checked)");
+            else
+                return policy_t::too_small("Checked::operator*(Checked)");
+        };
+
+#if __has_builtin(__builtin_mul_overflow)
+        Checked result;
+        if (__builtin_mul_overflow(value_, other.value_, &result.value_)) {
+            return overflow();
+        } else {
+            return result;
+        }
+#else
+        // This is slow right now, because it does a division. There are better
+        // ways of doing it, depending on the size of T.
         if (other.value_ != 0) {
             if (abs() > unsigned_t(max_()) / other.abs()) {
-                if ((value_ > 0 && other.value_ > 0) ||
-                        (value_ < 0 && other.value_ < 0))
-                    return policy_t::too_large("Checked::operator*(Checked)");
-                else
-                    return policy_t::too_small("Checked::operator*(Checked)");
+                return overflow();
             }
         }
 
         return value_ * other.value_;
+#endif
     }
 
     Checked operator/(Checked other) const
@@ -508,9 +545,17 @@ public:
 
     Checked operator+(Checked other) const
     {
+#if __has_builtin(__builtin_add_overflow)
+        Checked result;
+        if (__builtin_add_overflow(value_, other.value_, &result.value_)) {
+            return policy_t::too_large("Checked::operator+(Checked)");
+        } else {
+            return result;
+        }
+#else
         if (value_ > max_() - other.value_)
             return policy_t::too_large("Checked::operator+(Checked)");
-
+#endif
         return value_ + other.value_;
     }
 
@@ -522,16 +567,25 @@ public:
         return value_ - other.value_;
     }
 
-    // This is slow right now, because it does a division. There are better
-    // ways of doing it, depending on the size of T.
     Checked operator*(Checked other) const
     {
+#if __has_builtin(__builtin_mul_overflow)
+        Checked result;
+        if (__builtin_mul_overflow(value_, other.value_, &result.value_)) {
+            return policy_t::too_large("Checked::operator*(Checked)");
+        } else {
+            return result;
+        }
+#else
+        // This is slow right now, because it does a division. There are better
+        // ways of doing it, depending on the size of T.
         if (other.value_ != 0) {
             if (value_ > max_() / other.value_)
                 return policy_t::too_large("Checked::operator*(Checked)");
         }
 
         return value_ * other.value_;
+#endif
     }
 
     Checked operator/(Checked other) const
