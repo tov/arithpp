@@ -1,9 +1,14 @@
 #include "arith++/arith++.h"
 #include "UnitTest++/UnitTest++.h"
 
-using W = arithpp::Wrapping<int>;
-using C = arithpp::Checked<int>;
-using S = arithpp::Saturating<int>;
+using arithpp::Wrapping;
+using W = Wrapping<int>;
+
+using arithpp::Checked;
+using C = Checked<int>;
+
+using arithpp::Saturating;
+using S = Saturating<int>;
 
 int main()
 {
@@ -133,6 +138,32 @@ TEST(Widen) {
 TEST(Wrapping) {
     CHECK_EQUAL(5, W(5).get());
     CHECK_EQUAL(W(INT_MIN + 4), W(INT_MAX) + W(5));
+}
+
+TEST(Widening_conversions) {
+    Wrapping<short> sfive_w = 5;
+    Wrapping<long> lfive_w = sfive_w;
+
+    Checked<short> sfive_c = 5;
+    Checked<long> lfive_c = sfive_c;
+}
+
+TEST(Convert_method) {
+    using CS = Checked<short>;
+    using CL = Checked<long>;
+    CHECK_EQUAL(CL(5), CS(5).convert<long>());
+    CHECK_EQUAL(CL(std::numeric_limits<short>::min()),
+                CS(std::numeric_limits<short>::min()).convert<long>());
+    CHECK_EQUAL(CL(std::numeric_limits<short>::max()),
+                CS(std::numeric_limits<short>::max()).convert<long>());
+    CHECK_EQUAL(CS(std::numeric_limits<short>::max()),
+                CL(std::numeric_limits<short>::max()).convert<short>());
+    CHECK_EQUAL(CS(std::numeric_limits<short>::min()),
+                CL(std::numeric_limits<short>::min()).convert<short>());
+    CHECK_THROW((CL(std::numeric_limits<short>::max()) + 1).convert<short>(),
+                std::overflow_error);
+    CHECK_THROW((CL(std::numeric_limits<short>::min()) - 1).convert<short>(),
+                std::overflow_error);
 }
 
 TEST(Checked_construction) {

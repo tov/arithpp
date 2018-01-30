@@ -20,25 +20,27 @@ struct Saturating_policy
     }
 };
 
-template <class T, class E = std::overflow_error>
+template <class T>
 struct Throwing_policy
 {
     static T too_large(const char* who)
     {
-        throw E(who);
+        throw std::overflow_error(who);
     }
 
     static T too_small(const char* who)
     {
-        throw E(who);
+        throw std::overflow_error(who);
     }
 };
 
-template <class To, class From, class P = Throwing_policy<To>,
+template <class To,
+          class From,
+          template <class> class P = Throwing_policy,
           class Enable = void>
 struct Convert;
 
-template <class To, class From, class P>
+template <class To, class From, template <class> class P>
 struct Convert<To, From, P,
         std::enable_if_t<std::is_signed<From>::value &&
                          std::is_unsigned<To>::value &&
@@ -46,12 +48,12 @@ struct Convert<To, From, P,
 {
     static To convert(From from)
     {
-        if (from < 0) return P::too_small("Convert");
+        if (from < 0) return P<To>::too_small("Convert");
         return static_cast<To>(from);
     }
 };
 
-template <class To, class From, class P>
+template <class To, class From, template <class> class P>
 struct Convert<To, From, P,
         std::enable_if_t<std::is_signed<From>::value &&
                          std::is_unsigned<To>::value &&
@@ -59,14 +61,14 @@ struct Convert<To, From, P,
 {
     static To convert(From from)
     {
-        if (from < 0) return P::too_small("Convert");
+        if (from < 0) return P<To>::too_small("Convert");
         if (from > static_cast<From>(std::numeric_limits<To>::max()))
-            return P::too_large("Convert");
+            return P<To>::too_large("Convert");
         return static_cast<To>(from);
     }
 };
 
-template <class To, class From, class P>
+template <class To, class From, template <class> class P>
 struct Convert<To, From, P,
         std::enable_if_t<std::is_signed<From>::value ==
                          std::is_signed<To>::value &&
@@ -83,7 +85,7 @@ struct Convert<To, From, P,
     }
 };
 
-template <class To, class From, class P>
+template <class To, class From, template <class> class P>
 struct Convert<To, From, P,
         std::enable_if_t<std::is_signed<From>::value ==
                          std::is_signed<To>::value &&
@@ -92,14 +94,14 @@ struct Convert<To, From, P,
     static To convert(From from)
     {
         if (from < static_cast<From>(std::numeric_limits<To>::min()))
-            return P::too_small("Convert");
+            return P<To>::too_small("Convert");
         if (from > static_cast<From>(std::numeric_limits<To>::max()))
-            return P::too_large("Convert");
+            return P<To>::too_large("Convert");
         return static_cast<To>(from);
     }
 };
 
-template <class To, class From, class P>
+template <class To, class From, template <class> class P>
 struct Convert<To, From, P,
         std::enable_if_t<std::is_unsigned<From>::value &&
                          std::is_signed<To>::value &&
@@ -116,7 +118,7 @@ struct Convert<To, From, P,
     }
 };
 
-template <class To, class From, class P>
+template <class To, class From, template <class> class P>
 struct Convert<To, From, P,
         std::enable_if_t<std::is_unsigned<From>::value &&
                          std::is_signed<To>::value &&
@@ -125,7 +127,7 @@ struct Convert<To, From, P,
     static To convert(From from)
     {
         if (from > static_cast<From>(std::numeric_limits<To>::max()))
-            return P::too_large("Convert");
+            return P<To>::too_large("Convert");
         return static_cast<To>(from);
     }
 };
@@ -133,30 +135,33 @@ struct Convert<To, From, P,
 template <class To, class From>
 To convert_exn(From from)
 {
-    return Convert<To, From, Throwing_policy<To>>::convert(from);
+    return Convert<To, From, Throwing_policy>::convert(from);
 };
 
 template <class To, class From>
 To convert_sat(From from)
 {
-    return Convert<To, From, Saturating_policy<To>>::convert(from);
+    return Convert<To, From, Saturating_policy>::convert(from);
 };
 
 template <class To, class From>
 To convert_widen(From from)
 {
-    return Convert<To, From, Saturating_policy<To>>::widen(from);
+    return Convert<To, From, Saturating_policy>::widen(from);
 };
 
 // Checked is currently specialized based on signedness.
-template <class T, class P = Throwing_policy<T>, class Enable = void>
+template <class T,
+          template<class> class P = Throwing_policy,
+          class Enable = void>
 class Checked;
 
-template <class T, class P>
+template <class T, template<class> class P>
 class Checked<T, P, std::enable_if_t<std::is_signed<T>::value>>
 {
 private:
     using unsigned_t = std::make_unsigned_t<T>;
+    using policy_t   = P<T>;
 
     T value_;
 
@@ -170,20 +175,36 @@ private:
         return std::numeric_limits<T>::max();
     }
 
+    template <class U, template <class> class Q, class F>
+    friend class Checked;
+
 public:
-    Checked(T value = T())
+    Checked(T value = T()) : value_(value)
+    { }
+
+    template <class U>
+    Checked(U value) : value_(Convert<T, U, P>::convert(value))
+    { }
+
+    template <class U, template<class> class Q>
+    Checked(Checked<U, Q> other) : value_(Convert<T, U, P>::widen(other.value_))
+    { }
+
+    T get() const
     {
-        value_ = value;
+        return value_;
     }
 
-    T get() const {
-        return value_;
+    template <class U, template <class> class Q = P>
+    Checked<U, Q> convert() const
+    {
+        return Checked<U, Q>(Convert<U, T, Q>::convert(value_));
     }
 
     Checked operator-() const
     {
         if (std::is_signed<T>::value && value_ == min_())
-            return P::too_large("Checked::operator-()");
+            return policy_t::too_large("Checked::operator-()");
         else
             return -value_;
     }
@@ -207,10 +228,10 @@ public:
     {
         if (other.value_ >= 0) {
             if (value_ > max_() - other.value_)
-                return P::too_large("Checked::operator+");
+                return policy_t::too_large("Checked::operator+");
         } else {
             if (value_ < min_() - other.value_)
-                return P::too_small("Checked::operator+");
+                return policy_t::too_small("Checked::operator+");
         }
 
         return value_ + other.value_;
@@ -220,10 +241,10 @@ public:
     {
         if (value_ >= 0) {
             if (other.value_ < value_ - max_())
-                return P::too_large("Checked::operator-");
+                return policy_t::too_large("Checked::operator-");
         } else {
             if (other.value_ > value_ - min_())
-                return P::too_small("Checked::operator-");
+                return policy_t::too_small("Checked::operator-");
         }
 
         return value_ - other.value_;
@@ -237,9 +258,9 @@ public:
             if (abs() > unsigned_t(max_()) / other.abs()) {
                 if ((value_ > 0 && other.value_ > 0) ||
                         (value_ < 0 && other.value_ < 0))
-                    return P::too_large("Checked::operator*");
+                    return policy_t::too_large("Checked::operator*");
                 else
-                    return P::too_small("Checked::operator*");
+                    return policy_t::too_small("Checked::operator*");
             }
         }
 
@@ -249,14 +270,14 @@ public:
     Checked operator/(Checked other) const
     {
         if (value_ == min_() && other.value_ == -1)
-            return P::too_large("Checked::operator/");
+            return policy_t::too_large("Checked::operator/");
 
         if (other.value_ == 0) {
             // In saturating mode, 0 / 0 is T_MAX.
             if (value_ >= 0)
-                return P::too_large("Checked::operator/");
+                return policy_t::too_large("Checked::operator/");
             else
-                return P::too_small("Checked::operator/");
+                return policy_t::too_small("Checked::operator/");
         }
 
         return value_ / other.value_;
@@ -291,7 +312,7 @@ public:
         // This is very inefficient.
         while (other > 0) {
             if (result & mask)
-                return P::too_large("Checked::operator<<");
+                return policy_t::too_large("Checked::operator<<");
 
             result <<= 1;
             --other;
@@ -405,10 +426,12 @@ public:
     }
 };
 
-template <class T, class P>
+template <class T, template <class> class P>
 class Checked<T, P, std::enable_if_t<std::is_unsigned<T>::value>>
 {
 private:
+    using policy_t   = P<T>;
+
     T value_;
 
     static T zero_()
@@ -421,18 +444,38 @@ private:
         return std::numeric_limits<T>::max();
     }
 
+    template <class U, template <class> class Q, class F>
+    friend class Checked;
+
 public:
-    Checked(T value) : value_(value)
+    Checked(T value = T()) : value_(value)
     { }
 
-    T get() const { return value_ ; }
+    template <class U>
+    Checked(U value) : value_(Convert<T, U, P>::convert(value))
+    { }
+
+    template <class U, template <class> class Q>
+    Checked(Checked<U, Q> other) : value_(Convert<T, U, P>::widen(other.value_))
+    { }
+
+    T get() const
+    {
+        return value_;
+    }
+
+    template <class U, template <class> class Q = P>
+    Checked<U, Q> convert() const
+    {
+        return Checked<U, Q>(Convert<U, T, Q>::convert(value_));
+    }
 
     Checked operator-() const
     {
         if (value_ == zero_())
             return value_;
         else
-            return P::too_small("Checked::operator-()");
+            return policy_t::too_small("Checked::operator-()");
     }
 
     T abs() const
@@ -443,7 +486,7 @@ public:
     Checked operator+(Checked other) const
     {
         if (value_ > max_() - other.value_)
-            return P::too_large("Checked::operator+");
+            return policy_t::too_large("Checked::operator+");
 
         return value_ + other.value_;
     }
@@ -451,7 +494,7 @@ public:
     Checked operator-(Checked other) const
     {
         if (other.value_ > value_)
-            return P::too_small("Checked::operator-");
+            return policy_t::too_small("Checked::operator-");
 
         return value_ - other.value_;
     }
@@ -462,7 +505,7 @@ public:
     {
         if (other.value_ != 0) {
             if (value_ > max_() / other.value_)
-                return P::too_large("Checked::operator*");
+                return policy_t::too_large("Checked::operator*");
         }
 
         return value_ * other.value_;
@@ -501,7 +544,7 @@ public:
         // This is very inefficient.
         while (other > 0) {
             if (result & mask)
-                return P::too_large("Checked::operator<<");
+                return policy_t::too_large("Checked::operator<<");
 
             result <<= 1;
             --other;
@@ -615,13 +658,13 @@ public:
     }
 };
 
-template <class T, class P>
+template <class T, template <class> class P>
 std::ostream& operator<<(std::ostream& o, Checked<T, P> a)
 {
     return o << a.get();
 }
 
-template <class T, class P>
+template <class T, template <class> class P>
 std::istream& operator>>(std::istream& i, Checked<T, P>& a) {
     T temp;
     i >> temp;
@@ -630,7 +673,7 @@ std::istream& operator>>(std::istream& i, Checked<T, P>& a) {
 }
 
 template <class T>
-using Saturating = Checked<T, Saturating_policy<T>>;
+using Saturating = Checked<T, Saturating_policy>;
 
 template <class T>
 class Wrapping
@@ -639,14 +682,31 @@ private:
     using unsigned_t = std::make_unsigned_t<T>;
     unsigned_t value_;
 
-    explicit Wrapping(unsigned_t value) : value_(value)
-    { }
+    template <class U>
+    friend class Wrapping;
 
 public:
-    Wrapping(T value) : value_{unsigned_t(value)}
+    Wrapping(T value = T()) : value_{unsigned_t(value)}
     { }
 
-    T get() const { return T(value_); }
+    template <class U>
+    Wrapping(U value) : value_{unsigned_t(value)}
+    { }
+
+    template <class U>
+    Wrapping(Wrapping<U> other) : Wrapping(convert_widen<T>(other.value_))
+    { }
+
+    T get() const
+    {
+        return T(value_);
+    }
+
+    template <class U>
+    Wrapping<U> convert() const
+    {
+        return Wrapping<U>(static_cast<std::make_unsigned_t<U>>(value_));
+    }
 
     Wrapping operator-() const {
         if (get() == std::numeric_limits<T>::min())
@@ -668,52 +728,52 @@ public:
 
     Wrapping operator+(Wrapping other) const
     {
-        return value_ + other.value_;
+        return Wrapping(value_ + other.value_);
     }
 
     Wrapping operator-(Wrapping other) const
     {
-        return value_ - other.value_;
+        return Wrapping(value_ - other.value_);
     }
 
     Wrapping operator*(Wrapping other) const
     {
-        return value_ * other.value_;
+        return Wrapping(value_ * other.value_);
     }
 
     Wrapping operator/(Wrapping other) const
     {
-        return value_ / other.value_;
+        return Wrapping(value_ / other.value_);
     }
 
     Wrapping operator%(Wrapping other) const
     {
-        return value_ % other.value_;
+        return Wrapping(value_ % other.value_);
     }
 
     Wrapping operator&(Wrapping other) const
     {
-        return value_ & other.value_;
+        return Wrapping(value_ & other.value_);
     }
 
     Wrapping operator|(Wrapping other) const
     {
-        return value_ | other.value_;
+        return Wrapping(value_ | other.value_);
     }
 
     Wrapping operator^(Wrapping other) const
     {
-        return value_ ^ other.value_;
+        return Wrapping(value_ ^ other.value_);
     }
 
     Wrapping operator<<(u_int8_t other) const
     {
-        return value_ << other;
+        return Wrapping(value_ << other);
     }
 
     Wrapping operator>>(u_int8_t other) const
     {
-        return get() >> other;
+        return Wrapping(get() >> other);
     }
 
     Wrapping operator~() const
