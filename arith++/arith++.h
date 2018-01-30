@@ -387,43 +387,53 @@ public:
         return ~value_;
     }
 
-    Checked& operator+=(Checked other) {
+    Checked& operator+=(Checked other)
+    {
         return *this = *this + other;
     }
 
-    Checked& operator-=(Checked other) {
+    Checked& operator-=(Checked other)
+    {
         return *this = *this - other;
     }
 
-    Checked& operator*=(Checked other) {
+    Checked& operator*=(Checked other)
+    {
         return *this = *this * other;
     }
 
-    Checked& operator/=(Checked other) {
+    Checked& operator/=(Checked other)
+    {
         return *this = *this / other;
     }
 
-    Checked& operator%=(Checked other) {
+    Checked& operator%=(Checked other)
+    {
         return *this = *this % other;
     }
 
-    Checked& operator&=(Checked other) {
+    Checked& operator&=(Checked other)
+    {
         return *this = *this & other;
     }
 
-    Checked& operator|=(Checked other) {
+    Checked& operator|=(Checked other)
+    {
         return *this = *this | other;
     }
 
-    Checked& operator^=(Checked other) {
+    Checked& operator^=(Checked other)
+    {
         return *this = *this | other;
     }
 
-    Checked& operator<<=(u_int8_t other) {
+    Checked& operator<<=(u_int8_t other)
+    {
         return *this = *this << other;
     }
 
-    Checked& operator>>=(u_int8_t other) {
+    Checked& operator>>=(u_int8_t other)
+    {
         return *this = *this >> other;
     }
 
@@ -643,43 +653,53 @@ public:
         return ~value_;
     }
 
-    Checked& operator+=(Checked other) {
+    Checked& operator+=(Checked other)
+    {
         return *this = *this + other;
     }
 
-    Checked& operator-=(Checked other) {
+    Checked& operator-=(Checked other)
+    {
         return *this = *this - other;
     }
 
-    Checked& operator*=(Checked other) {
+    Checked& operator*=(Checked other)
+    {
         return *this = *this * other;
     }
 
-    Checked& operator/=(Checked other) {
+    Checked& operator/=(Checked other)
+    {
         return *this = *this / other;
     }
 
-    Checked& operator%=(Checked other) {
+    Checked& operator%=(Checked other)
+    {
         return *this = *this % other;
     }
 
-    Checked& operator&=(Checked other) {
+    Checked& operator&=(Checked other)
+    {
         return *this = *this & other;
     }
 
-    Checked& operator|=(Checked other) {
+    Checked& operator|=(Checked other)
+    {
         return *this = *this | other;
     }
 
-    Checked& operator^=(Checked other) {
+    Checked& operator^=(Checked other)
+    {
         return *this = *this | other;
     }
 
-    Checked& operator<<=(u_int8_t other) {
+    Checked& operator<<=(u_int8_t other)
+    {
         return *this = *this << other;
     }
 
-    Checked& operator>>=(u_int8_t other) {
+    Checked& operator>>=(u_int8_t other)
+    {
         return *this = *this >> other;
     }
 
@@ -872,7 +892,8 @@ public:
         return *this = *this + other;
     }
 
-    Wrapping& operator-=(Wrapping other) {
+    Wrapping& operator-=(Wrapping other)
+    {
         return *this = *this - other;
     }
 
