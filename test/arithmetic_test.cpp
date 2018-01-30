@@ -5,9 +5,17 @@ using W = arithpp::Wrapping<int>;
 using C = arithpp::Checked<int>;
 using S = arithpp::Saturating<int>;
 
+//using arithpp::checked_convert;
+
 int main()
 {
     return UnitTest::RunAllTests();
+}
+
+TEST(checked_convert) {
+//    CHECK_EQUAL(5, checked_convert<unsigned int>(5));
+//    CHECK_EQUAL(INT_MAX, checked_convert<unsigned int>(INT_MAX));
+//    CHECK_THROW(checked_convert<unsigned int>(-1), std::overflow_error);
 }
 
 TEST(Wrapping) {
@@ -49,6 +57,17 @@ TEST(Checked_plus) {
     CHECK_THROW(C(1) + C(INT_MAX), std::overflow_error);
     CHECK_THROW(C(INT_MAX - 5) + C(6), std::overflow_error);
     CHECK_THROW(C(INT_MIN) + C(-1), std::overflow_error);
+}
+
+TEST(Checked_unsigned) {
+    using CU = arithpp::Checked<unsigned>;
+
+    CHECK_EQUAL(CU(8), CU(3) + CU(5));
+    CHECK_THROW(CU(UINT_MAX) + CU(UINT_MAX), std::overflow_error);
+    CHECK_THROW(CU(UINT_MAX) + CU(1), std::overflow_error);
+    CHECK_THROW(CU(UINT_MAX - 5) + CU(6), std::overflow_error);
+
+    CHECK_THROW(CU(0) - CU(1), std::overflow_error);
 }
 
 TEST(Saturating_plus) {
@@ -114,3 +133,4 @@ TEST(Checked_left_shift) {
     CHECK_EQUAL(C(4), C(1) << 2);
     CHECK_THROW(C(INT_MAX) << 1, std::overflow_error);
 }
+
