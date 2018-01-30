@@ -70,8 +70,7 @@ struct Convert<To, From, P,
 
 template <class To, class From, template <class> class P>
 struct Convert<To, From, P,
-        std::enable_if_t<std::is_signed<From>::value ==
-                         std::is_signed<To>::value &&
+        std::enable_if_t<std::is_signed<From>::value == std::is_signed<To>::value &&
                          sizeof(From) <= sizeof(To)>>
 {
     static To convert(From from)
@@ -87,8 +86,7 @@ struct Convert<To, From, P,
 
 template <class To, class From, template <class> class P>
 struct Convert<To, From, P,
-        std::enable_if_t<std::is_signed<From>::value ==
-
+        std::enable_if_t<std::is_signed<From>::value == std::is_signed<To>::value &&
                          sizeof(To) < sizeof(From)>>
 {
     static To convert(From from)
