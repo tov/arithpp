@@ -36,40 +36,40 @@ struct Throwing_policy
 
 template <class To,
           class From,
-          template <class> class P = Throwing_policy,
+          template <class> class Policy = Throwing_policy,
           class Enable = void>
 struct Convert;
 
-template <class To, class From, template <class> class P>
-struct Convert<To, From, P,
+template <class To, class From, template <class> class Policy>
+struct Convert<To, From, Policy,
         std::enable_if_t<std::is_signed<From>::value &&
                          std::is_unsigned<To>::value &&
                          sizeof(From) <= sizeof(To)>>
 {
     static To convert(From from)
     {
-        if (from < 0) return P<To>::too_small("Convert");
+        if (from < 0) return Policy<To>::too_small("Convert");
         return static_cast<To>(from);
     }
 };
 
-template <class To, class From, template <class> class P>
-struct Convert<To, From, P,
+template <class To, class From, template <class> class Policy>
+struct Convert<To, From, Policy,
         std::enable_if_t<std::is_signed<From>::value &&
                          std::is_unsigned<To>::value &&
                          sizeof(To) < sizeof(From)>>
 {
     static To convert(From from)
     {
-        if (from < 0) return P<To>::too_small("Convert");
+        if (from < 0) return Policy<To>::too_small("Convert");
         if (from > static_cast<From>(std::numeric_limits<To>::max()))
-            return P<To>::too_large("Convert");
+            return Policy<To>::too_large("Convert");
         return static_cast<To>(from);
     }
 };
 
-template <class To, class From, template <class> class P>
-struct Convert<To, From, P,
+template <class To, class From, template <class> class Policy>
+struct Convert<To, From, Policy,
         std::enable_if_t<std::is_signed<From>::value == std::is_signed<To>::value &&
                          sizeof(From) <= sizeof(To)>>
 {
@@ -84,23 +84,23 @@ struct Convert<To, From, P,
     }
 };
 
-template <class To, class From, template <class> class P>
-struct Convert<To, From, P,
+template <class To, class From, template <class> class Policy>
+struct Convert<To, From, Policy,
         std::enable_if_t<std::is_signed<From>::value == std::is_signed<To>::value &&
                          sizeof(To) < sizeof(From)>>
 {
     static To convert(From from)
     {
         if (from < static_cast<From>(std::numeric_limits<To>::min()))
-            return P<To>::too_small("Convert");
+            return Policy<To>::too_small("Convert");
         if (from > static_cast<From>(std::numeric_limits<To>::max()))
-            return P<To>::too_large("Convert");
+            return Policy<To>::too_large("Convert");
         return static_cast<To>(from);
     }
 };
 
-template <class To, class From, template <class> class P>
-struct Convert<To, From, P,
+template <class To, class From, template <class> class Policy>
+struct Convert<To, From, Policy,
         std::enable_if_t<std::is_unsigned<From>::value &&
                          std::is_signed<To>::value &&
                          sizeof(From) < sizeof(To)>>
@@ -116,8 +116,8 @@ struct Convert<To, From, P,
     }
 };
 
-template <class To, class From, template <class> class P>
-struct Convert<To, From, P,
+template <class To, class From, template <class> class Policy>
+struct Convert<To, From, Policy,
         std::enable_if_t<std::is_unsigned<From>::value &&
                          std::is_signed<To>::value &&
                          sizeof(To) <= sizeof(From)>>
@@ -125,7 +125,7 @@ struct Convert<To, From, P,
     static To convert(From from)
     {
         if (from > static_cast<From>(std::numeric_limits<To>::max()))
-            return P<To>::too_large("Convert");
+            return Policy<To>::too_large("Convert");
         return static_cast<To>(from);
     }
 };
