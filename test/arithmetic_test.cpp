@@ -107,14 +107,27 @@ TEST(convert_exn_2) {
     CHECK_THROW(convert_exn<signed char>((unsigned short) SCHAR_MAX + 1),
                 std::overflow_error);
     // unsigned to signed, same width, fits
-    CHECK_EQUAL(1, convert_exn<signed short>((unsigned short) 1));
+    CHECK_EQUAL(1, convert_exn<short>((unsigned short) 1));
     // unsigned to signed, same width, doesn't fit
-    CHECK_THROW(convert_exn<signed short>(
+    CHECK_THROW(convert_exn<short>(
             static_cast<unsigned short>(
-                    std::numeric_limits<signed short>::max()) + 1),
+                    std::numeric_limits<short>::max()) + 1),
                 std::overflow_error);
     // unsigned to signed, wider
-    CHECK_EQUAL(1, convert_exn<signed long>((unsigned short) 1));
+    CHECK_EQUAL(1, convert_exn<long>((unsigned short) 1));
+}
+
+TEST(Widen) {
+    using arithpp::convert_widen;
+
+    short five = 5;
+    CHECK_EQUAL(5, convert_widen<short>(five));
+    CHECK_EQUAL(5, convert_widen<long>(five));
+
+    unsigned short ufive = 5;
+    CHECK_EQUAL(5, convert_widen<unsigned short>(ufive));
+    CHECK_EQUAL(5, convert_widen<unsigned long>(ufive));
+    CHECK_EQUAL(5, convert_widen<long>(ufive));
 }
 
 TEST(Wrapping) {
