@@ -7,7 +7,10 @@ add_subdirectory(unittest-cpp)
 include_directories(.)
 include_directories(unittest-cpp)
 
-add_executable(arith++_test test/arithmetic_test.cpp)
+add_executable(arith++_test
+        test/int_test.cpp
+        test/rational_test.cpp
+        test/Rational.cpp)
 set_property(TARGET arith++_test PROPERTY CXX_STANDARD 14)
 set_property(TARGET arith++_test PROPERTY CXX_STANDARD_REQUIRED On)
 target_link_libraries(arith++_test UnitTest++)

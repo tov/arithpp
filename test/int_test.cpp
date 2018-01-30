@@ -1,5 +1,5 @@
-#include "arith++/arith++.h"
-#include "UnitTest++/UnitTest++.h"
+#include <arith++/arith++.h>
+#include <UnitTest++/UnitTest++.h>
 
 using arithpp::Wrapping;
 using W = Wrapping<int>;
