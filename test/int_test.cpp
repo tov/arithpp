@@ -166,6 +166,24 @@ TEST(Convert_method) {
                 std::overflow_error);
 }
 
+TEST(Checked_comparisons)
+{
+    using CU = Checked<unsigned int>;
+
+    CHECK_EQUAL(C(5), C(5));
+    CHECK_EQUAL(CU(5), C(5));
+    CHECK(CU(5) != C(-5));
+    CHECK(CU(UINT_MAX) != C(-1));
+    CHECK(UINT_MAX == -1);
+
+    CHECK(C(5) < C(6));
+    CHECK(!(C(5) < C(5)));
+    CHECK(!(C(6) < C(5)));
+    CHECK(C(-1) < CU(1));
+    CHECK(intmax_t(-1) > uintmax_t(1));
+    CHECK(Checked<intmax_t>(-1) < Checked<uintmax_t>(1));
+}
+
 TEST(Checked_construction) {
     CHECK_EQUAL(5, C(5).get());
 }

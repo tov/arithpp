@@ -103,36 +103,33 @@ constexpr bool goes_higher_than()
 };
 
 // Gets the minimum value of type `T` in type `Repr`.
-// Only enabled when the value fits.
+// PRECONDITION: !goes_lower_than<T, Repr>()
 template<class T, class Repr>
-constexpr std::enable_if_t<!goes_lower_than<T, Repr>(), Repr> min_as()
+constexpr Repr
+min_as()
 {
     return static_cast<T>(std::numeric_limits<T>::min());
 };
 
 // Gets the maximum value of type `T` in type `Repr`.
-// Only enabled when the value fits.
+// PRECONDITION: !goes_higher_than<T, Repr>()
 template<class T, class Repr>
-constexpr std::enable_if_t<!goes_higher_than<T, Repr>(), Repr>
+constexpr Repr
 max_as()
 {
     return static_cast<T>(std::numeric_limits<T>::max());
 };
 
 // Is `from` too small to fit in type `To`?
-// Only enabled if it might return false.
 template<class To, class From>
-constexpr std::enable_if_t<goes_lower_than<From, To>(), bool>
-is_too_small_for(From from)
+constexpr bool is_too_small_for(From from)
 {
     return from < min_as<To, From>();
 }
 
 // Is `from` too large to fit in type `To`?
-// Only enabled if it might return false.
 template<class To, class From>
-constexpr std::enable_if_t<goes_higher_than<From, To>(), bool>
-is_too_large_for(From from)
+constexpr bool is_too_large_for(From from)
 {
     return from > max_as<To, From>();
 }
@@ -483,36 +480,6 @@ public:
         return *this = *this >> other;
     }
 
-    constexpr bool operator==(Checked other) const
-    {
-        return get() == other.get();
-    }
-
-    constexpr bool operator!=(Checked other) const
-    {
-        return get() != other.get();
-    }
-
-    constexpr bool operator<(Checked other) const
-    {
-        return get() < other.get();
-    }
-
-    constexpr bool operator>(Checked other) const
-    {
-        return get() > other.get();
-    }
-
-    constexpr bool operator<=(Checked other) const
-    {
-        return get() <= other.get();
-    }
-
-    constexpr bool operator>=(Checked other) const
-    {
-        return get() >= other.get();
-    }
-
     constexpr Checked& operator++()
     {
         return *this += 1;
@@ -749,36 +716,6 @@ public:
         return *this = *this >> other;
     }
 
-    constexpr bool operator==(Checked other) const
-    {
-        return get() == other.get();
-    }
-
-    constexpr bool operator!=(Checked other) const
-    {
-        return get() != other.get();
-    }
-
-    constexpr bool operator<(Checked other) const
-    {
-        return get() < other.get();
-    }
-
-    constexpr bool operator>(Checked other) const
-    {
-        return get() > other.get();
-    }
-
-    constexpr bool operator<=(Checked other) const
-    {
-        return get() <= other.get();
-    }
-
-    constexpr bool operator>=(Checked other) const
-    {
-        return get() >= other.get();
-    }
-
     constexpr Checked& operator++()
     {
         return *this += 1;
@@ -803,6 +740,100 @@ public:
         return old;
     }
 };
+
+template <class T, template <class> class P,
+          class U, template <class> class Q>
+constexpr bool operator==(Checked<T, P> a, Checked<U, Q> b)
+{
+    if (internal::goes_higher_than<T, U>() &&
+            internal::is_too_large_for<U>(a.get()))
+        return false;
+
+    if (internal::goes_lower_than<T, U>() &&
+            internal::is_too_small_for<U>(a.get()))
+        return false;
+
+    return static_cast<U>(a.get()) == b.get();
+}
+
+template <class T, template <class> class P,
+          class U, template <class> class Q>
+constexpr bool operator!=(Checked<T, P> a, Checked<U, Q> b)
+{
+    return !(a == b);
+}
+
+template <class T, template <class> class P,
+          class U, template <class> class Q>
+constexpr bool operator<(Checked<T, P> a, Checked<U, Q> b)
+{
+    if (internal::goes_higher_than<T, U>() &&
+            internal::is_too_large_for<U>(a.get()))
+        return false;
+
+    if (internal::goes_lower_than<T, U>() &&
+            internal::is_too_small_for<U>(a.get()))
+        return true;
+
+    return static_cast<U>(a.get()) < b.get();
+}
+
+template <class T, template <class> class P,
+        class U, template <class> class Q>
+constexpr bool operator<=(Checked<T, P> a, Checked<U, Q> b)
+{
+    return !(b < a);
+}
+
+template <class T, template <class> class P,
+        class U, template <class> class Q>
+constexpr bool operator>(Checked<T, P> a, Checked<U, Q> b)
+{
+    return b < a;
+}
+
+template <class T, template <class> class P,
+          class U, template <class> class Q>
+constexpr bool operator>=(Checked<T, P> a, Checked<U, Q> b)
+{
+    return !(a < b);
+}
+
+template <class T, template <class> class P, class U>
+constexpr bool operator==(Checked<T, P> a, U b)
+{
+    return a == Checked<U, P>(b);
+}
+
+template <class T, template <class> class P, class U>
+constexpr bool operator!=(Checked<T, P> a, U b)
+{
+    return a != Checked<U, P>(b);
+}
+
+template <class T, template <class> class P, class U>
+constexpr bool operator<(Checked<T, P> a, U b)
+{
+    return a < Checked<U, P>(b);
+}
+
+template <class T, template <class> class P, class U>
+constexpr bool operator<=(Checked<T, P> a, U b)
+{
+    return a <= Checked<U, P>(b);
+}
+
+template <class T, template <class> class P, class U>
+constexpr bool operator>(Checked<T, P> a, U b)
+{
+    return a > Checked<U, P>(b);
+}
+
+template <class T, template <class> class P, class U>
+constexpr bool operator>=(Checked<T, P> a, U b)
+{
+    return a >= Checked<U, P>(b);
+}
 
 template <class T, template <class> class P>
 std::ostream& operator<<(std::ostream& o, Checked<T, P> a)
