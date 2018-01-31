@@ -28,7 +28,7 @@ struct overflow_div_zero : std::overflow_error
     using overflow_error::overflow_error;
 };
 
-template <class T>
+template<class T>
 struct Saturating_policy
 {
     static constexpr T too_large(const char*)
@@ -47,7 +47,7 @@ struct Saturating_policy
     }
 };
 
-template <class T>
+template<class T>
 struct Throwing_policy
 {
     static T constexpr too_large(const char* who)
@@ -66,44 +66,88 @@ struct Throwing_policy
     }
 };
 
+namespace internal {
+
+// Is type `A` wide enough to hold ever value of type `B`?
+template<class A, class B>
+constexpr bool is_as_wide_as()
+{
+    if (std::is_signed<B>::value == std::is_signed<A>::value)
+        return sizeof(B) <= sizeof(A);
+
+    if (std::is_unsigned<B>::value && std::is_signed<A>::value)
+        return sizeof(B) < sizeof(A);
+
+    return false;
+};
+
+// Does type `A` include values lower than `B_MIN`?
+template<class A, class B>
+constexpr bool goes_lower_than()
+{
+    if (std::is_unsigned<A>::value) return false;
+
+    if (std::is_unsigned<B>::value) return true;
+
+    return sizeof(A) > sizeof(B);
+};
+
+// Does type `A` include values higher than `B_MAX`?
+template<class A, class B>
+constexpr bool goes_higher_than()
+{
+    if (sizeof(A) == sizeof(B))
+        return std::is_unsigned<A>::value && std::is_signed<B>::value;
+
+    return sizeof(A) > sizeof(B);
+};
+
+// Gets the minimum value of type `T` in type `Repr`.
+// Only enabled when the value fits.
+template<class T, class Repr>
+constexpr std::enable_if_t<!goes_lower_than<T, Repr>(), Repr> min_as()
+{
+    return static_cast<T>(std::numeric_limits<T>::min());
+};
+
+// Gets the maximum value of type `T` in type `Repr`.
+// Only enabled when the value fits.
+template<class T, class Repr>
+constexpr std::enable_if_t<!goes_higher_than<T, Repr>(), Repr>
+max_as()
+{
+    return static_cast<T>(std::numeric_limits<T>::max());
+};
+
+// Is `from` too small to fit in type `To`?
+// Only enabled if it might return false.
+template<class To, class From>
+constexpr std::enable_if_t<goes_lower_than<From, To>(), bool>
+is_too_small_for(From from)
+{
+    return from < min_as<To, From>();
+}
+
+// Is `from` too large to fit in type `To`?
+// Only enabled if it might return false.
+template<class To, class From>
+constexpr std::enable_if_t<goes_higher_than<From, To>(), bool>
+is_too_large_for(From from)
+{
+    return from > max_as<To, From>();
+}
+
+} // end internal
+
 template <class To,
-          class From,
+          class from,
           template <class> class Policy = Throwing_policy,
           class Enable = void>
 struct Convert;
 
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<std::is_signed<From>::value &&
-                         std::is_unsigned<To>::value &&
-                         sizeof(From) <= sizeof(To)>>
-{
-    static constexpr To convert(From from)
-    {
-        if (from < 0) return Policy<To>::too_small("Convert");
-        return static_cast<To>(from);
-    }
-};
-
-template <class To, class From, template <class> class Policy>
-struct Convert<To, From, Policy,
-        std::enable_if_t<std::is_signed<From>::value &&
-                         std::is_unsigned<To>::value &&
-                         sizeof(To) < sizeof(From)>>
-{
-    static constexpr To convert(From from)
-    {
-        if (from < 0) return Policy<To>::too_small("Convert");
-        if (from > static_cast<From>(std::numeric_limits<To>::max()))
-            return Policy<To>::too_large("Convert");
-        return static_cast<To>(from);
-    }
-};
-
-template <class To, class From, template <class> class Policy>
-struct Convert<To, From, Policy,
-        std::enable_if_t<std::is_signed<From>::value == std::is_signed<To>::value &&
-                         sizeof(From) <= sizeof(To)>>
+        std::enable_if_t<internal::is_as_wide_as<To, From>()>>
 {
     static constexpr To convert(From from)
     {
@@ -118,46 +162,41 @@ struct Convert<To, From, Policy,
 
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<std::is_signed<From>::value == std::is_signed<To>::value &&
-                         sizeof(To) < sizeof(From)>>
+        std::enable_if_t<internal::goes_lower_than<From, To>() &&
+                         ! internal::goes_higher_than<From, To>()>>
 {
     static constexpr To convert(From from)
     {
-        if (from < static_cast<From>(std::numeric_limits<To>::min()))
+        if (internal::is_too_small_for<To>(from))
             return Policy<To>::too_small("Convert");
-        if (from > static_cast<From>(std::numeric_limits<To>::max()))
-            return Policy<To>::too_large("Convert");
         return static_cast<To>(from);
     }
 };
 
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<std::is_unsigned<From>::value &&
-                         std::is_signed<To>::value &&
-                         sizeof(From) < sizeof(To)>>
+        std::enable_if_t<internal::goes_lower_than<From, To>() &&
+                         internal::goes_higher_than<From, To>()>>
 {
     static constexpr To convert(From from)
     {
-        return static_cast<To>(from);
-    }
-
-    static constexpr To widen(From from)
-    {
+        if (internal::is_too_small_for<To>(from))
+            return Policy<To>::too_small("Convert");
+        if (internal::is_too_large_for<To>(from))
+            return Policy<To>::too_small("Convert");
         return static_cast<To>(from);
     }
 };
 
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<std::is_unsigned<From>::value &&
-                         std::is_signed<To>::value &&
-                         sizeof(To) <= sizeof(From)>>
+        std::enable_if_t<! internal::goes_lower_than<From, To>() &&
+                         internal::goes_higher_than<From, To>()>>
 {
     static constexpr To convert(From from)
     {
-        if (from > static_cast<From>(std::numeric_limits<To>::max()))
-            return Policy<To>::too_large("Convert");
+        if (internal::is_too_large_for<To>(from))
+            return Policy<To>::too_small("Convert");
         return static_cast<To>(from);
     }
 };

@@ -8,6 +8,8 @@ include_directories(.)
 include_directories(unittest-cpp)
 
 add_executable(arith++_test
+        arith++/arith++.h
+        test/internal_test.cpp
         test/int_test.cpp
         test/rational_test.cpp
         test/Rational.cpp)
