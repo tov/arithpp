@@ -6,6 +6,13 @@
 
 namespace arithpp {
 
+// Make sure we have two's complement numbers, because Wrapping<T> depends on
+// conversion to unsigned and back:
+static_assert(static_cast<unsigned int>(-3) == UINT_MAX - 2,
+              "Two's complement check");
+static_assert(static_cast<int>(UINT_MAX - 2) == -3,
+              "Two's complement check");
+
 struct overflow_too_large : std::overflow_error
 {
     using overflow_error::overflow_error;
