@@ -31,17 +31,17 @@ struct overflow_div_zero : std::overflow_error
 template <class T>
 struct Saturating_policy
 {
-    static T too_large(const char*)
+    static constexpr T too_large(const char*)
     {
         return std::numeric_limits<T>::max();
     }
 
-    static T too_small(const char*)
+    static T constexpr too_small(const char*)
     {
         return std::numeric_limits<T>::min();
     }
 
-    static T div_zero(const char* who)
+    static T constexpr div_zero(const char* who)
     {
         throw overflow_div_zero(who);
     }
@@ -50,17 +50,17 @@ struct Saturating_policy
 template <class T>
 struct Throwing_policy
 {
-    static T too_large(const char* who)
+    static T constexpr too_large(const char* who)
     {
         throw overflow_too_large(who);
     }
 
-    static T too_small(const char* who)
+    static T constexpr too_small(const char* who)
     {
         throw overflow_too_small(who);
     }
 
-    static T div_zero(const char* who)
+    static T constexpr div_zero(const char* who)
     {
         throw overflow_div_zero(who);
     }
@@ -78,7 +78,7 @@ struct Convert<To, From, Policy,
                          std::is_unsigned<To>::value &&
                          sizeof(From) <= sizeof(To)>>
 {
-    static To convert(From from)
+    static constexpr To convert(From from)
     {
         if (from < 0) return Policy<To>::too_small("Convert");
         return static_cast<To>(from);
@@ -91,7 +91,7 @@ struct Convert<To, From, Policy,
                          std::is_unsigned<To>::value &&
                          sizeof(To) < sizeof(From)>>
 {
-    static To convert(From from)
+    static constexpr To convert(From from)
     {
         if (from < 0) return Policy<To>::too_small("Convert");
         if (from > static_cast<From>(std::numeric_limits<To>::max()))
@@ -105,12 +105,12 @@ struct Convert<To, From, Policy,
         std::enable_if_t<std::is_signed<From>::value == std::is_signed<To>::value &&
                          sizeof(From) <= sizeof(To)>>
 {
-    static To convert(From from)
+    static constexpr To convert(From from)
     {
         return static_cast<To>(from);
     }
 
-    static To widen(From from)
+    static constexpr To widen(From from)
     {
         return static_cast<To>(from);
     }
@@ -121,7 +121,7 @@ struct Convert<To, From, Policy,
         std::enable_if_t<std::is_signed<From>::value == std::is_signed<To>::value &&
                          sizeof(To) < sizeof(From)>>
 {
-    static To convert(From from)
+    static constexpr To convert(From from)
     {
         if (from < static_cast<From>(std::numeric_limits<To>::min()))
             return Policy<To>::too_small("Convert");
@@ -137,12 +137,12 @@ struct Convert<To, From, Policy,
                          std::is_signed<To>::value &&
                          sizeof(From) < sizeof(To)>>
 {
-    static To convert(From from)
+    static constexpr To convert(From from)
     {
         return static_cast<To>(from);
     }
 
-    static To widen(From from)
+    static constexpr To widen(From from)
     {
         return static_cast<To>(from);
     }
@@ -154,7 +154,7 @@ struct Convert<To, From, Policy,
                          std::is_signed<To>::value &&
                          sizeof(To) <= sizeof(From)>>
 {
-    static To convert(From from)
+    static constexpr To convert(From from)
     {
         if (from > static_cast<From>(std::numeric_limits<To>::max()))
             return Policy<To>::too_large("Convert");
@@ -163,19 +163,19 @@ struct Convert<To, From, Policy,
 };
 
 template <class To, class From>
-To convert_exn(From from)
+constexpr To convert_exn(From from)
 {
     return Convert<To, From, Throwing_policy>::convert(from);
 };
 
 template <class To, class From>
-To convert_sat(From from)
+constexpr To convert_sat(From from)
 {
     return Convert<To, From, Saturating_policy>::convert(from);
 };
 
 template <class To, class From>
-To convert_widen(From from)
+constexpr To convert_widen(From from)
 {
     return Convert<To, From, Throwing_policy>::widen(from);
 };
@@ -195,12 +195,12 @@ private:
 
     T value_;
 
-    static T min_()
+    static constexpr T min_()
     {
         return std::numeric_limits<T>::min();
     }
 
-    static T max_()
+    static constexpr T max_()
     {
         return std::numeric_limits<T>::max();
     }
@@ -209,29 +209,29 @@ private:
     friend class Checked;
 
 public:
-    Checked(T value = T()) : value_(value)
+    constexpr Checked(T value = T()) : value_(value)
     { }
 
     template <class U>
-    Checked(U value) : value_(Convert<T, U, P>::convert(value))
+    constexpr Checked(U value) : value_(Convert<T, U, P>::convert(value))
     { }
 
     template <class U, template<class> class Q>
-    Checked(Checked<U, Q> other) : value_(Convert<T, U, P>::widen(other.value_))
+    constexpr Checked(Checked<U, Q> other) : value_(Convert<T, U, P>::widen(other.value_))
     { }
 
-    T get() const
+    constexpr T get() const
     {
         return value_;
     }
 
     template <class U, template <class> class Q = P>
-    Checked<U, Q> convert() const
+    constexpr Checked<U, Q> convert() const
     {
         return Checked<U, Q>(Convert<U, T, Q>::convert(value_));
     }
 
-    Checked operator-() const
+    constexpr Checked operator-() const
     {
         if (std::is_signed<T>::value && value_ == min_())
             return policy_t::too_large("Checked::operator-()");
@@ -239,7 +239,7 @@ public:
             return -value_;
     }
 
-    unsigned_t abs() const
+    constexpr unsigned_t abs() const
     {
         if (value_ == min_()) {
             return unsigned_t(std::numeric_limits<T>::max()) + 1;
@@ -250,7 +250,7 @@ public:
         }
     }
 
-    Checked operator+(Checked other) const
+    constexpr Checked operator+(Checked other) const
     {
 #if __has_builtin(__builtin_add_overflow)
         Checked result;
@@ -275,7 +275,7 @@ public:
 #endif
     }
 
-    Checked operator-(Checked other) const
+    constexpr Checked operator-(Checked other) const
     {
 #if __has_builtin(__builtin_sub_overflow)
         Checked result;
@@ -300,7 +300,7 @@ public:
 #endif
     }
 
-    Checked operator*(Checked other) const
+    constexpr Checked operator*(Checked other) const
     {
         auto overflow = [=]() {
             if ((value_ > 0 && other.value_ > 0) ||
@@ -330,7 +330,7 @@ public:
 #endif
     }
 
-    Checked operator/(Checked other) const
+    constexpr Checked operator/(Checked other) const
     {
         if (value_ == min_() && other.value_ == -1)
             return policy_t::too_large("Checked::operator/(Checked)");
@@ -343,7 +343,7 @@ public:
     }
 
     // Should this do some kind of checking?
-    Checked operator%(Checked other) const
+    constexpr Checked operator%(Checked other) const
     {
         if (other.value_ == 0) {
             return policy_t::div_zero("Checked::operator%(Checked)");
@@ -352,22 +352,22 @@ public:
         return value_ % other.value_;
     }
 
-    Checked operator&(Checked other) const
+    constexpr Checked operator&(Checked other) const
     {
         return value_ & other.value_;
     }
 
-    Checked operator|(Checked other) const
+    constexpr Checked operator|(Checked other) const
     {
         return value_ | other.value_;
     }
 
-    Checked operator^(Checked other) const
+    constexpr Checked operator^(Checked other) const
     {
         return value_ ^ other.value_;
     }
 
-    Checked operator<<(u_int8_t other) const
+    constexpr Checked operator<<(u_int8_t other) const
     {
         T mask = max_() - (max_() >> 1);
         T result = value_;
@@ -384,114 +384,114 @@ public:
         return result;
     }
 
-    Checked operator>>(u_int8_t other) const
+    constexpr Checked operator>>(u_int8_t other) const
     {
         return value_ >> other;
     }
 
-    Checked operator~() const
+    constexpr Checked operator~() const
     {
         return ~value_;
     }
 
-    Checked& operator+=(Checked other)
+    constexpr Checked& operator+=(Checked other)
     {
         return *this = *this + other;
     }
 
-    Checked& operator-=(Checked other)
+    constexpr Checked& operator-=(Checked other)
     {
         return *this = *this - other;
     }
 
-    Checked& operator*=(Checked other)
+    constexpr Checked& operator*=(Checked other)
     {
         return *this = *this * other;
     }
 
-    Checked& operator/=(Checked other)
+    constexpr Checked& operator/=(Checked other)
     {
         return *this = *this / other;
     }
 
-    Checked& operator%=(Checked other)
+    constexpr Checked& operator%=(Checked other)
     {
         return *this = *this % other;
     }
 
-    Checked& operator&=(Checked other)
+    constexpr Checked& operator&=(Checked other)
     {
         return *this = *this & other;
     }
 
-    Checked& operator|=(Checked other)
+    constexpr Checked& operator|=(Checked other)
     {
         return *this = *this | other;
     }
 
-    Checked& operator^=(Checked other)
+    constexpr Checked& operator^=(Checked other)
     {
         return *this = *this | other;
     }
 
-    Checked& operator<<=(u_int8_t other)
+    constexpr Checked& operator<<=(u_int8_t other)
     {
         return *this = *this << other;
     }
 
-    Checked& operator>>=(u_int8_t other)
+    constexpr Checked& operator>>=(u_int8_t other)
     {
         return *this = *this >> other;
     }
 
-    bool operator==(Checked other) const
+    constexpr bool operator==(Checked other) const
     {
         return get() == other.get();
     }
 
-    bool operator!=(Checked other) const
+    constexpr bool operator!=(Checked other) const
     {
         return get() != other.get();
     }
 
-    bool operator<(Checked other) const
+    constexpr bool operator<(Checked other) const
     {
         return get() < other.get();
     }
 
-    bool operator>(Checked other) const
+    constexpr bool operator>(Checked other) const
     {
         return get() > other.get();
     }
 
-    bool operator<=(Checked other) const
+    constexpr bool operator<=(Checked other) const
     {
         return get() <= other.get();
     }
 
-    bool operator>=(Checked other) const
+    constexpr bool operator>=(Checked other) const
     {
         return get() >= other.get();
     }
 
-    Checked& operator++()
+    constexpr Checked& operator++()
     {
         return *this += 1;
     }
 
-    Checked& operator--()
+    constexpr Checked& operator--()
     {
         return *this -= 1;
     }
 
-    Checked& operator++(int)
+    constexpr Checked& operator++(int)
     {
         Checked old = *this;
         ++*this;
         return old;
     }
 
-    Checked& operator--(int)
+    constexpr Checked& operator--(int)
     {
         Checked old = *this;
         --*this;
@@ -507,12 +507,12 @@ private:
 
     T value_;
 
-    static T zero_()
+    static constexpr T zero_()
     {
         return T(0);
     }
 
-    static T max_()
+    static constexpr T max_()
     {
         return std::numeric_limits<T>::max();
     }
@@ -521,29 +521,29 @@ private:
     friend class Checked;
 
 public:
-    Checked(T value = T()) : value_(value)
+    constexpr Checked(T value = T()) : value_(value)
     { }
 
     template <class U>
-    Checked(U value) : value_(Convert<T, U, P>::convert(value))
+    constexpr Checked(U value) : value_(Convert<T, U, P>::convert(value))
     { }
 
     template <class U, template <class> class Q>
-    Checked(Checked<U, Q> other) : value_(Convert<T, U, P>::widen(other.value_))
+    constexpr Checked(Checked<U, Q> other) : value_(Convert<T, U, P>::widen(other.value_))
     { }
 
-    T get() const
+    constexpr T get() const
     {
         return value_;
     }
 
     template <class U, template <class> class Q = P>
-    Checked<U, Q> convert() const
+    constexpr Checked<U, Q> convert() const
     {
         return Checked<U, Q>(Convert<U, T, Q>::convert(value_));
     }
 
-    Checked operator-() const
+    constexpr Checked operator-() const
     {
         if (value_ == zero_())
             return value_;
@@ -551,12 +551,12 @@ public:
             return policy_t::too_small("Checked::operator-()");
     }
 
-    T abs() const
+    constexpr T abs() const
     {
         return value_;
     }
 
-    Checked operator+(Checked other) const
+    constexpr Checked operator+(Checked other) const
     {
 #if __has_builtin(__builtin_add_overflow)
         Checked result;
@@ -573,7 +573,7 @@ public:
 #endif
     }
 
-    Checked operator-(Checked other) const
+    constexpr Checked operator-(Checked other) const
     {
         if (other.value_ > value_)
             return policy_t::too_small("Checked::operator-(Checked)");
@@ -602,7 +602,7 @@ public:
 #endif
     }
 
-    Checked operator/(Checked other) const
+    constexpr Checked operator/(Checked other) const
     {
         if (other.value_ == 0)
             return policy_t::div_zero("Checked::operator/(Checked)");
@@ -610,7 +610,7 @@ public:
         return value_ / other.value_;
     }
 
-    Checked operator%(Checked other) const
+    constexpr Checked operator%(Checked other) const
     {
         if (other.value_ == 0)
             return policy_t::div_zero("Checked::operator%(Checked)");
@@ -618,22 +618,22 @@ public:
         return value_ % other.value_;
     }
 
-    Checked operator&(Checked other) const
+    constexpr Checked operator&(Checked other) const
     {
         return value_ & other.value_;
     }
 
-    Checked operator|(Checked other) const
+    constexpr Checked operator|(Checked other) const
     {
         return value_ | other.value_;
     }
 
-    Checked operator^(Checked other) const
+    constexpr Checked operator^(Checked other) const
     {
         return value_ ^ other.value_;
     }
 
-    Checked operator<<(u_int8_t other) const
+    constexpr Checked operator<<(u_int8_t other) const
     {
         T mask = max_() - (max_() >> 1);
         T result = value_;
@@ -650,114 +650,114 @@ public:
         return result;
     }
 
-    Checked operator>>(u_int8_t other) const
+    constexpr Checked operator>>(u_int8_t other) const
     {
         return value_ >> other;
     }
 
-    Checked operator~() const
+    constexpr Checked operator~() const
     {
         return ~value_;
     }
 
-    Checked& operator+=(Checked other)
+    constexpr Checked& operator+=(Checked other)
     {
         return *this = *this + other;
     }
 
-    Checked& operator-=(Checked other)
+    constexpr Checked& operator-=(Checked other)
     {
         return *this = *this - other;
     }
 
-    Checked& operator*=(Checked other)
+    constexpr Checked& operator*=(Checked other)
     {
         return *this = *this * other;
     }
 
-    Checked& operator/=(Checked other)
+    constexpr Checked& operator/=(Checked other)
     {
         return *this = *this / other;
     }
 
-    Checked& operator%=(Checked other)
+    constexpr Checked& operator%=(Checked other)
     {
         return *this = *this % other;
     }
 
-    Checked& operator&=(Checked other)
+    constexpr Checked& operator&=(Checked other)
     {
         return *this = *this & other;
     }
 
-    Checked& operator|=(Checked other)
+    constexpr Checked& operator|=(Checked other)
     {
         return *this = *this | other;
     }
 
-    Checked& operator^=(Checked other)
+    constexpr Checked& operator^=(Checked other)
     {
         return *this = *this | other;
     }
 
-    Checked& operator<<=(u_int8_t other)
+    constexpr Checked& operator<<=(u_int8_t other)
     {
         return *this = *this << other;
     }
 
-    Checked& operator>>=(u_int8_t other)
+    constexpr Checked& operator>>=(u_int8_t other)
     {
         return *this = *this >> other;
     }
 
-    bool operator==(Checked other) const
+    constexpr bool operator==(Checked other) const
     {
         return get() == other.get();
     }
 
-    bool operator!=(Checked other) const
+    constexpr bool operator!=(Checked other) const
     {
         return get() != other.get();
     }
 
-    bool operator<(Checked other) const
+    constexpr bool operator<(Checked other) const
     {
         return get() < other.get();
     }
 
-    bool operator>(Checked other) const
+    constexpr bool operator>(Checked other) const
     {
         return get() > other.get();
     }
 
-    bool operator<=(Checked other) const
+    constexpr bool operator<=(Checked other) const
     {
         return get() <= other.get();
     }
 
-    bool operator>=(Checked other) const
+    constexpr bool operator>=(Checked other) const
     {
         return get() >= other.get();
     }
 
-    Checked& operator++()
+    constexpr Checked& operator++()
     {
         return *this += 1;
     }
 
-    Checked& operator--()
+    constexpr Checked& operator--()
     {
         return *this -= 1;
     }
 
-    Checked& operator++(int)
+    constexpr Checked& operator++(int)
     {
         Checked old = *this;
         ++*this;
         return old;
     }
 
-    Checked& operator--(int)
+    constexpr Checked& operator--(int)
     {
         Checked old = *this;
         --*this;
@@ -794,36 +794,36 @@ private:
     friend class Wrapping;
 
 public:
-    Wrapping(T value = T()) : value_{unsigned_t(value)}
+    constexpr Wrapping(T value = T()) : value_{unsigned_t(value)}
     { }
 
     template <class U>
-    Wrapping(U value) : value_{unsigned_t(value)}
+    constexpr Wrapping(U value) : value_{unsigned_t(value)}
     { }
 
     template <class U>
-    Wrapping(Wrapping<U> other) : Wrapping(convert_widen<T>(other.value_))
+    constexpr Wrapping(Wrapping<U> other) : Wrapping(convert_widen<T>(other.value_))
     { }
 
-    T get() const
+    constexpr T get() const
     {
         return T(value_);
     }
 
     template <class U>
-    Wrapping<U> convert() const
+    constexpr Wrapping<U> convert() const
     {
         return Wrapping<U>(static_cast<std::make_unsigned_t<U>>(value_));
     }
 
-    Wrapping operator-() const {
+    constexpr Wrapping operator-() const {
         if (get() == std::numeric_limits<T>::min())
             return Wrapping(std::numeric_limits<T>::min());
         else
             return Wrapping(-get());
     }
 
-    unsigned_t abs() const
+    constexpr unsigned_t abs() const
     {
         if (get() == std::numeric_limits<T>::min()) {
             return unsigned_t(std::numeric_limits<T>::max()) + 1;
@@ -834,22 +834,22 @@ public:
         }
     }
 
-    Wrapping operator+(Wrapping other) const
+    constexpr Wrapping operator+(Wrapping other) const
     {
         return Wrapping(value_ + other.value_);
     }
 
-    Wrapping operator-(Wrapping other) const
+    constexpr Wrapping operator-(Wrapping other) const
     {
         return Wrapping(value_ - other.value_);
     }
 
-    Wrapping operator*(Wrapping other) const
+    constexpr Wrapping operator*(Wrapping other) const
     {
         return Wrapping(value_ * other.value_);
     }
 
-    Wrapping operator/(Wrapping other) const
+    constexpr Wrapping operator/(Wrapping other) const
     {
         if (other.value_ == 0)
             throw overflow_div_zero("Wrapping::operator/(Wrapping)");
@@ -857,7 +857,7 @@ public:
         return Wrapping(value_ / other.value_);
     }
 
-    Wrapping operator%(Wrapping other) const
+    constexpr Wrapping operator%(Wrapping other) const
     {
         if (other.value_ == 0)
             throw overflow_div_zero("Wrapping::operator%(Wrapping)");
@@ -865,134 +865,134 @@ public:
         return Wrapping(value_ % other.value_);
     }
 
-    Wrapping operator&(Wrapping other) const
+    constexpr Wrapping operator&(Wrapping other) const
     {
         return Wrapping(value_ & other.value_);
     }
 
-    Wrapping operator|(Wrapping other) const
+    constexpr Wrapping operator|(Wrapping other) const
     {
         return Wrapping(value_ | other.value_);
     }
 
-    Wrapping operator^(Wrapping other) const
+    constexpr Wrapping operator^(Wrapping other) const
     {
         return Wrapping(value_ ^ other.value_);
     }
 
-    Wrapping operator<<(u_int8_t other) const
+    constexpr Wrapping operator<<(u_int8_t other) const
     {
         return Wrapping(value_ << other);
     }
 
-    Wrapping operator>>(u_int8_t other) const
+    constexpr Wrapping operator>>(u_int8_t other) const
     {
         return Wrapping(get() >> other);
     }
 
-    Wrapping operator~() const
+    constexpr Wrapping operator~() const
     {
         return Wrapping(~value_);
     }
 
-    Wrapping& operator+=(Wrapping other)
+    constexpr Wrapping& operator+=(Wrapping other)
     {
         return *this = *this + other;
     }
 
-    Wrapping& operator-=(Wrapping other)
+    constexpr Wrapping& operator-=(Wrapping other)
     {
         return *this = *this - other;
     }
 
-    Wrapping& operator*=(Wrapping other)
+    constexpr Wrapping& operator*=(Wrapping other)
     {
         return *this = *this * other;
     }
 
-    Wrapping& operator/=(Wrapping other)
+    constexpr Wrapping& operator/=(Wrapping other)
     {
         return *this = *this / other;
     }
 
-    Wrapping& operator%=(Wrapping other)
+    constexpr Wrapping& operator%=(Wrapping other)
     {
         return *this = *this % other;
     }
 
-    Wrapping& operator&=(Wrapping other)
+    constexpr Wrapping& operator&=(Wrapping other)
     {
         return *this = *this & other;
     }
 
-    Wrapping& operator|=(Wrapping other)
+    constexpr Wrapping& operator|=(Wrapping other)
     {
         return *this = *this | other;
     }
 
-    Wrapping& operator^=(Wrapping other)
+    constexpr Wrapping& operator^=(Wrapping other)
     {
         return *this = *this ^ other;
     }
 
-    Wrapping& operator<<=(u_int8_t other)
+    constexpr Wrapping& operator<<=(u_int8_t other)
     {
         return *this = *this << other;
     }
 
-    Wrapping& operator>>=(u_int8_t other)
+    constexpr Wrapping& operator>>=(u_int8_t other)
     {
         return *this = *this >> other;
     }
 
-    bool operator==(Wrapping other) const
+    constexpr bool operator==(Wrapping other) const
     {
         return get() == other.get();
     }
 
-    bool operator!=(Wrapping other) const
+    constexpr bool operator!=(Wrapping other) const
     {
         return get() != other.get();
     }
 
-    bool operator<(Wrapping other) const
+    constexpr bool operator<(Wrapping other) const
     {
         return get() < other.get();
     }
 
-    bool operator>(Wrapping other) const
+    constexpr bool operator>(Wrapping other) const
     {
         return get() > other.get();
     }
 
-    bool operator<=(Wrapping other) const
+    constexpr bool operator<=(Wrapping other) const
     {
         return get() <= other.get();
     }
 
-    bool operator>=(Wrapping other) const
+    constexpr bool operator>=(Wrapping other) const
     {
         return get() >= other.get();
     }
 
-    Wrapping& operator++()
+    constexpr Wrapping& operator++()
     {
         return *this += 1;
     }
 
-    Wrapping& operator--()
+    constexpr Wrapping& operator--()
     {
         return *this -= 1;
     }
 
-    Wrapping& operator++(int)
+    constexpr Wrapping& operator++(int)
     {
         Wrapping old = *this;
         ++*this;
         return old;
     }
 
-    Wrapping& operator--(int)
+    constexpr Wrapping& operator--(int)
     {
         Wrapping old = *this;
         --*this;
