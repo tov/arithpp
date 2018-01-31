@@ -134,6 +134,12 @@ constexpr bool is_too_large_for(From from)
     return from > max_as<To, From>();
 }
 
+template<class T>
+constexpr bool same_sign(T a, T b)
+{
+    return (a ^ b) >= 0;
+}
+
 } // end internal
 
 template <class To,
@@ -339,8 +345,7 @@ public:
     constexpr Checked operator*(Checked other) const
     {
         auto overflow = [=]() {
-            if ((value_ > 0 && other.value_ > 0) ||
-                (value_ < 0 && other.value_ < 0))
+            if (internal::same_sign(value_, other.value_))
                 return policy_t::too_large("Checked::operator*(Checked)");
             else
                 return policy_t::too_small("Checked::operator*(Checked)");
