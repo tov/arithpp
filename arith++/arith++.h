@@ -1015,4 +1015,7 @@ std::istream& operator>>(std::istream& i, Wrapping<T>& a)
     return i;
 }
 
+static_assert(Wrapping<int>(INT_MAX) + 3 == Wrapping<int>(INT_MIN + 2),
+              "Wrapping<int> wraps around");
+
 }
