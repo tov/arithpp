@@ -253,15 +253,8 @@ private:
 
     T value_;
 
-    static constexpr T min_()
-    {
-        return std::numeric_limits<T>::min();
-    }
-
-    static constexpr T max_()
-    {
-        return std::numeric_limits<T>::max();
-    }
+    static constexpr T T_MIN_ = std::numeric_limits<T>::min();
+    static constexpr T T_MAX_ = std::numeric_limits<T>::max();
 
     template <class U, template <class> class Q, class F>
     friend class Checked;
@@ -291,7 +284,7 @@ public:
 
     constexpr Checked operator-() const
     {
-        if (std::is_signed<T>::value && value_ == min_())
+        if (std::is_signed<T>::value && value_ == T_MIN_)
             return policy_t::too_large("Checked::operator-()");
         else
             return -value_;
@@ -299,7 +292,7 @@ public:
 
     constexpr unsigned_t abs() const
     {
-        if (value_ == min_()) {
+        if (value_ == T_MIN_) {
             return unsigned_t(std::numeric_limits<T>::max()) + 1;
         } else if (value_ < 0) {
             return unsigned_t(-value_);
@@ -322,10 +315,10 @@ public:
         }
 #else
         if (value_ >= 0) {
-            if (other.value_ > max_() - value_)
+            if (other.value_ > T_MAX_ - value_)
                 return policy_t::too_large("Checked::operator+(Checked)");
         } else {
-            if (other.value_ < min_() - value_)
+            if (other.value_ < T_MIN_ - value_)
                 return policy_t::too_small("Checked::operator+(Checked)");
         }
 
@@ -347,10 +340,10 @@ public:
         }
 #else
         if (value_ >= 0) {
-            if (other.value_ < value_ - max_())
+            if (other.value_ < value_ - T_MAX_)
                 return policy_t::too_large("Checked::operator-(Checked)");
         } else {
-            if (other.value_ > value_ - min_())
+            if (other.value_ > value_ - T_MIN_)
                 return policy_t::too_small("Checked::operator-(Checked)");
         }
 
@@ -378,7 +371,7 @@ public:
         // This is slow right now, because it does a division. There are better
         // ways of doing it, depending on the size of T.
         if (other.value_ != 0) {
-            if (abs() > unsigned_t(max_()) / other.abs()) {
+            if (abs() > unsigned_t(T_MAX_) / other.abs()) {
                 return overflow();
             }
         }
@@ -389,7 +382,7 @@ public:
 
     constexpr Checked operator/(Checked other) const
     {
-        if (value_ == min_() && other.value_ == -1)
+        if (value_ == T_MIN_ && other.value_ == -1)
             return policy_t::too_large("Checked::operator/(Checked)");
 
         if (other.value_ == 0) {
@@ -426,7 +419,7 @@ public:
 
     constexpr Checked operator<<(u_int8_t other) const
     {
-        T mask = max_() - (max_() >> 1);
+        T mask = T_MAX_ - (T_MAX_ >> 1);
         T result = value_;
 
         // This is very inefficient.
@@ -535,15 +528,7 @@ private:
 
     T value_;
 
-    static constexpr T zero_()
-    {
-        return T(0);
-    }
-
-    static constexpr T max_()
-    {
-        return std::numeric_limits<T>::max();
-    }
+    static constexpr T T_MAX_ = std::numeric_limits<T>::max();
 
     template <class U, template <class> class Q, class F>
     friend class Checked;
@@ -573,7 +558,7 @@ public:
 
     constexpr Checked operator-() const
     {
-        if (value_ == zero_())
+        if (value_ == T(0))
             return value_;
         else
             return policy_t::too_small("Checked::operator-()");
@@ -594,7 +579,7 @@ public:
             return result;
         }
 #else
-        if (value_ > max_() - other.value_)
+        if (value_ > T_MAX_ - other.value_)
             return policy_t::too_large("Checked::operator+(Checked)");
 
         return value_ + other.value_;
@@ -622,7 +607,7 @@ public:
         // This is slow right now, because it does a division. There are better
         // ways of doing it, depending on the size of T.
         if (other.value_ != 0) {
-            if (value_ > max_() / other.value_)
+            if (value_ > T_MAX_ / other.value_)
                 return policy_t::too_large("Checked::operator*(Checked)");
         }
 
@@ -663,7 +648,7 @@ public:
 
     constexpr Checked operator<<(u_int8_t other) const
     {
-        T mask = max_() - (max_() >> 1);
+        T mask = T_MAX_ - (T_MAX_ >> 1);
         T result = value_;
 
         // This is very inefficient.
@@ -1021,7 +1006,6 @@ constexpr bool operator==(Checked<T, P> a, U b)
 {
     return a == Checked<U, P>(b);
 }
-
 template <class T, template <class> class P, class U>
 constexpr bool operator!=(Checked<T, P> a, U b)
 {
