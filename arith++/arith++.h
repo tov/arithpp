@@ -419,19 +419,10 @@ public:
 
     constexpr Checked operator<<(u_int8_t other) const
     {
-        T mask = T_MAX_ - (T_MAX_ >> 1);
-        T result = value_;
+        if (T_MAX_ >> other < value_)
+            return policy_t::too_large("Checked::operator<<(u_int8_t)");
 
-        // This is very inefficient.
-        while (other > 0) {
-            if (result & mask)
-                return policy_t::too_large("Checked::operator<<(u_int8_t)");
-
-            result <<= 1;
-            --other;
-        }
-
-        return result;
+        return value_ << other;
     }
 
     constexpr Checked operator>>(u_int8_t other) const
@@ -648,19 +639,10 @@ public:
 
     constexpr Checked operator<<(u_int8_t other) const
     {
-        T mask = T_MAX_ - (T_MAX_ >> 1);
-        T result = value_;
+        if (T_MAX_ >> other < value_)
+            return policy_t::too_large("Checked::operator<<(u_int8_t)");
 
-        // This is very inefficient.
-        while (other > 0) {
-            if (result & mask)
-                return policy_t::too_large("Checked::operator<<(u_int8_t)");
-
-            result <<= 1;
-            --other;
-        }
-
-        return result;
+        return value_ << other;
     }
 
     constexpr Checked operator>>(u_int8_t other) const

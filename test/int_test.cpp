@@ -293,5 +293,7 @@ TEST(Checked_left_shift) {
     CHECK_EQUAL(C(2), C(1) << 1);
     CHECK_EQUAL(C(4), C(1) << 2);
     CHECK_THROW(C(INT_MAX) << 1, std::overflow_error);
+    CHECK_EQUAL(C(INT_MAX ^ 0x7), C(INT_MAX) >> 3 << 3);
+    CHECK_THROW(C(INT_MAX) >> 3 << 4, std::overflow_error);
 }
 
