@@ -1058,7 +1058,7 @@ std::ostream& operator<<(std::ostream& o, Checked<T, P> a)
     return o << a.get();
 }
 
-template <class T, template <class> class P>
+
 std::istream& operator>>(std::istream& i, Checked<T, P>& a)
 {
     T temp;
