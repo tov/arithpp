@@ -256,6 +256,12 @@ private:
     static constexpr T T_MIN_ = std::numeric_limits<T>::min();
     static constexpr T T_MAX_ = std::numeric_limits<T>::max();
 
+    template <typename U>
+    static constexpr Checked rebuild_(U value)
+    {
+        return static_cast<T>(value);
+    }
+
     template <class U, template <class> class Q, class F>
     friend class Checked;
 
@@ -287,7 +293,7 @@ public:
         if (std::is_signed<T>::value && value_ == T_MIN_)
             return policy_t::too_large("Checked::operator-()");
         else
-            return -value_;
+            return rebuild_(-value_);
     }
 
     constexpr unsigned_t abs() const
@@ -322,7 +328,7 @@ public:
                 return policy_t::too_small("Checked::operator+(Checked)");
         }
 
-        return value_ + other.value_;
+        return rebuild_(value_ + other.value_);
 #endif
     }
 
@@ -347,7 +353,7 @@ public:
                 return policy_t::too_small("Checked::operator-(Checked)");
         }
 
-        return value_ - other.value_;
+        return rebuild_(value_ - other.value_);
 #endif
     }
 
@@ -376,7 +382,7 @@ public:
             }
         }
 
-        return value_ * other.value_;
+        return rebuild_(value_ * other.value_);
 #endif
     }
 
@@ -389,7 +395,7 @@ public:
             return policy_t::div_zero("Checked::operator/(Checked)");
         }
 
-        return value_ / other.value_;
+        return rebuild_(value_ / other.value_);
     }
 
     // Should this do some kind of checking?
@@ -399,22 +405,22 @@ public:
             return policy_t::div_zero("Checked::operator%(Checked)");
         }
 
-        return value_ % other.value_;
+        return rebuild_(value_ % other.value_);
     }
 
     constexpr Checked operator&(Checked other) const
     {
-        return value_ & other.value_;
+        return rebuild_(value_ & other.value_);
     }
 
     constexpr Checked operator|(Checked other) const
     {
-        return value_ | other.value_;
+        return rebuild_(value_ | other.value_);
     }
 
     constexpr Checked operator^(Checked other) const
     {
-        return value_ ^ other.value_;
+        return rebuild_(value_ ^ other.value_);
     }
 
     constexpr Checked operator<<(u_int8_t other) const
@@ -422,17 +428,17 @@ public:
         if (T_MAX_ >> other < value_)
             return policy_t::too_large("Checked::operator<<(u_int8_t)");
 
-        return value_ << other;
+        return rebuild_(value_ << other);
     }
 
     constexpr Checked operator>>(u_int8_t other) const
     {
-        return value_ >> other;
+        return rebuild_(value_ >> other);
     }
 
     constexpr Checked operator~() const
     {
-        return ~value_;
+        return rebuild_(~value_);
     }
 
     constexpr Checked& operator+=(Checked other)
@@ -521,6 +527,12 @@ private:
 
     static constexpr T T_MAX_ = std::numeric_limits<T>::max();
 
+    template <typename U>
+    static constexpr Checked rebuild_(U value)
+    {
+        return static_cast<T>(value);
+    }
+
     template <class U, template <class> class Q, class F>
     friend class Checked;
 
@@ -550,7 +562,7 @@ public:
     constexpr Checked operator-() const
     {
         if (value_ == T(0))
-            return value_;
+            return rebuild_(value_);
         else
             return policy_t::too_small("Checked::operator-()");
     }
@@ -573,7 +585,7 @@ public:
         if (value_ > T_MAX_ - other.value_)
             return policy_t::too_large("Checked::operator+(Checked)");
 
-        return value_ + other.value_;
+        return rebuild_(value_ + other.value_);
 #endif
     }
 
@@ -582,7 +594,7 @@ public:
         if (other.value_ > value_)
             return policy_t::too_small("Checked::operator-(Checked)");
 
-        return value_ - other.value_;
+        return rebuild_(value_ - other.value_);
     }
 
     Checked operator*(Checked other) const
@@ -602,7 +614,7 @@ public:
                 return policy_t::too_large("Checked::operator*(Checked)");
         }
 
-        return value_ * other.value_;
+        return rebuild_(value_ * other.value_);
 #endif
     }
 
@@ -611,7 +623,7 @@ public:
         if (other.value_ == 0)
             return policy_t::div_zero("Checked::operator/(Checked)");
 
-        return value_ / other.value_;
+        return rebuild_(value_ / other.value_);
     }
 
     constexpr Checked operator%(Checked other) const
@@ -619,22 +631,22 @@ public:
         if (other.value_ == 0)
             return policy_t::div_zero("Checked::operator%(Checked)");
 
-        return value_ % other.value_;
+        return rebuild_(value_ % other.value_);
     }
 
     constexpr Checked operator&(Checked other) const
     {
-        return value_ & other.value_;
+        return rebuild_(value_ & other.value_);
     }
 
     constexpr Checked operator|(Checked other) const
     {
-        return value_ | other.value_;
+        return rebuild_(value_ | other.value_);
     }
 
     constexpr Checked operator^(Checked other) const
     {
-        return value_ ^ other.value_;
+        return rebuild_(value_ ^ other.value_);
     }
 
     constexpr Checked operator<<(u_int8_t other) const
@@ -642,17 +654,17 @@ public:
         if (T_MAX_ >> other < value_)
             return policy_t::too_large("Checked::operator<<(u_int8_t)");
 
-        return value_ << other;
+        return rebuild_(value_ << other);
     }
 
     constexpr Checked operator>>(u_int8_t other) const
     {
-        return value_ >> other;
+        return rebuild_(value_ >> other);
     }
 
     constexpr Checked operator~() const
     {
-        return ~value_;
+        return rebuild_(~value_);
     }
 
     constexpr Checked& operator+=(Checked other)

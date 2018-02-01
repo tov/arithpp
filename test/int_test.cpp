@@ -61,6 +61,13 @@ TEST(convert_exn)
                 std::overflow_error);
 }
 
+TEST(Checked_char)
+{
+    using CC = Checked<char>;
+
+    CHECK_EQUAL(CC(27), CC(14) + 13);
+}
+
 TEST(convert_exn_2) {
     using arithpp::convert_exn;;
 
