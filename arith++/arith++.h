@@ -136,6 +136,7 @@ max_as()
 };
 
 // Is `from` too small to fit in type `To`?
+// PRECONDITION: !goes_lower_than<To, From>
 template<class To, class From>
 constexpr bool is_too_small_for(From from)
 {
@@ -143,6 +144,7 @@ constexpr bool is_too_small_for(From from)
 }
 
 // Is `from` too large to fit in type `To`?
+// PRECONDITION: !goes_higher_than<To, From>
 template<class To, class From>
 constexpr bool is_too_large_for(From from)
 {

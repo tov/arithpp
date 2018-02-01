@@ -64,8 +64,8 @@ TEST(convert_exn)
 TEST(Checked_char)
 {
     using CC = Checked<char>;
-
     CHECK_EQUAL(CC(27), CC(14) + 13);
+    CHECK_THROW(CC(CHAR_MAX) + 1, std::overflow_error);
 }
 
 TEST(convert_exn_2) {
