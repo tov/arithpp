@@ -304,7 +304,7 @@ public:
     template <class U, template <class> class Q = P>
     constexpr Checked<U, Q> convert() const
     {
-        return Checked<U, Q>(Convert<U, T, Q>::convert(value_));
+        return Checked<U, Q>(Convert<U, T, P>::convert(get()));
     }
 
     constexpr Checked operator-() const
@@ -575,7 +575,7 @@ public:
     template <class U, template <class> class Q = P>
     constexpr Checked<U, Q> convert() const
     {
-        return Checked<U, Q>(Convert<U, T, Q>::convert(value_));
+        return Checked<U, Q>(Convert<U, T, P>::convert(get()));
     }
 
     constexpr Checked operator-() const
@@ -787,13 +787,13 @@ public:
 
     constexpr T get() const
     {
-        return T(value_);
+        return static_cast<T>(value_);
     }
 
     template <class U, template <class> class Q = P>
     constexpr Checked<U, Q> convert() const
     {
-        return Checked<U, Q>(static_cast<std::make_unsigned_t<U>>(value_));
+        return Checked<U, Q>(Convert<U, T, P>::convert(get()));
     }
 
     constexpr Checked operator-() const {
