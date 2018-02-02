@@ -13,6 +13,10 @@ static_assert(static_cast<unsigned int>(-3) == UINT_MAX - 2,
 static_assert(static_cast<int>(UINT_MAX - 2) == -3,
               "Two's complement check");
 
+/*
+ * EXCEPTIONS
+ */
+
 struct overflow_too_large : std::overflow_error
 {
     using overflow_error::overflow_error;
@@ -28,6 +32,11 @@ struct overflow_div_zero : std::overflow_error
     using overflow_error::overflow_error;
 };
 
+/*
+ * POLICIES
+ */
+
+// Saturates on overflow, throws on divide-by-zero.
 template<class T>
 struct Saturating_policy
 {
@@ -49,6 +58,7 @@ struct Saturating_policy
     }
 };
 
+// Throws on overflow or divide-by-zero.
 template<class T>
 struct Throwing_policy
 {
@@ -70,6 +80,7 @@ struct Throwing_policy
     }
 };
 
+// Wraps instead of overflowing, throws on divide-by-zero
 template<class T>
 struct Wrapping_policy
 {
@@ -80,6 +91,11 @@ struct Wrapping_policy
         throw overflow_div_zero(who);
     }
 };
+
+/*
+ * INTERNAL DEFINITIONS
+ * Includes type size calculations and comparisons.
+ */
 
 namespace internal {
 
@@ -159,6 +175,10 @@ constexpr bool same_sign(T a, T b)
 
 } // end internal
 
+/*
+ * CONVERSION
+ */
+
 template <class To,
           class from,
           template <class> class Policy = Throwing_policy,
@@ -167,8 +187,7 @@ struct Convert;
 
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<internal::is_as_wide_as<To, From>()
-                         && !Policy<To>::is_wrapping>>
+        std::enable_if_t<internal::is_as_wide_as<To, From>()>>
 {
     static constexpr To convert(From from)
     {
@@ -227,7 +246,8 @@ struct Convert<To, From, Policy,
 
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<Policy<To>::is_wrapping>>
+        std::enable_if_t<Policy<To>::is_wrapping &&
+                         !internal::is_as_wide_as<To, From>()>>
 {
     using UFrom = std::make_unsigned_t<From>;
     using UTo   = std::make_unsigned_t<From>;
