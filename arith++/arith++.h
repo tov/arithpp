@@ -152,19 +152,23 @@ max_as()
 };
 
 // Is `from` too small to fit in type `To`?
-// PRECONDITION: !goes_lower_than<To, From>
 template<class To, class From>
 constexpr bool is_too_small_for(From from)
 {
-    return from < min_as<To, From>();
+    if (goes_lower_than<From, To>())
+        return from < min_as<To, From>();
+    else
+        return false;
 }
 
 // Is `from` too large to fit in type `To`?
-// PRECONDITION: !goes_higher_than<To, From>
 template<class To, class From>
 constexpr bool is_too_large_for(From from)
 {
-    return from > max_as<To, From>();
+    if (goes_higher_than<From, To>())
+        return from > max_as<To, From>();
+    else
+        return false;
 }
 
 template<class T>
@@ -1002,12 +1006,10 @@ template <class T, template <class> class P,
         class U, template <class> class Q>
 constexpr bool operator==(Checked<T, P> a, Checked<U, Q> b)
 {
-    if (internal::goes_higher_than<T, U>() &&
-        internal::is_too_large_for<U>(a.get()))
+    if (internal::is_too_large_for<U>(a.get()))
         return false;
 
-    if (internal::goes_lower_than<T, U>() &&
-        internal::is_too_small_for<U>(a.get()))
+    if (internal::is_too_small_for<U>(a.get()))
         return false;
 
     return static_cast<U>(a.get()) == b.get();
@@ -1024,12 +1026,10 @@ template <class T, template <class> class P,
         class U, template <class> class Q>
 constexpr bool operator<(Checked<T, P> a, Checked<U, Q> b)
 {
-    if (internal::goes_higher_than<T, U>() &&
-        internal::is_too_large_for<U>(a.get()))
+    if (internal::is_too_large_for<U>(a.get()))
         return false;
 
-    if (internal::goes_lower_than<T, U>() &&
-        internal::is_too_small_for<U>(a.get()))
+    if (internal::is_too_small_for<U>(a.get()))
         return true;
 
     return static_cast<U>(a.get()) < b.get();
