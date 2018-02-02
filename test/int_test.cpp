@@ -304,3 +304,10 @@ TEST(Checked_left_shift) {
     CHECK_THROW(C(INT_MAX) >> 3 << 4, std::overflow_error);
 }
 
+TEST(Wrapping_print) {
+    Wrapping<int> x(-1);
+    std::ostringstream os;
+
+    os << x;
+    CHECK_EQUAL("-1", os.str());
+}
