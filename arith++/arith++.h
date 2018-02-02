@@ -176,15 +176,17 @@ constexpr bool same_sign(T a, T b)
 } // end internal
 
 /*
- * CONVERSION
+ * CONVERSIONS
  */
 
+// We specialize class Convert for the `To` and `From` types and the `Policy`.
 template <class To,
           class from,
           template <class> class Policy = Throwing_policy,
           class Enable = void>
 struct Convert;
 
+// Widening conversions are non-lossy.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
         std::enable_if_t<internal::is_as_wide_as<To, From>()>>
@@ -194,12 +196,14 @@ struct Convert<To, From, Policy,
         return static_cast<To>(from);
     }
 
+    // Only for widening conversions do we provide the widen function.
     static constexpr To widen(From from)
     {
         return static_cast<To>(from);
     }
 };
 
+// Non-wrapping conversion where the value might be too low.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
         std::enable_if_t<internal::goes_lower_than<From, To>()
@@ -214,6 +218,7 @@ struct Convert<To, From, Policy,
     }
 };
 
+// Non-wrapping conversion where the value might be too low or too high.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
         std::enable_if_t<internal::goes_lower_than<From, To>()
@@ -230,6 +235,7 @@ struct Convert<To, From, Policy,
     }
 };
 
+// Non-wrapping conversion where the value might be too high.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
         std::enable_if_t<!internal::goes_lower_than<From, To>()
@@ -244,6 +250,7 @@ struct Convert<To, From, Policy,
     }
 };
 
+// Wrapping, non-widening conversion.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
         std::enable_if_t<Policy<To>::is_wrapping &&
@@ -258,30 +265,39 @@ struct Convert<To, From, Policy,
     }
 };
 
+// Convenience function for converting using Throwing_policy.
 template <class To, class From>
 constexpr To convert_exn(From from)
 {
     return Convert<To, From, Throwing_policy>::convert(from);
 };
 
+// Convenience function for converting using Saturating_policy.
 template <class To, class From>
 constexpr To convert_sat(From from)
 {
     return Convert<To, From, Saturating_policy>::convert(from);
 };
 
+// Convenience function for widening conversions.
 template <class To, class From>
 constexpr To convert_widen(From from)
 {
     return Convert<To, From, Throwing_policy>::widen(from);
 };
 
-// Checked is currently specialized based on signedness and wrapping.
+/*
+ * CHECKED INTEGERS
+ */
+
+// Checked<T, P> specifies an integer type T and a policy P. It is specialized based
+// on signedness and wrapping.
 template <class T,
           template<class> class P = Throwing_policy,
           class Enable = void>
 class Checked;
 
+// Non-wrapping, signed integers.
 template <class T, template<class> class P>
 class Checked<T, P,
         std::enable_if_t<std::is_signed<T>::value && !P<T>::is_wrapping>>
@@ -555,6 +571,7 @@ public:
     }
 };
 
+// Non-wrapping, unsigned integers.
 template <class T, template <class> class P>
 class Checked<T, P,
         std::enable_if_t<std::is_unsigned<T>::value && !P<T>::is_wrapping>>
@@ -781,6 +798,7 @@ public:
     }
 };
 
+// Wrapping integers (potentially signed)
 template <class T, template <class> class P>
 class Checked<T, P, std::enable_if_t<P<T>::is_wrapping>>
 {
@@ -975,6 +993,10 @@ using Saturating = Checked<T, Saturating_policy>;
 
 template <class T>
 using Wrapping = Checked<T, Wrapping_policy>;
+
+/*
+ * Checked integer comparisons and stream operations:
+ */
 
 template <class T, template <class> class P,
         class U, template <class> class Q>
