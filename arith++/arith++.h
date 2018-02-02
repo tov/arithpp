@@ -123,7 +123,7 @@ template<class T, class Repr>
 constexpr Repr
 min_as()
 {
-    return static_cast<T>(std::numeric_limits<T>::min());
+    return static_cast<Repr>(std::numeric_limits<T>::min());
 };
 
 // Gets the maximum value of type `T` in type `Repr`.
@@ -132,7 +132,7 @@ template<class T, class Repr>
 constexpr Repr
 max_as()
 {
-    return static_cast<T>(std::numeric_limits<T>::max());
+    return static_cast<Repr>(std::numeric_limits<T>::max());
 };
 
 // Is `from` too small to fit in type `To`?
@@ -167,7 +167,8 @@ struct Convert;
 
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<internal::is_as_wide_as<To, From>()>>
+        std::enable_if_t<internal::is_as_wide_as<To, From>()
+                         && !Policy<To>::is_wrapping>>
 {
     static constexpr To convert(From from)
     {
@@ -182,8 +183,9 @@ struct Convert<To, From, Policy,
 
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<internal::goes_lower_than<From, To>() &&
-                         ! internal::goes_higher_than<From, To>()>>
+        std::enable_if_t<internal::goes_lower_than<From, To>()
+                         && !internal::goes_higher_than<From, To>()
+                         && !Policy<To>::is_wrapping>>
 {
     static constexpr To convert(From from)
     {
@@ -195,8 +197,9 @@ struct Convert<To, From, Policy,
 
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<internal::goes_lower_than<From, To>() &&
-                         internal::goes_higher_than<From, To>()>>
+        std::enable_if_t<internal::goes_lower_than<From, To>()
+                         && internal::goes_higher_than<From, To>()
+                         && !Policy<To>::is_wrapping>>
 {
     static constexpr To convert(From from)
     {
@@ -210,14 +213,28 @@ struct Convert<To, From, Policy,
 
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<! internal::goes_lower_than<From, To>() &&
-                         internal::goes_higher_than<From, To>()>>
+        std::enable_if_t<!internal::goes_lower_than<From, To>()
+                         && internal::goes_higher_than<From, To>()
+                         && !Policy<To>::is_wrapping>>
 {
     static constexpr To convert(From from)
     {
         if (internal::is_too_large_for<To>(from))
             return Policy<To>::too_small("Convert");
         return static_cast<To>(from);
+    }
+};
+
+template <class To, class From, template <class> class Policy>
+struct Convert<To, From, Policy,
+        std::enable_if_t<Policy<To>::is_wrapping>>
+{
+    using UFrom = std::make_unsigned_t<From>;
+    using UTo   = std::make_unsigned_t<From>;
+
+    static constexpr To convert(From from)
+    {
+        return static_cast<To>(static_cast<UTo>(static_cast<UFrom>(from)));
     }
 };
 
