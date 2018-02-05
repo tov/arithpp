@@ -2,7 +2,7 @@
 #include <catch/catch.hpp>
 #include <cstdint>
 
-using namespace intpp::internal;
+using namespace intpp::detail;
 
 TEST_CASE("is_as_wide_as")
 {

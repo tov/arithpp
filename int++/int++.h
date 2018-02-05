@@ -154,7 +154,7 @@ struct Wrapping_policy
  * Includes type size calculations and comparisons.
  */
 
-namespace internal {
+namespace detail {
 
 // Is type `A` wide enough to hold ever value of type `B`?
 template<class A, class B>
@@ -251,7 +251,7 @@ struct Convert;
 /// Widening conversions are non-lossy.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<internal::is_as_wide_as<To, From>()>>
+        std::enable_if_t<detail::is_as_wide_as<To, From>()>>
 {
     /// Widens to `To` from `From`.
     ///
@@ -271,15 +271,15 @@ struct Convert<To, From, Policy,
 /// Non-wrapping conversion where the value might be too low.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<internal::goes_lower_than<From, To>()
-                         && !internal::goes_higher_than<From, To>()
+        std::enable_if_t<detail::goes_lower_than<From, To>()
+                         && !detail::goes_higher_than<From, To>()
                          && !Policy<To>::is_wrapping>>
 {
     /// Converts to `To` from `From`, handling bounds errors according to
     /// policy `Policy`.
     static constexpr To convert(From from)
     {
-        if (internal::is_too_small_for<To>(from))
+        if (detail::is_too_small_for<To>(from))
             return Policy<To>::too_small("Convert");
         return static_cast<To>(from);
     }
@@ -288,17 +288,17 @@ struct Convert<To, From, Policy,
 /// Non-wrapping conversion where the value might be too low or too high.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<internal::goes_lower_than<From, To>()
-                         && internal::goes_higher_than<From, To>()
+        std::enable_if_t<detail::goes_lower_than<From, To>()
+                         && detail::goes_higher_than<From, To>()
                          && !Policy<To>::is_wrapping>>
 {
     /// Converts to `To` from `From`, handling bounds errors according to
     /// policy `Policy`.
     static constexpr To convert(From from)
     {
-        if (internal::is_too_small_for<To>(from))
+        if (detail::is_too_small_for<To>(from))
             return Policy<To>::too_small("Convert");
-        if (internal::is_too_large_for<To>(from))
+        if (detail::is_too_large_for<To>(from))
             return Policy<To>::too_large("Convert");
         return static_cast<To>(from);
     }
@@ -307,15 +307,15 @@ struct Convert<To, From, Policy,
 /// Non-wrapping conversion where the value might be too high.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
-        std::enable_if_t<!internal::goes_lower_than<From, To>()
-                         && internal::goes_higher_than<From, To>()
+        std::enable_if_t<!detail::goes_lower_than<From, To>()
+                         && detail::goes_higher_than<From, To>()
                          && !Policy<To>::is_wrapping>>
 {
     /// Converts to `To` from `From`, handling bounds errors according to
     /// policy `Policy`.
     static constexpr To convert(From from)
     {
-        if (internal::is_too_large_for<To>(from))
+        if (detail::is_too_large_for<To>(from))
             return Policy<To>::too_large("Convert");
         return static_cast<To>(from);
     }
@@ -325,7 +325,7 @@ struct Convert<To, From, Policy,
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
         std::enable_if_t<Policy<To>::is_wrapping &&
-                         !internal::is_as_wide_as<To, From>()>>
+                         !detail::is_as_wide_as<To, From>()>>
 {
     /// Converts to `To` from `From`, handling bounds errors according to
     /// policy `Policy`.
@@ -499,7 +499,7 @@ public:
     constexpr Checked operator*(Checked other) const
     {
         auto overflow = [=]() {
-            if (internal::same_sign(value_, other.value_))
+            if (detail::same_sign(value_, other.value_))
                 return policy_t::too_large("Checked::operator*(Checked)");
             else
                 return policy_t::too_small("Checked::operator*(Checked)");
@@ -1192,10 +1192,10 @@ template <class T, template <class> class P,
         class U, template <class> class Q>
 constexpr bool operator==(Checked<T, P> a, Checked<U, Q> b)
 {
-    if (internal::is_too_large_for<U>(a.get()))
+    if (detail::is_too_large_for<U>(a.get()))
         return false;
 
-    if (internal::is_too_small_for<U>(a.get()))
+    if (detail::is_too_small_for<U>(a.get()))
         return false;
 
     return static_cast<U>(a.get()) == b.get();
@@ -1214,10 +1214,10 @@ template <class T, template <class> class P,
         class U, template <class> class Q>
 constexpr bool operator<(Checked<T, P> a, Checked<U, Q> b)
 {
-    if (internal::is_too_large_for<U>(a.get()))
+    if (detail::is_too_large_for<U>(a.get()))
         return false;
 
-    if (internal::is_too_small_for<U>(a.get()))
+    if (detail::is_too_small_for<U>(a.get()))
         return true;
 
     return static_cast<U>(a.get()) < b.get();
