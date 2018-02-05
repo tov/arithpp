@@ -234,7 +234,7 @@ struct Convert<To, From, Policy,
         if (internal::is_too_small_for<To>(from))
             return Policy<To>::too_small("Convert");
         if (internal::is_too_large_for<To>(from))
-            return Policy<To>::too_small("Convert");
+            return Policy<To>::too_large("Convert");
         return static_cast<To>(from);
     }
 };
@@ -249,7 +249,7 @@ struct Convert<To, From, Policy,
     static constexpr To convert(From from)
     {
         if (internal::is_too_large_for<To>(from))
-            return Policy<To>::too_small("Convert");
+            return Policy<To>::too_large("Convert");
         return static_cast<To>(from);
     }
 };

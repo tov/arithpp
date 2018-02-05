@@ -102,6 +102,55 @@ void apply_to_types()
 }
 
 template <class T>
+struct Check_conversions
+{
+    template <class U>
+    struct Loop
+    {
+        static void go()
+        {
+            T a_t;
+            U a_u;
+            string t_s = typeid(a_t).name();
+            string u_s = typeid(a_u).name();
+            string description = "conversion from " + t_s + " to " + u_s;
+
+            Z min_u(numeric_limits<U>::min());
+            Z max_u(numeric_limits<U>::max());
+
+            rc::check(description,
+                      [&](T a) {
+                          Z ma(a);
+
+                          if (ma < min_u) {
+                              try {
+                                  Checked<U> c(a);
+                                  return false;
+                              } catch (overflow_too_small& e) {
+                                  return true;
+                              }
+                          } else if (max_u < ma) {
+                              try {
+                                  Checked<U> c(a);
+                                  return false;
+                              } catch (overflow_too_large& e) {
+                                  return true;
+                              }
+                          } else {
+                              Checked<U> c(a);
+                              return c.get() == a;
+                          }
+                      });
+        }
+    };
+
+    static void go()
+    {
+        apply_to_types<Loop>();
+    }
+};
+
+template <class T>
 struct Check_operations
 {
     static void go()
@@ -160,9 +209,8 @@ struct Check_operations
 
 int main()
 {
-    apply_to_types<Check_operations>();
+//    apply_to_types<Check_operations>();
+    apply_to_types<Check_conversions>();
 
-//    Checked<unsigned char> c = 1;
-//    auto d = c << 32;
-//    cout << int(d.get()) << '\n';
+//    Checked<signed char> x(128);
 }
