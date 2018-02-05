@@ -1344,7 +1344,7 @@ std::ostream& operator<<(std::ostream& o, Checked<T, P> a)
 
 /// Stream extraction for checked types.
 ///
-/// This reads directly into a variable of type `T`; it cannot throw.
+/// This reads directly into a variable of type `T`; it performs no checking.
 template <class T, template <class> class P>
 std::istream& operator>>(std::istream& i, Checked<T, P>& a)
 {
