@@ -1,7 +1,7 @@
 #include "arith++/arith++.h"
 #include <gmpxx.h>
 #include <rapidcheck.h>
-#include <stdexcept>
+#include <cstdint>
 
 using namespace arithpp;
 using namespace std;
@@ -13,92 +13,156 @@ bool operator<(const Z& a, const Z& b)
     return mpz_cmp(a.get_mpz_t(), b.get_mpz_t()) < 0;
 }
 
-template <class T, class Op>
-bool check_binop(T a, T b, Op operation)
+Z operator<<(const Z& a, unsigned long b)
 {
-    using CT = Checked<T>;
-
-    Z ma(a);
-    Z mb(b);
-    Z mc(operation(ma, mb));
-
-    Z max(numeric_limits<T>::max());
-    Z min(numeric_limits<T>::min());
-
-    if (max < mc) {
-        try {
-            operation(CT(a), CT(b));
-            return false;
-        } catch (overflow_too_large& e) {
-            return true;
-        }
-    }
-
-    if (mc < min) {
-        try {
-            operation(CT(a), CT(b));
-            return false;
-        } catch (overflow_too_small& e) {
-            return true;
-        }
-    }
-
-    CT c(operation(a, b));
-    if (is_signed<T>()) {
-        return c.get() == mc.get_si();
-    } else {
-        return c.get() == mc.get_ui();
-    }
+    Z result;
+    Z base(2);
+    mpz_pow_ui(result.get_mpz_t(), base.get_mpz_t(), b);
+    return a * result;
 }
 
 template <class T>
-void check_binops()
+struct Check
 {
-    T a_t;
-    ostringstream params_s;
-    params_s << "(" << typeid(a_t).name() << ", " << typeid(a_t).name() << ")";
-    string params(params_s.str());
+    using CT = Checked<T>;
 
-    rc::check("operator+" + params,
-              [](T a, T b) {
-                  RC_ASSERT(check_binop(a, b, [](auto a, auto b) {
-                      return a + b;
-                  }));
-                  return true;
-              });
-    rc::check("operator-" + params,
-              [](T a, T b) {
-                  RC_ASSERT(check_binop(a, b, [](auto a, auto b) {
-                      return a - b;
-                  }));
-                  return true;
-              });
-    rc::check("operator*" + params,
-              [](T a, T b) {
-                  RC_ASSERT(check_binop(a, b, [](auto a, auto b) {
-                      return a * b;
-                  }));
-                  return true;
-              });
-    rc::check("operator/" + params,
-              [](T a, T b) {
-                  RC_PRE(b != 0);
-                  RC_ASSERT(check_binop(a, b, [](auto a, auto b) {
-                      return a / b;
-                  }));
-                  return true;
-              });
+    Z max;
+    Z min;
+
+    Check() : max(numeric_limits<T>::max())
+            , min(numeric_limits<T>::min())
+    { }
+
+    template <class Thunk>
+    bool check_against(const Z& mc, Thunk thunk)
+    {
+        if (max < mc) {
+            try {
+                thunk();
+                return false;
+            } catch (overflow_too_large& e) {
+                return true;
+            }
+        }
+
+        if (mc < min) {
+            try {
+                thunk();
+                return false;
+            } catch (overflow_too_small& e) {
+                return true;
+            }
+        }
+
+        CT c(thunk());
+        if (is_signed<T>()) {
+            return c.get() == mc.get_si();
+        } else {
+            return c.get() == mc.get_ui();
+        }
+    }
+
+    template <class Op>
+    bool unop(T a, Op operation)
+    {
+        Z ma(a);
+        Z mc(operation(ma));
+        return check_against(mc, [&]() { return operation(CT(a)); });
+    }
+
+    template <class Op>
+    bool binop(T a, T b, Op operation)
+    {
+        Z ma(a);
+        Z mb(b);
+        Z mc(operation(ma, mb));
+        return check_against(mc, [&]() { return operation(CT(a), CT(b)); });
+    }
+
+     bool lshiftop(T a, u_int8_t b)
+     {
+         Z ma(a);
+         Z mc(ma << b);
+         return check_against(mc, [=]() { return CT(a) << b; });
+     }
+};
+
+template <template <class> class F>
+void apply_to_types()
+{
+    F<char>::go();
+    F<unsigned char>::go();
+    F<signed char>::go();
+    F<short>::go();
+    F<unsigned short>::go();
+    F<int>::go();
+    F<unsigned int>::go();
+    F<long>::go();
+    F<unsigned long>::go();
 }
+
+template <class T>
+struct Check_operations
+{
+    static void go()
+    {
+        T a_t;
+        string t_s = typeid(a_t).name();
+        string param = "(" + t_s + ")";
+        string params = "(" + t_s + ", " + t_s + ")";
+
+        Check<T> check;
+
+        rc::check("operator+" + params,
+                  [&](T a, T b) {
+                      RC_ASSERT(check.binop(a, b, [](auto a, auto b) {
+                          return a + b;
+                      }));
+                      return true;
+                  });
+        rc::check("operator-" + params,
+                  [&](T a, T b) {
+                      RC_ASSERT(check.binop(a, b, [](auto a, auto b) {
+                          return a - b;
+                      }));
+                      return true;
+                  });
+        rc::check("operator*" + params,
+                  [&](T a, T b) {
+                      RC_ASSERT(check.binop(a, b, [](auto a, auto b) {
+                          return a * b;
+                      }));
+                      return true;
+                  });
+        rc::check("operator/" + params,
+                  [&](T a, T b) {
+                      RC_PRE(b != 0);
+                      RC_ASSERT(check.binop(a, b, [](auto a, auto b) {
+                          return a / b;
+                      }));
+                      return true;
+                  });
+        rc::check("operator-" + param,
+                  [&](T a) {
+                      RC_ASSERT(check.unop(a, [](auto a) {
+                          return -a;
+                      }));
+                      return true;
+                  });
+        rc::check("operator<<(" + t_s + ", u_int8_t)",
+                  [&](T a, unsigned char b) {
+                      RC_PRE(a >= 0);
+                      RC_ASSERT(check.lshiftop(a, b));
+                      return true;
+                  });
+    }
+};
 
 int main()
 {
-    check_binops<char>();
-    check_binops<unsigned char>();
-    check_binops<signed char>();
-    check_binops<short>();
-    check_binops<unsigned short>();
-    check_binops<int>();
-    check_binops<unsigned int>();
-    check_binops<long>();
-    check_binops<unsigned long>();
+    apply_to_types<Check_operations>();
+
+//    Checked<unsigned char> c = 1;
+//    auto d = c << 32;
+//    cout << int(d.get()) << '\n';
 }

@@ -484,6 +484,12 @@ public:
 
     constexpr Checked operator<<(u_int8_t other) const
     {
+        if (value_ == 0)
+            return rebuild_(0);
+
+        if (other >= sizeof(T) * CHAR_BIT)
+            return policy_t::too_large("Checked::operator<<(u_int8_t)");
+
         if (T_MAX_ >> other < value_)
             return policy_t::too_large("Checked::operator<<(u_int8_t)");
 
@@ -711,6 +717,12 @@ public:
 
     constexpr Checked operator<<(u_int8_t other) const
     {
+        if (value_ == 0)
+            return rebuild_(0);
+
+        if (other >= sizeof(T) * CHAR_BIT)
+            return policy_t::too_large("Checked::operator<<(u_int8_t)");
+
         if (T_MAX_ >> other < value_)
             return policy_t::too_large("Checked::operator<<(u_int8_t)");
 
