@@ -5,39 +5,46 @@
 #include <limits>
 #include <stdexcept>
 
-/**
- * \mainpage int++: checked integers for C++
- *
- * ## Get it
- *
- * The latest version is available [on GitHub](https://github.com/tov/intpp).
- *
- * ## Use it
- *
- * The main class template is `intpp::Checked`. For any built-in integer-type
- * `T`, an `intpp::Checked<T>` behaves like `T` but it throws an exception
- * when a `T` would overflow (or if unsigned, wrap around).
- *
- * For example, here is a function that computes the factorial of an `int`,
- * throwing an `intpp::overflow_too_large` exception if type `int` is not large
- * enough to hold the result:
- *
- * ```cpp
- * #include <int++.h>
- *
- * int factorial(int n)
- * {
- *     intpp::Checked<int> result = 1;
- *
- *     for (int i = 1; i <= n; ++i)
- *         result *= i;
- *     }
- *
- *     return result.get()
- * }
- * ```
- *
- */
+/// \mainpage int++: checked integers for C++
+///
+/// ## Get it
+///
+/// The latest version is available [on GitHub](https://github.com/tov/intpp).
+///
+/// ## Use it
+///
+/// The main class template is `intpp::Checked`. For any built-in integer-type
+/// `T`, an `intpp::Checked<T>` behaves like `T` but it throws an exception
+/// when a `T` would overflow (or if unsigned, wrap around).
+///
+/// For example, here is a function that computes the factorial of an `int`,
+/// throwing an `intpp::overflow_too_large` exception if type `int` is not large
+/// enough to hold the result:
+///
+/// ```cpp
+/// #include <int++.h>
+///
+/// using namespace intpp;
+///
+/// int factorial(int n)
+/// {
+///     Checked<int> result = 1;
+///
+///     for (int i = 1; i <= n; ++i)
+///         result *= i;
+///     }
+///
+///     return result.get()
+/// }
+/// ```
+///
+/// If we want `factorial` to saturate, and return `INT_MAX` instead of
+/// overflowing, we can replace `Checked<int>` with
+/// `Checked<int, Saturating_policy>`. (There's a type alias, so we can
+/// also write `Saturating<int>` instead for this type.)
+///
+/// The library also provides checked conversions and mathematically-correct
+/// mixed-signed comparisons between `Checked` types.
 
 namespace intpp {
 
