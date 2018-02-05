@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>int++: intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt;!internal::goes_lower_than&lt; From, To &gt;() &amp;&amp;internal::goes_higher_than&lt; From, To &gt;() &amp;&amp;!Policy&lt; To &gt;::is_wrapping &gt; &gt; Struct Template Reference</title>
+<title>int++: intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt; Policy&lt; To &gt;::is_wrapping &amp;&amp;!detail::is_as_wide_as&lt; To, From &gt;()&gt; &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,39 +61,39 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>intpp</b></li><li class="navelem"><a class="el" href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_9internal_1_99d4f3592828b720b42e4e5bf9fafb0e.html">Convert&lt; To, From, Policy, std::enable_if_t&lt;!internal::goes_lower_than&lt; From, To &gt;() &amp;&amp;internal::goes_higher_than&lt; From, To &gt;() &amp;&amp;!Policy&lt; To &gt;::is_wrapping &gt; &gt;</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespaceintpp.html">intpp</a></li><li class="navelem"><a class="el" href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_01_policy_3_5ec425be23db6c1691ee2bbd3383ddf7.html">Convert&lt; To, From, Policy, std::enable_if_t&lt; Policy&lt; To &gt;::is_wrapping &amp;&amp;!detail::is_as_wide_as&lt; To, From &gt;()&gt; &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_9internal_1_6ceccfb48a3f436939f390169a5a2576.html">List of all members</a>  </div>
+<a href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_01_policy_3_b0aadfc3f99f31b5266b5a8f8ce93267.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt;!internal::goes_lower_than&lt; From, To &gt;() &amp;&amp;internal::goes_higher_than&lt; From, To &gt;() &amp;&amp;!Policy&lt; To &gt;::is_wrapping &gt; &gt; Struct Template Reference</div>  </div>
+<div class="title">intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt; Policy&lt; To &gt;::is_wrapping &amp;&amp;!detail::is_as_wide_as&lt; To, From &gt;()&gt; &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Non-wrapping conversion where the value might be too high.  
- <a href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_9internal_1_99d4f3592828b720b42e4e5bf9fafb0e.html#details">More...</a></p>
+<p>Wrapping, non-widening conversion.  
+ <a href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_01_policy_3_5ec425be23db6c1691ee2bbd3383ddf7.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="int_09_09_8h_source.html">int++.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a4960fe81353dd52354fa7f0669e3f9b0"><td class="memItemLeft" align="right" valign="top">static constexpr To&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_9internal_1_99d4f3592828b720b42e4e5bf9fafb0e.html#a4960fe81353dd52354fa7f0669e3f9b0">convert</a> (From from)</td></tr>
-<tr class="memdesc:a4960fe81353dd52354fa7f0669e3f9b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts to <code>To</code> from <code>From</code>, handling bounds errors according to policy <code>Policy</code>.  <a href="#a4960fe81353dd52354fa7f0669e3f9b0">More...</a><br /></td></tr>
-<tr class="separator:a4960fe81353dd52354fa7f0669e3f9b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac249fb8d1b9d861770c01215d2eced0e"><td class="memItemLeft" align="right" valign="top">static constexpr To&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_01_policy_3_5ec425be23db6c1691ee2bbd3383ddf7.html#ac249fb8d1b9d861770c01215d2eced0e">convert</a> (From from)</td></tr>
+<tr class="memdesc:ac249fb8d1b9d861770c01215d2eced0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts to <code>To</code> from <code>From</code>, handling bounds errors according to policy <code>Policy</code>.  <a href="#ac249fb8d1b9d861770c01215d2eced0e">More...</a><br /></td></tr>
+<tr class="separator:ac249fb8d1b9d861770c01215d2eced0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;class To, class From, template&lt; class &gt; class Policy&gt;<br />
-struct intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt;!internal::goes_lower_than&lt; From, To &gt;() &amp;&amp;internal::goes_higher_than&lt; From, To &gt;() &amp;&amp;!Policy&lt; To &gt;::is_wrapping &gt; &gt;</h3>
+struct intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt; Policy&lt; To &gt;::is_wrapping &amp;&amp;!detail::is_as_wide_as&lt; To, From &gt;()&gt; &gt;</h3>
 
-<p>Non-wrapping conversion where the value might be too high. </p>
+<p>Wrapping, non-widening conversion. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00309">309</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00344">344</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a4960fe81353dd52354fa7f0669e3f9b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4960fe81353dd52354fa7f0669e3f9b0">&#9670;&nbsp;</a></span>convert()</h2>
+<a id="ac249fb8d1b9d861770c01215d2eced0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac249fb8d1b9d861770c01215d2eced0e">&#9670;&nbsp;</a></span>convert()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -104,7 +104,7 @@ template&lt;class To , class From , template&lt; class &gt; class Policy&gt; </d
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr To <a class="el" href="structintpp_1_1_convert.html">intpp::Convert</a>&lt; To, From, Policy, std::enable_if_t&lt;!internal::goes_lower_than&lt; From, To &gt;() &amp;&amp;internal::goes_higher_than&lt; From, To &gt;() &amp;&amp;!Policy&lt; To &gt;::is_wrapping &gt; &gt;::convert </td>
+          <td class="memname">static constexpr To <a class="el" href="structintpp_1_1_convert.html">intpp::Convert</a>&lt; To, From, Policy, std::enable_if_t&lt; Policy&lt; To &gt;::is_wrapping &amp;&amp;!detail::is_as_wide_as&lt; To, From &gt;()&gt; &gt;::convert </td>
           <td>(</td>
           <td class="paramtype">From&#160;</td>
           <td class="paramname"><em>from</em></td><td>)</td>
@@ -120,8 +120,8 @@ template&lt;class To , class From , template&lt; class &gt; class Policy&gt; </d
 
 <p>Converts to <code>To</code> from <code>From</code>, handling bounds errors according to policy <code>Policy</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00316">316</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    {</div><div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        <span class="keywordflow">if</span> (internal::is_too_large_for&lt;To&gt;(from))</div><div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            <span class="keywordflow">return</span> Policy&lt;To&gt;::too_large(<span class="stringliteral">&quot;Convert&quot;</span>);</div><div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>To<span class="keyword">&gt;</span>(from);</div><div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    }</div></div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00350">350</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    {</div><div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        <span class="keyword">using</span> UFrom = std::make_unsigned_t&lt;From&gt;;</div><div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        <span class="keyword">using</span> UTo   = std::make_unsigned_t&lt;From&gt;;</div><div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;</div><div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>To<span class="keyword">&gt;</span>(<span class="keyword">static_cast&lt;</span>UTo<span class="keyword">&gt;</span>(<span class="keyword">static_cast&lt;</span>UFrom<span class="keyword">&gt;</span>(from)));</div><div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    }</div></div><!-- fragment -->
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>

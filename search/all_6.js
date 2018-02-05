@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['saturating_5fpolicy',['Saturating_policy',['../structintpp_1_1_saturating__policy.html',1,'intpp']]]
+  ['saturating',['saturating',['../structintpp_1_1policy_1_1saturating.html',1,'intpp::policy::saturating&lt; T &gt;'],['../namespaceintpp.html#a9b11f21499216e11cc67a91381b03c58',1,'intpp::Saturating()']]]
 ];

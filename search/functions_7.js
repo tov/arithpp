@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['same_5fsign',['same_sign',['../namespaceintpp_1_1internal.html#a4c0e4fd94e4e8c111bdd85393fdd7f16',1,'intpp::internal']]]
+  ['same_5fsign',['same_sign',['../namespaceintpp_1_1detail.html#a8922de9c6d71a0f792ea519e9ae3f90a',1,'intpp::detail']]]
 ];

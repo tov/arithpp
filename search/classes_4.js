@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['wrapping_5fpolicy',['Wrapping_policy',['../structintpp_1_1_wrapping__policy.html',1,'intpp']]]
+  ['wrapping',['wrapping',['../structintpp_1_1policy_1_1wrapping.html',1,'intpp::policy']]]
 ];
