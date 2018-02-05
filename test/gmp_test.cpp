@@ -1,38 +1,33 @@
 #include "arith++/arith++.h"
-#include <catch/catch.hpp>
 #include <gmpxx.h>
+#include <rapidcheck.h>
 #include <stdexcept>
 
 using namespace arithpp;
+using namespace std;
 
-TEST_CASE("Gmp_works")
-{
-    mpz_class a(5);
-    mpz_class b(4);
-    mpz_class c(a + b);
-    CHECK(9 == c);
-}
+using Z = mpz_class;
 
-bool operator<(const mpz_class& a, const mpz_class& b)
+bool operator<(const Z& a, const Z& b)
 {
     return mpz_cmp(a.get_mpz_t(), b.get_mpz_t()) < 0;
 }
 
-template <class T>
-bool check_add(T a, T b)
+template <class T, class Op>
+bool check_binop(T a, T b, Op operation)
 {
     using CT = Checked<T>;
 
-    mpz_class ma(a);
-    mpz_class mb(b);
-    mpz_class mc(ma + mb);
+    Z ma(a);
+    Z mb(b);
+    Z mc(operation(ma, mb));
 
-    mpz_class max(std::numeric_limits<T>::max());
-    mpz_class min(std::numeric_limits<T>::min());
+    Z max(numeric_limits<T>::max());
+    Z min(numeric_limits<T>::min());
 
     if (max < mc) {
         try {
-            CT(a) + CT(b);
+            operation(CT(a), CT(b));
             return false;
         } catch (overflow_too_large& e) {
             return true;
@@ -41,24 +36,69 @@ bool check_add(T a, T b)
 
     if (mc < min) {
         try {
-            CT(a)  + CT(b);
+            operation(CT(a), CT(b));
             return false;
         } catch (overflow_too_small& e) {
             return true;
         }
     }
 
-    CT c(a + b);
-    if (std::is_signed<T>()) {
+    CT c(operation(a, b));
+    if (is_signed<T>()) {
         return c.get() == mc.get_si();
     } else {
         return c.get() == mc.get_ui();
     }
 }
 
-TEST_CASE("Check_add")
+template <class T>
+void check_binops()
 {
-    CHECK(check_add(5, 9));
-    CHECK(check_add(5, INT_MAX));
-    CHECK(check_add(INT_MIN, INT_MAX));
+    T a_t;
+    ostringstream params_s;
+    params_s << "(" << typeid(a_t).name() << ", " << typeid(a_t).name() << ")";
+    string params(params_s.str());
+
+    rc::check("operator+" + params,
+              [](T a, T b) {
+                  RC_ASSERT(check_binop(a, b, [](auto a, auto b) {
+                      return a + b;
+                  }));
+                  return true;
+              });
+    rc::check("operator-" + params,
+              [](T a, T b) {
+                  RC_ASSERT(check_binop(a, b, [](auto a, auto b) {
+                      return a - b;
+                  }));
+                  return true;
+              });
+    rc::check("operator*" + params,
+              [](T a, T b) {
+                  RC_ASSERT(check_binop(a, b, [](auto a, auto b) {
+                      return a * b;
+                  }));
+                  return true;
+              });
+    rc::check("operator/" + params,
+              [](T a, T b) {
+                  RC_PRE(b != 0);
+                  RC_ASSERT(check_binop(a, b, [](auto a, auto b) {
+                      return a / b;
+                  }));
+                  return true;
+              });
+}
+
+int main()
+{
+    check_binops<char>();
+    check_binops<unsigned char>();
+    check_binops<signed char>();
+    check_binops<short>();
+    check_binops<unsigned short>();
+    check_binops<int>();
+    check_binops<unsigned int>();
+    check_binops<long>();
+    check_binops<unsigned long>();
 }
