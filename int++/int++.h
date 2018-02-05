@@ -17,16 +17,19 @@ static_assert(static_cast<int>(UINT_MAX - 2) == -3,
  * EXCEPTIONS
  */
 
+/// Thrown when the result would be too large to fit in the required type.
 struct overflow_too_large : std::overflow_error
 {
     using overflow_error::overflow_error;
 };
 
+/// Thrown when the result would be too small to fit in the required type.
 struct overflow_too_small : std::overflow_error
 {
     using overflow_error::overflow_error;
 };
 
+/// Thrown when the operation would divide by 0.
 struct overflow_div_zero : std::overflow_error
 {
     using overflow_error::overflow_error;
@@ -36,29 +39,35 @@ struct overflow_div_zero : std::overflow_error
  * POLICIES
  */
 
-// Saturates on overflow, throws on divide-by-zero.
+/// Saturates on overflow, throws on divide-by-zero.
 template<class T>
 struct Saturating_policy
 {
+    /// Indicates that this policy does not wrap around.
     static constexpr bool is_wrapping = false;
 
+    /// Returns the largest value of the type for when the result would be
+    /// too large.
     static constexpr T too_large(const char*)
     {
         return std::numeric_limits<T>::max();
     }
 
+    /// Returns the smallest value of the type for when the result would be
+    /// too small.
     static T constexpr too_small(const char*)
     {
         return std::numeric_limits<T>::min();
     }
 
+    /// Throws `overflow_div_zero`.
     static T constexpr div_zero(const char* who)
     {
         throw overflow_div_zero(who);
     }
 };
 
-// Throws on overflow or divide-by-zero.
+/// Throws on overflow or divide-by-zero.
 template<class T>
 struct Throwing_policy
 {
@@ -80,7 +89,7 @@ struct Throwing_policy
     }
 };
 
-// Wraps instead of overflowing, throws on divide-by-zero
+/// Wraps instead of overflowing, throws on divide-by-zero
 template<class T>
 struct Wrapping_policy
 {
@@ -183,14 +192,15 @@ constexpr bool same_sign(T a, T b)
  * CONVERSIONS
  */
 
-// We specialize class Convert for the `To` and `From` types and the `Policy`.
+/// Specialized based on the ranges of the `To` and `From` types, and the
+/// `Policy`.
 template <class To,
           class from,
           template <class> class Policy = Throwing_policy,
           class Enable = void>
 struct Convert;
 
-// Widening conversions are non-lossy.
+/// Widening conversions are non-lossy.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
         std::enable_if_t<internal::is_as_wide_as<To, From>()>>
@@ -207,7 +217,7 @@ struct Convert<To, From, Policy,
     }
 };
 
-// Non-wrapping conversion where the value might be too low.
+/// Non-wrapping conversion where the value might be too low.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
         std::enable_if_t<internal::goes_lower_than<From, To>()
@@ -222,7 +232,7 @@ struct Convert<To, From, Policy,
     }
 };
 
-// Non-wrapping conversion where the value might be too low or too high.
+/// Non-wrapping conversion where the value might be too low or too high.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
         std::enable_if_t<internal::goes_lower_than<From, To>()
@@ -239,7 +249,7 @@ struct Convert<To, From, Policy,
     }
 };
 
-// Non-wrapping conversion where the value might be too high.
+/// Non-wrapping conversion where the value might be too high.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
         std::enable_if_t<!internal::goes_lower_than<From, To>()
@@ -254,7 +264,7 @@ struct Convert<To, From, Policy,
     }
 };
 
-// Wrapping, non-widening conversion.
+/// Wrapping, non-widening conversion.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
         std::enable_if_t<Policy<To>::is_wrapping &&
@@ -269,21 +279,21 @@ struct Convert<To, From, Policy,
     }
 };
 
-// Convenience function for converting using Throwing_policy.
+/// Convenience function for converting using `Throwing_policy`.
 template <class To, class From>
 constexpr To convert_exn(From from)
 {
     return Convert<To, From, Throwing_policy>::convert(from);
 };
 
-// Convenience function for converting using Saturating_policy.
+/// Convenience function for converting using `Saturating_policy`.
 template <class To, class From>
 constexpr To convert_sat(From from)
 {
     return Convert<To, From, Saturating_policy>::convert(from);
 };
 
-// Convenience function for widening conversions.
+/// Convenience function that types only for widening conversions.
 template <class To, class From>
 constexpr To convert_widen(From from)
 {
@@ -294,14 +304,14 @@ constexpr To convert_widen(From from)
  * CHECKED INTEGERS
  */
 
-// Checked<T, P> specifies an integer type T and a policy P. It is specialized based
-// on signedness and wrapping.
+/// `Checked<T, P>` specifies an integer type `T` and a policy `P`. It is
+/// specialized based on signedness and wrapping.
 template <class T,
           template<class> class P = Throwing_policy,
           class Enable = void>
 class Checked;
 
-// Non-wrapping, signed integers.
+/// Non-wrapping, signed integers.
 template <class T, template<class> class P>
 class Checked<T, P,
         std::enable_if_t<std::is_signed<T>::value && !P<T>::is_wrapping>>
@@ -325,28 +335,35 @@ private:
     friend class Checked;
 
 public:
+    /// Non-converting constructor, defaults to 0.
     constexpr Checked(T value = T()) : value_(value)
     { }
 
+    /// Converts from any numeric type according to policy `P`.
     template <class U>
     constexpr Checked(U value) : value_(Convert<T, U, P>::convert(value))
     { }
 
+    /// Converts automatically from any equal or narrower `Checked` type.
     template <class U, template<class> class Q>
     constexpr Checked(Checked<U, Q> other) : value_(Convert<T, U, P>::widen(other.value_))
     { }
 
+    /// Gets the contained `T` value.
     constexpr T get() const
     {
         return value_;
     }
 
+    /// Converts to another `Checked` type, checking the conversion according
+    /// to the old policy `P`.
     template <class U, template <class> class Q = P>
     constexpr Checked<U, Q> convert() const
     {
         return Checked<U, Q>(Convert<U, T, P>::convert(get()));
     }
 
+    /// Checked negation.
     constexpr Checked operator-() const
     {
         if (std::is_signed<T>::value && value_ == T_MIN_)
@@ -355,6 +372,7 @@ public:
             return rebuild_(-value_);
     }
 
+    /// Absolute value.
     constexpr unsigned_t abs() const
     {
         if (value_ == T_MIN_) {
@@ -366,6 +384,7 @@ public:
         }
     }
 
+    /// Checked addition.
     constexpr Checked operator+(Checked other) const
     {
 #if __has_builtin(__builtin_add_overflow)
@@ -391,6 +410,7 @@ public:
 #endif
     }
 
+    /// Checked subtraction.
     constexpr Checked operator-(Checked other) const
     {
 #if __has_builtin(__builtin_sub_overflow)
@@ -416,6 +436,7 @@ public:
 #endif
     }
 
+    /// Checked multiplication.
     constexpr Checked operator*(Checked other) const
     {
         auto overflow = [=]() {
@@ -445,6 +466,7 @@ public:
 #endif
     }
 
+    /// Checked division.
     constexpr Checked operator/(Checked other) const
     {
         if (value_ == T_MIN_ && other.value_ == -1)
@@ -457,7 +479,7 @@ public:
         return rebuild_(value_ / other.value_);
     }
 
-    // Should this do some kind of checking?
+    /// Checked modulus.
     constexpr Checked operator%(Checked other) const
     {
         if (other.value_ == 0) {
@@ -467,21 +489,25 @@ public:
         return rebuild_(value_ % other.value_);
     }
 
+    /// Bitwise and.
     constexpr Checked operator&(Checked other) const
     {
         return rebuild_(value_ & other.value_);
     }
 
+    /// Bitwise or.
     constexpr Checked operator|(Checked other) const
     {
         return rebuild_(value_ | other.value_);
     }
 
+    /// Bitwise xor.
     constexpr Checked operator^(Checked other) const
     {
         return rebuild_(value_ ^ other.value_);
     }
 
+    /// Checked left shift.
     constexpr Checked operator<<(u_int8_t other) const
     {
         if (value_ == 0)
@@ -496,76 +522,91 @@ public:
         return rebuild_(value_ << other);
     }
 
+    /// Right shift.
     constexpr Checked operator>>(u_int8_t other) const
     {
         return rebuild_(value_ >> other);
     }
 
+    /// Bitwise not.
     constexpr Checked operator~() const
     {
         return rebuild_(~value_);
     }
 
+    /// Checked +=
     constexpr Checked& operator+=(Checked other)
     {
         return *this = *this + other;
     }
 
+    /// Checked -=
     constexpr Checked& operator-=(Checked other)
     {
         return *this = *this - other;
     }
 
+    /// Checked *=
     constexpr Checked& operator*=(Checked other)
     {
         return *this = *this * other;
     }
 
+    /// Checked /=
     constexpr Checked& operator/=(Checked other)
     {
         return *this = *this / other;
     }
 
+    /// Checked %=
     constexpr Checked& operator%=(Checked other)
     {
         return *this = *this % other;
     }
 
+    /// &=
     constexpr Checked& operator&=(Checked other)
     {
         return *this = *this & other;
     }
 
+    /// |=
     constexpr Checked& operator|=(Checked other)
     {
         return *this = *this | other;
     }
 
+    /// ^=
     constexpr Checked& operator^=(Checked other)
     {
         return *this = *this | other;
     }
 
+    /// Checked <<=
     constexpr Checked& operator<<=(u_int8_t other)
     {
         return *this = *this << other;
     }
 
+    /// >>=
     constexpr Checked& operator>>=(u_int8_t other)
     {
         return *this = *this >> other;
     }
 
+    /// Checked preincrement
     constexpr Checked& operator++()
     {
         return *this += 1;
     }
 
+    /// Checked predecrement.
     constexpr Checked& operator--()
     {
         return *this -= 1;
     }
 
+    /// Checked postincrement.
     constexpr Checked& operator++(int)
     {
         Checked old = *this;
@@ -573,6 +614,7 @@ public:
         return old;
     }
 
+    /// Checked postdecrement.
     constexpr Checked& operator--(int)
     {
         Checked old = *this;
@@ -581,7 +623,7 @@ public:
     }
 };
 
-// Non-wrapping, unsigned integers.
+/// Non-wrapping, unsigned integers.
 template <class T, template <class> class P>
 class Checked<T, P,
         std::enable_if_t<std::is_unsigned<T>::value && !P<T>::is_wrapping>>
@@ -814,7 +856,7 @@ public:
     }
 };
 
-// Wrapping integers (potentially signed)
+/// Wrapping integers (potentially signed)
 template <class T, template <class> class P>
 class Checked<T, P, std::enable_if_t<P<T>::is_wrapping>>
 {
@@ -1004,9 +1046,11 @@ public:
     }
 };
 
+/// Alias for saturating integers.
 template <class T>
 using Saturating = Checked<T, Saturating_policy>;
 
+/// Alias for wrapping integers.
 template <class T>
 using Wrapping = Checked<T, Wrapping_policy>;
 
@@ -1014,6 +1058,7 @@ using Wrapping = Checked<T, Wrapping_policy>;
  * Checked integer comparisons and stream operations:
  */
 
+/// Equality between possibly mixed checked types.
 template <class T, template <class> class P,
         class U, template <class> class Q>
 constexpr bool operator==(Checked<T, P> a, Checked<U, Q> b)
@@ -1027,6 +1072,7 @@ constexpr bool operator==(Checked<T, P> a, Checked<U, Q> b)
     return static_cast<U>(a.get()) == b.get();
 }
 
+/// Inequality between possibly mixed checked types.
 template <class T, template <class> class P,
         class U, template <class> class Q>
 constexpr bool operator!=(Checked<T, P> a, Checked<U, Q> b)
@@ -1034,6 +1080,7 @@ constexpr bool operator!=(Checked<T, P> a, Checked<U, Q> b)
     return !(a == b);
 }
 
+/// Less-than for possibly mixed checked types.
 template <class T, template <class> class P,
         class U, template <class> class Q>
 constexpr bool operator<(Checked<T, P> a, Checked<U, Q> b)
@@ -1047,6 +1094,7 @@ constexpr bool operator<(Checked<T, P> a, Checked<U, Q> b)
     return static_cast<U>(a.get()) < b.get();
 }
 
+/// Less-than-or-equal for possibly mixed checked types.
 template <class T, template <class> class P,
         class U, template <class> class Q>
 constexpr bool operator<=(Checked<T, P> a, Checked<U, Q> b)
@@ -1054,6 +1102,7 @@ constexpr bool operator<=(Checked<T, P> a, Checked<U, Q> b)
     return !(b < a);
 }
 
+/// Greater-than for possibly mixed checked types.
 template <class T, template <class> class P,
         class U, template <class> class Q>
 constexpr bool operator>(Checked<T, P> a, Checked<U, Q> b)
@@ -1061,6 +1110,7 @@ constexpr bool operator>(Checked<T, P> a, Checked<U, Q> b)
     return b < a;
 }
 
+/// Greater-than-or-equal for possibly mixed checked types.
 template <class T, template <class> class P,
         class U, template <class> class Q>
 constexpr bool operator>=(Checked<T, P> a, Checked<U, Q> b)
@@ -1068,47 +1118,58 @@ constexpr bool operator>=(Checked<T, P> a, Checked<U, Q> b)
     return !(a < b);
 }
 
+/// Equality for a checked type and an unwrapped integer type.
 template <class T, template <class> class P, class U>
 constexpr bool operator==(Checked<T, P> a, U b)
 {
     return a == Checked<U, P>(b);
 }
+
+/// Inequality for a checked type and an unwrapped integer type.
 template <class T, template <class> class P, class U>
 constexpr bool operator!=(Checked<T, P> a, U b)
 {
     return a != Checked<U, P>(b);
 }
 
+/// Less-than for a checked type and an unwrapped integer type.
 template <class T, template <class> class P, class U>
 constexpr bool operator<(Checked<T, P> a, U b)
 {
     return a < Checked<U, P>(b);
 }
 
+/// Less-than-or-equal for a checked type and an unwrapped integer type.
 template <class T, template <class> class P, class U>
 constexpr bool operator<=(Checked<T, P> a, U b)
 {
     return a <= Checked<U, P>(b);
 }
 
+/// Greater-than for a checked type and an unwrapped integer type.
 template <class T, template <class> class P, class U>
 constexpr bool operator>(Checked<T, P> a, U b)
 {
     return a > Checked<U, P>(b);
 }
 
+/// Greater-than-or-equal for a checked type and an unwrapped integer type.
 template <class T, template <class> class P, class U>
 constexpr bool operator>=(Checked<T, P> a, U b)
 {
     return a >= Checked<U, P>(b);
 }
 
+/// Stream insertion for checked types.
 template <class T, template <class> class P>
 std::ostream& operator<<(std::ostream& o, Checked<T, P> a)
 {
     return o << a.get();
 }
 
+/// Stream extraction for checked types.
+///
+/// This reads directly into a variable of type `T`; it cannot throw.
 template <class T, template <class> class P>
 std::istream& operator>>(std::istream& i, Checked<T, P>& a)
 {
