@@ -5,16 +5,23 @@ enable_testing()
 include_directories(.)
 
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-find_package(Gmp REQUIRED)
-include_directories(${GMP_INCLUDE_DIR})
-include_directories(${GMPXX_INCLUDE_DIR})
+find_package(Gmp)
+if (GMP_FOUND)
+    include_directories(${GMP_INCLUDE_DIR})
+    include_directories(${GMPXX_INCLUDE_DIR})
+    set(GMP_TEST test/gmp_test.cpp)
+else()
+    set(GMP_LIB "")
+    set(GMPXX_LIB "")
+    set(GMP_TEST)
+endif (GMP_FOUND)
 
 add_executable(arith++_test
         arith++/arith++.h
         test/internal_test.cpp
         test/int_test.cpp
         test/rational_test.cpp
-        test/gmp_test.cpp
+        ${GMP_TEST}
         test/test_main.cpp
         test/Rational.cpp)
 set_property(TARGET arith++_test PROPERTY CXX_STANDARD 14)
