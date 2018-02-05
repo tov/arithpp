@@ -307,3 +307,4 @@ TEST_CASE("Wrapping_print") {
     os << x;
     CHECK("-1" == os.str());
 }
+

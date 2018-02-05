@@ -7,3 +7,6 @@ cmake-build*
 
 # Doxygen output
 doc/
+
+# For inspecting ASM output
+*.s
