@@ -7,7 +7,7 @@ download [int++/int++.h][header] and put it somewhere in your include path.
 
 The main class template is `Checked`. For any built-in integer-type `T`, a 
 `Checked<T>` behaves like `T` but it throws an exception when a `T` would 
-overflow (or if signed, wrap around).
+overflow (or if unsigned, wrap around).
 
 For example, here is a function that computes the factorial of an `int`, 
 throwing an `intpp::overflow_too_large` exception if type `int` is not large 
