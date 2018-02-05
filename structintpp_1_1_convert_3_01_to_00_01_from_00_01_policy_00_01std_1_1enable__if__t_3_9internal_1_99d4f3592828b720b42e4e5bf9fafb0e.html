@@ -90,7 +90,7 @@ struct intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt;!internal::goes_
 
 <p>Non-wrapping conversion where the value might be too high. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00302">302</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00305">305</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a4960fe81353dd52354fa7f0669e3f9b0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4960fe81353dd52354fa7f0669e3f9b0">&#9670;&nbsp;</a></span>convert()</h2>
@@ -120,8 +120,8 @@ template&lt;class To , class From , template&lt; class &gt; class Policy&gt; </d
 
 <p>Converts to <code>To</code> from <code>From</code>, handling bounds errors according to policy <code>Policy</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00309">309</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    {</div><div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <span class="keywordflow">if</span> (internal::is_too_large_for&lt;To&gt;(from))</div><div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;            <span class="keywordflow">return</span> Policy&lt;To&gt;::too_large(<span class="stringliteral">&quot;Convert&quot;</span>);</div><div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>To<span class="keyword">&gt;</span>(from);</div><div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    }</div></div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00312">312</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    {</div><div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keywordflow">if</span> (internal::is_too_large_for&lt;To&gt;(from))</div><div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            <span class="keywordflow">return</span> Policy&lt;To&gt;::too_large(<span class="stringliteral">&quot;Convert&quot;</span>);</div><div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>To<span class="keyword">&gt;</span>(from);</div><div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    }</div></div><!-- fragment -->
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
