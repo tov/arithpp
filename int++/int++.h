@@ -40,12 +40,15 @@
 ///
 /// If we want `factorial` to saturate and return `INT_MAX` instead of
 /// overflowing, we can replace `Checked<int>` with
-/// `Checked<int, Saturating_policy>`. (There's a type alias, so we can
+/// `Checked<int, policy::saturating>`. (There's a type alias, so we can
 /// also write `Saturating<int>` instead for this type.)
 ///
 /// The library also provides checked conversions and mathematically-correct
 /// mixed-sign comparisons between `Checked` types.
+/// See the [`intpp`](namespaceintpp.html) namespace, which contains
+/// everything this library defines.
 
+/// Namespace for int++.
 namespace intpp {
 
 // Make sure we have two's complement numbers, because Wrapping<T> depends on
@@ -81,9 +84,29 @@ struct overflow_div_zero : std::overflow_error
  * POLICIES
  */
 
+/// Policies are class templates that specify how the `Checked` class
+/// template behaves.
+///
+/// A policy is parametrized by the underlying checked type. It then specifies:
+///
+///  - Whether the type should wrap.
+///
+///  - What the type should do or return on division by zero.
+///
+///  - If non-wrapping, what the type should do or return when an operation
+///    returns a value too small or too large for the type.
+///
+/// A policy is used by supplying it as the second argument to `Checked`. For
+/// example, we can make a saturating short by writing
+///
+/// ```cpp
+/// Checked<short, policy::saturating> cs;
+/// ```
+namespace policy {
+
 /// Saturates on overflow, throws on divide-by-zero.
 template<class T>
-struct Saturating_policy
+struct saturating
 {
     /// Indicates that this policy does not wrap around.
     static constexpr bool is_wrapping = false;
@@ -111,7 +134,7 @@ struct Saturating_policy
 
 /// Throws on overflow or divide-by-zero.
 template<class T>
-struct Throwing_policy
+struct throwing
 {
     /// Indicates that this policy does not wrap around.
     static constexpr bool is_wrapping = false;
@@ -137,7 +160,7 @@ struct Throwing_policy
 
 /// Wraps instead of overflowing, throws on divide-by-zero
 template<class T>
-struct Wrapping_policy
+struct wrapping
 {
     /// Indicates that this is a wrapping policy.
     static constexpr bool is_wrapping = true;
@@ -149,6 +172,8 @@ struct Wrapping_policy
     }
 };
 
+} // end namespace policy
+
 /*
  * INTERNAL DEFINITIONS
  * Includes type size calculations and comparisons.
@@ -156,7 +181,7 @@ struct Wrapping_policy
 
 namespace detail {
 
-// Is type `A` wide enough to hold ever value of type `B`?
+/// Is type `A` wide enough to hold ever value of type `B`?
 template<class A, class B>
 constexpr bool is_as_wide_as()
 {
@@ -169,7 +194,7 @@ constexpr bool is_as_wide_as()
     return false;
 };
 
-// Does type `A` include values lower than `B_MIN`?
+/// Does type `A` include values lower than `B_MIN`?
 template<class A, class B>
 constexpr bool goes_lower_than()
 {
@@ -180,7 +205,7 @@ constexpr bool goes_lower_than()
     return sizeof(A) > sizeof(B);
 };
 
-// Does type `A` include values higher than `B_MAX`?
+/// Does type `A` include values higher than `B_MAX`?
 template<class A, class B>
 constexpr bool goes_higher_than()
 {
@@ -190,8 +215,9 @@ constexpr bool goes_higher_than()
     return sizeof(A) > sizeof(B);
 };
 
-// Gets the minimum value of type `T` in type `Repr`.
-// PRECONDITION: !goes_lower_than<T, Repr>()
+/// Gets the minimum value of type `T` in type `Repr`.
+///
+/// PRECONDITION: `!goes_lower_than<T, Repr>()`
 template<class T, class Repr>
 constexpr Repr
 min_as()
@@ -199,8 +225,9 @@ min_as()
     return static_cast<Repr>(std::numeric_limits<T>::min());
 };
 
-// Gets the maximum value of type `T` in type `Repr`.
-// PRECONDITION: !goes_higher_than<T, Repr>()
+/// Gets the maximum value of type `T` in type `Repr`.
+///
+/// PRECONDITION: `!goes_higher_than<T, Repr>()`
 template<class T, class Repr>
 constexpr Repr
 max_as()
@@ -208,7 +235,7 @@ max_as()
     return static_cast<Repr>(std::numeric_limits<T>::max());
 };
 
-// Is `from` too small to fit in type `To`?
+/// Is `from` too small to fit in type `To`?
 template<class To, class From>
 constexpr bool is_too_small_for(From from)
 {
@@ -218,7 +245,7 @@ constexpr bool is_too_small_for(From from)
         return false;
 }
 
-// Is `from` too large to fit in type `To`?
+/// Is `from` too large to fit in type `To`?
 template<class To, class From>
 constexpr bool is_too_large_for(From from)
 {
@@ -228,13 +255,16 @@ constexpr bool is_too_large_for(From from)
         return false;
 }
 
+/// Do the two values have the same sign?
+///
+/// 0 is considered non-negative.
 template<class T>
 constexpr bool same_sign(T a, T b)
 {
     return (a ^ b) >= 0;
 }
 
-} // end internal
+} // end detail
 
 /*
  * CONVERSIONS
@@ -242,13 +272,29 @@ constexpr bool same_sign(T a, T b)
 
 /// Specialized based on the ranges of the `To` and `From` types, and the
 /// `Policy`.
+///
+/// A structure type `Convert<To, From, Policy>` defines a public static member
+/// `To convert(From)` that converts from `From` to `To`, acting according to
+/// `Policy` if the value does not fit. For example, we can perform a
+/// saturating conversion from `short` to `signed char`:
+///
+/// ```cpp
+/// short s = 130;
+/// signed char c = Convert<signed char, short, policy::saturating>::convert(s);
+/// assert(c == 127);
+/// ```
+///
+/// Additionally, if all values of type `From` fit in type `To` (that is, if
+/// `To` is as wide as `From`), then `Convert<To, From, Policy>` defines a
+/// public static member `To widen(From)`. This can be used to statically
+/// allow only widening conversions.
 template <class To,
           class from,
-          template <class> class Policy = Throwing_policy,
+          template <class> class Policy = policy::throwing,
           class Enable = void>
 struct Convert;
 
-/// Widening conversions are non-lossy.
+/// This specialization implements widening (non-lossy) conversions.
 template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
         std::enable_if_t<detail::is_as_wide_as<To, From>()>>
@@ -338,25 +384,25 @@ struct Convert<To, From, Policy,
     }
 };
 
-/// Convenience function for converting using `Throwing_policy`.
+/// Convenience function for converting using `policy::throwing`.
 template <class To, class From>
 constexpr To convert_exn(From from)
 {
-    return Convert<To, From, Throwing_policy>::convert(from);
+    return Convert<To, From, policy::throwing>::convert(from);
 };
 
-/// Convenience function for converting using `Saturating_policy`.
+/// Convenience function for converting using `policy::saturating`.
 template <class To, class From>
 constexpr To convert_sat(From from)
 {
-    return Convert<To, From, Saturating_policy>::convert(from);
+    return Convert<To, From, policy::saturating>::convert(from);
 };
 
 /// Convenience function that types only for widening conversions.
 template <class To, class From>
 constexpr To convert_widen(From from)
 {
-    return Convert<To, From, Throwing_policy>::widen(from);
+    return Convert<To, From, policy::throwing>::widen(from);
 };
 
 /*
@@ -366,7 +412,7 @@ constexpr To convert_widen(From from)
 /// `Checked<T, P>` specifies an integer type `T` and a policy `P`. It is
 /// specialized based on signedness and wrapping.
 template <class T,
-          template<class> class P = Throwing_policy,
+          template<class> class P = policy::throwing,
           class Enable = void>
 class Checked;
 
@@ -1177,11 +1223,11 @@ public:
 
 /// Alias for saturating integers.
 template <class T>
-using Saturating = Checked<T, Saturating_policy>;
+using Saturating = Checked<T, policy::saturating>;
 
 /// Alias for wrapping integers.
 template <class T>
-using Wrapping = Checked<T, Wrapping_policy>;
+using Wrapping = Checked<T, policy::wrapping>;
 
 /*
  * Checked integer comparisons and stream operations:
