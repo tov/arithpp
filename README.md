@@ -18,7 +18,7 @@ enough to hold the result:
 
 int factorial(int n)
 {
-    intpp::Wrapped<int> result = 1;
+    intpp::Checked<int> result = 1;
     
     for (int i = 1; i <= n; ++i)
         result *= i;
