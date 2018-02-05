@@ -1,0 +1,4 @@
+var searchData=
+[
+  ['abs',['abs',['../classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#acbcd53154518d84eec28bf2d8a7610f0',1,'intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;::abs()'],['../classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a0da8ad4b074d8e54d931c8f62f3952ac',1,'intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;::abs()'],['../classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a66426ceb53b99a91442d22b148da8767',1,'intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;::abs()']]]
+];
