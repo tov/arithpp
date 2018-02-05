@@ -15,7 +15,7 @@
 ///
 /// The main class template is `intpp::Checked`. For any built-in integer-type
 /// `T`, an `intpp::Checked<T>` behaves like `T` but it throws an exception
-/// when a `T` would overflow (or if unsigned, wrap around).
+/// when the result of an operation would not fit in type `T`.
 ///
 /// For example, here is a function that computes the factorial of an `int`,
 /// throwing an `intpp::overflow_too_large` exception if type `int` is not large
