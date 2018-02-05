@@ -8,6 +8,12 @@
 /**
  * \mainpage int++: checked integers for C++
  *
+ * ## Get it
+ *
+ * The latest version is available [on GitHub](https://github.com/tov/intpp).
+ *
+ * ## Use it
+ *
  * The main class template is `intpp::Checked`. For any built-in integer-type
  * `T`, an `intpp::Checked<T>` behaves like `T` but it throws an exception
  * when a `T` would overflow (or if signed, wrap around).

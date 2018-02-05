@@ -28,6 +28,10 @@ int factorial(int n)
 }
 ```
 
+Further documentation may be found [here][docs].
+
 [header]:
     https://github.com/tov/intpp/raw/master/int%2B%2B/int%2B%2B.h
 
+[docs]:
+    https://tov.github.io/intpp/
