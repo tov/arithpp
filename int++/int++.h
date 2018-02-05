@@ -38,13 +38,13 @@
 /// }
 /// ```
 ///
-/// If we want `factorial` to saturate, and return `INT_MAX` instead of
+/// If we want `factorial` to saturate and return `INT_MAX` instead of
 /// overflowing, we can replace `Checked<int>` with
 /// `Checked<int, Saturating_policy>`. (There's a type alias, so we can
 /// also write `Saturating<int>` instead for this type.)
 ///
 /// The library also provides checked conversions and mathematically-correct
-/// mixed-signed comparisons between `Checked` types.
+/// mixed-sign comparisons between `Checked` types.
 
 namespace intpp {
 
