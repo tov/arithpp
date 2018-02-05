@@ -200,7 +200,6 @@ struct Check_operations
                   });
         rc::check("operator<<(" + t_s + ", u_int8_t)",
                   [&](T a, unsigned char b) {
-                      RC_PRE(a >= 0);
                       RC_ASSERT(check.lshiftop(a, b));
                       return true;
                   });

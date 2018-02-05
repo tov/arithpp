@@ -559,11 +559,15 @@ public:
         if (value_ == 0)
             return rebuild_(0);
 
-        if (other >= sizeof(T) * CHAR_BIT)
-            return policy_t::too_large("Checked::operator<<(u_int8_t)");
-
-        if (T_MAX_ >> other < value_)
-            return policy_t::too_large("Checked::operator<<(u_int8_t)");
+        if (value_ > 0) {
+            if (other >= sizeof(T) * CHAR_BIT
+                || T_MAX_ >> other < value_)
+                return policy_t::too_large("Checked::operator<<(u_int8_t)");
+        } else {
+            if (other >= sizeof(T) * CHAR_BIT
+                || T_MIN_ >> other > value_)
+                return policy_t::too_small("Checked::operation<<(u_int8_t)");
+        }
 
         return rebuild_(value_ << other);
     }
