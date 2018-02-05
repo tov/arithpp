@@ -1,8 +1,37 @@
-#pragma once
+#ifndef INT_PLUS_PLUS_H_
+#define INT_PLUS_PLUS_H_
 
 #include <iostream>
 #include <limits>
 #include <stdexcept>
+
+/**
+ * \mainpage int++: checked integers for C++
+ *
+ * The main class template is `intpp::Checked`. For any built-in integer-type
+ * `T`, an `intpp::Checked<T>` behaves like `T` but it throws an exception
+ * when a `T` would overflow (or if signed, wrap around).
+ *
+ * For example, here is a function that computes the factorial of an `int`,
+ * throwing an `intpp::overflow_too_large` exception if type `int` is not large
+ * enough to hold the result:
+ *
+ * ```cpp
+ * #include <int++.h>
+ *
+ * int factorial(int n)
+ * {
+ *     intpp::Checked<int> result = 1;
+ *
+ *     for (int i = 1; i <= n; ++i)
+ *         result *= i;
+ *     }
+ *
+ *     return result.get()
+ * }
+ * ```
+ *
+ */
 
 namespace intpp {
 
@@ -60,7 +89,7 @@ struct Saturating_policy
         return std::numeric_limits<T>::min();
     }
 
-    /// Throws `overflow_div_zero`.
+    /// Throws an `overflow_div_zero` exception.
     static T constexpr div_zero(const char* who)
     {
         throw overflow_div_zero(who);
@@ -71,18 +100,22 @@ struct Saturating_policy
 template<class T>
 struct Throwing_policy
 {
+    /// Indicates that this policy does not wrap around.
     static constexpr bool is_wrapping = false;
 
+    /// Throws an `overflow_too_large` exception.
     static T constexpr too_large(const char* who)
     {
         throw overflow_too_large(who);
     }
 
+    /// Throws an `overflow_too_small` exception.
     static T constexpr too_small(const char* who)
     {
         throw overflow_too_small(who);
     }
 
+    /// Throws an `overflow_div_zero` exception.
     static T constexpr div_zero(const char* who)
     {
         throw overflow_div_zero(who);
@@ -93,8 +126,10 @@ struct Throwing_policy
 template<class T>
 struct Wrapping_policy
 {
+    /// Indicates that this is a wrapping policy.
     static constexpr bool is_wrapping = true;
 
+    /// Throws an `overflow_div_zero` exception.
     static T constexpr div_zero(const char* who)
     {
         throw overflow_div_zero(who);
@@ -205,12 +240,15 @@ template <class To, class From, template <class> class Policy>
 struct Convert<To, From, Policy,
         std::enable_if_t<internal::is_as_wide_as<To, From>()>>
 {
+    /// Widens to `To` from `From`.
+    ///
+    /// Because this is a widening, policy `Policy` is irrelevant.
     static constexpr To convert(From from)
     {
         return static_cast<To>(from);
     }
 
-    // Only for widening conversions do we provide the widen function.
+    /// Only for widening conversions do we provide the widen function.
     static constexpr To widen(From from)
     {
         return static_cast<To>(from);
@@ -224,6 +262,8 @@ struct Convert<To, From, Policy,
                          && !internal::goes_higher_than<From, To>()
                          && !Policy<To>::is_wrapping>>
 {
+    /// Converts to `To` from `From`, handling bounds errors according to
+    /// policy `Policy`.
     static constexpr To convert(From from)
     {
         if (internal::is_too_small_for<To>(from))
@@ -239,6 +279,8 @@ struct Convert<To, From, Policy,
                          && internal::goes_higher_than<From, To>()
                          && !Policy<To>::is_wrapping>>
 {
+    /// Converts to `To` from `From`, handling bounds errors according to
+    /// policy `Policy`.
     static constexpr To convert(From from)
     {
         if (internal::is_too_small_for<To>(from))
@@ -256,6 +298,8 @@ struct Convert<To, From, Policy,
                          && internal::goes_higher_than<From, To>()
                          && !Policy<To>::is_wrapping>>
 {
+    /// Converts to `To` from `From`, handling bounds errors according to
+    /// policy `Policy`.
     static constexpr To convert(From from)
     {
         if (internal::is_too_large_for<To>(from))
@@ -270,11 +314,13 @@ struct Convert<To, From, Policy,
         std::enable_if_t<Policy<To>::is_wrapping &&
                          !internal::is_as_wide_as<To, From>()>>
 {
-    using UFrom = std::make_unsigned_t<From>;
-    using UTo   = std::make_unsigned_t<From>;
-
+    /// Converts to `To` from `From`, handling bounds errors according to
+    /// policy `Policy`.
     static constexpr To convert(From from)
     {
+        using UFrom = std::make_unsigned_t<From>;
+        using UTo   = std::make_unsigned_t<From>;
+
         return static_cast<To>(static_cast<UTo>(static_cast<UFrom>(from)));
     }
 };
@@ -645,28 +691,35 @@ private:
     friend class Checked;
 
 public:
+    /// Non-converting constructor, defaults to 0.
     constexpr Checked(T value = T()) : value_(value)
     { }
 
+    /// Converts from any numeric type according to policy `P`.
     template <class U>
     constexpr Checked(U value) : value_(Convert<T, U, P>::convert(value))
     { }
 
+    /// Converts automatically from any equal or narrower `Checked` type.
     template <class U, template <class> class Q>
     constexpr Checked(Checked<U, Q> other) : value_(Convert<T, U, P>::widen(other.value_))
     { }
 
+    /// Gets the contained `T` value.
     constexpr T get() const
     {
         return value_;
     }
 
+    /// Converts to another `Checked` type, checking the conversion according
+    /// to the old policy `P`.
     template <class U, template <class> class Q = P>
     constexpr Checked<U, Q> convert() const
     {
         return Checked<U, Q>(Convert<U, T, P>::convert(get()));
     }
 
+    /// Checked negation.
     constexpr Checked operator-() const
     {
         if (value_ == T(0))
@@ -675,11 +728,13 @@ public:
             return policy_t::too_small("Checked::operator-()");
     }
 
+    /// Absolute value.
     constexpr T abs() const
     {
         return value_;
     }
 
+    /// Checked addition.
     constexpr Checked operator+(Checked other) const
     {
 #if __has_builtin(__builtin_add_overflow)
@@ -697,6 +752,7 @@ public:
 #endif
     }
 
+    /// Checked subtraction.
     constexpr Checked operator-(Checked other) const
     {
         if (other.value_ > value_)
@@ -705,6 +761,7 @@ public:
         return rebuild_(value_ - other.value_);
     }
 
+    /// Checked multiplication.
     Checked operator*(Checked other) const
     {
 #if __has_builtin(__builtin_mul_overflow)
@@ -726,6 +783,7 @@ public:
 #endif
     }
 
+    /// Checked division.
     constexpr Checked operator/(Checked other) const
     {
         if (other.value_ == 0)
@@ -734,6 +792,7 @@ public:
         return rebuild_(value_ / other.value_);
     }
 
+    /// Checked remainder.
     constexpr Checked operator%(Checked other) const
     {
         if (other.value_ == 0)
@@ -742,21 +801,25 @@ public:
         return rebuild_(value_ % other.value_);
     }
 
+    /// Bitwise and.
     constexpr Checked operator&(Checked other) const
     {
         return rebuild_(value_ & other.value_);
     }
 
+    /// Bitwise or.
     constexpr Checked operator|(Checked other) const
     {
         return rebuild_(value_ | other.value_);
     }
 
+    /// Bitwise xor.
     constexpr Checked operator^(Checked other) const
     {
         return rebuild_(value_ ^ other.value_);
     }
 
+    /// Checked left shift.
     constexpr Checked operator<<(u_int8_t other) const
     {
         if (value_ == 0)
@@ -771,76 +834,91 @@ public:
         return rebuild_(value_ << other);
     }
 
+    /// Right shift.
     constexpr Checked operator>>(u_int8_t other) const
     {
         return rebuild_(value_ >> other);
     }
 
+    /// Bitwise not.
     constexpr Checked operator~() const
     {
         return rebuild_(~value_);
     }
 
+    /// Checked +=
     constexpr Checked& operator+=(Checked other)
     {
         return *this = *this + other;
     }
 
+    /// Checked -=
     constexpr Checked& operator-=(Checked other)
     {
         return *this = *this - other;
     }
 
+    /// Checked *=
     constexpr Checked& operator*=(Checked other)
     {
         return *this = *this * other;
     }
 
+    /// Checked /=
     constexpr Checked& operator/=(Checked other)
     {
         return *this = *this / other;
     }
 
+    /// Checked %=
     constexpr Checked& operator%=(Checked other)
     {
         return *this = *this % other;
     }
 
+    /// &=
     constexpr Checked& operator&=(Checked other)
     {
         return *this = *this & other;
     }
 
+    /// |=
     constexpr Checked& operator|=(Checked other)
     {
         return *this = *this | other;
     }
 
+    /// ^=
     constexpr Checked& operator^=(Checked other)
     {
         return *this = *this | other;
     }
 
+    /// Checked <<=
     constexpr Checked& operator<<=(u_int8_t other)
     {
         return *this = *this << other;
     }
 
+    /// >>=
     constexpr Checked& operator>>=(u_int8_t other)
     {
         return *this = *this >> other;
     }
 
+    /// Checked preincrement.
     constexpr Checked& operator++()
     {
         return *this += 1;
     }
 
+    /// Checked predecrement.
     constexpr Checked& operator--()
     {
         return *this -= 1;
     }
 
+    /// Checked postincrement.
     constexpr Checked& operator++(int)
     {
         Checked old = *this;
@@ -848,6 +926,7 @@ public:
         return old;
     }
 
+    /// Checked postdecrement.
     constexpr Checked& operator--(int)
     {
         Checked old = *this;
@@ -869,29 +948,36 @@ private:
     friend class Checked;
 
 public:
+    /// Non-converting constructor, defaults to 0.
     constexpr Checked(T value = T()) : value_{unsigned_t(value)}
     { }
 
+    /// Converts from any numeric type by wrapping.
     template <class U>
     constexpr Checked(U value) : value_{unsigned_t(value)}
     { }
 
+    /// Converts automatically from any equal or narrower `Checked` type.
     template <class U, template <class> class Q>
     constexpr Checked(Checked<U, Q> other)
             : Checked(convert_widen<T>(other.value_))
     { }
 
+    /// Gets the contained `T` value.
     constexpr T get() const
     {
         return static_cast<T>(value_);
     }
 
+    /// Converts to another `Checked` type, checking the conversion according
+    /// to the old policy `P`.
     template <class U, template <class> class Q = P>
     constexpr Checked<U, Q> convert() const
     {
         return Checked<U, Q>(Convert<U, T, P>::convert(get()));
     }
 
+    /// Wrapping negation.
     constexpr Checked operator-() const {
         if (get() == std::numeric_limits<T>::min())
             return Checked(std::numeric_limits<T>::min());
@@ -899,6 +985,7 @@ public:
             return Checked(-get());
     }
 
+    /// Absolute value.
     constexpr unsigned_t abs() const
     {
         if (get() == std::numeric_limits<T>::min()) {
@@ -910,21 +997,25 @@ public:
         }
     }
 
+    /// Wrapping addition.
     constexpr Checked operator+(Checked other) const
     {
         return Checked(value_ + other.value_);
     }
 
+    /// Wrapping subtraction.
     constexpr Checked operator-(Checked other) const
     {
         return Checked(value_ - other.value_);
     }
 
+    /// Wrapping multiplication.
     constexpr Checked operator*(Checked other) const
     {
         return Checked(value_ * other.value_);
     }
 
+    /// Wrapping division.
     constexpr Checked operator/(Checked other) const
     {
         if (other.value_ == 0)
@@ -933,6 +1024,7 @@ public:
         return Checked(value_ / other.value_);
     }
 
+    /// Wrapping remainder.
     constexpr Checked operator%(Checked other) const
     {
         if (other.value_ == 0)
@@ -941,96 +1033,115 @@ public:
         return Checked(value_ % other.value_);
     }
 
+    /// Bitwise and.
     constexpr Checked operator&(Checked other) const
     {
         return Checked(value_ & other.value_);
     }
 
+    /// Bitwise or.
     constexpr Checked operator|(Checked other) const
     {
         return Checked(value_ | other.value_);
     }
 
+    /// Bitwise xor.
     constexpr Checked operator^(Checked other) const
     {
         return Checked(value_ ^ other.value_);
     }
 
+    /// Wrapping left shift.
     constexpr Checked operator<<(u_int8_t other) const
     {
         return Checked(value_ << other);
     }
 
+    /// Right shift.
     constexpr Checked operator>>(u_int8_t other) const
     {
         return Checked(get() >> other);
     }
 
+    /// Bitwise not.
     constexpr Checked operator~() const
     {
         return Checked(~value_);
     }
 
+    /// Wrapping +=
     constexpr Checked& operator+=(Checked other)
     {
         return *this = *this + other;
     }
 
+    /// Wrapping -=
     constexpr Checked& operator-=(Checked other)
     {
         return *this = *this - other;
     }
 
+    /// Wrapping *=
     constexpr Checked& operator*=(Checked other)
     {
         return *this = *this * other;
     }
 
+    /// Wrapping /=
     constexpr Checked& operator/=(Checked other)
     {
         return *this = *this / other;
     }
 
+    /// Wrapping %=
     constexpr Checked& operator%=(Checked other)
     {
         return *this = *this % other;
     }
 
+    /// &=
     constexpr Checked& operator&=(Checked other)
     {
         return *this = *this & other;
     }
 
+    /// |=
     constexpr Checked& operator|=(Checked other)
     {
         return *this = *this | other;
     }
 
+    /// ^=
     constexpr Checked& operator^=(Checked other)
     {
         return *this = *this ^ other;
     }
 
+    /// Wrapping <<=
     constexpr Checked& operator<<=(u_int8_t other)
     {
         return *this = *this << other;
     }
 
+    /// >>=
     constexpr Checked& operator>>=(u_int8_t other)
     {
         return *this = *this >> other;
     }
 
+    /// Wrapping preincrement.
     constexpr Checked& operator++()
     {
         return *this += 1;
     }
 
+    /// Wrapping predecrement.
     constexpr Checked& operator--()
     {
         return *this -= 1;
     }
 
+    /// Wrapping postincrement.
     constexpr Checked& operator++(int)
     {
         Checked old = *this;
@@ -1038,6 +1149,7 @@ public:
         return old;
     }
 
+    /// Wrapping predecrement.
     constexpr Checked& operator--(int)
     {
         Checked old = *this;
@@ -1180,3 +1292,5 @@ std::istream& operator>>(std::istream& i, Checked<T, P>& a)
 }
 
 }
+
+#endif

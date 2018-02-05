@@ -4,3 +4,6 @@ cmake-build*
 
 # CLion configuration
 .idea/
+
+# Doxygen output
+doc/
