@@ -8,7 +8,7 @@ include_directories(3rdparty)
 add_subdirectory(3rdparty/rapidcheck)
 
 add_executable(int++_test
-        int++/intpp.h
+        int++/int++.h
         test/internal_test.cpp
         test/int_test.cpp
         test/rational_test.cpp
@@ -25,7 +25,7 @@ if (GMP_FOUND)
     include_directories(${GMP_INCLUDE_DIR})
     include_directories(${GMPXX_INCLUDE_DIR})
     add_executable(random_test
-            int++/intpp.h
+            int++/int++.h
             test/gmp_test.cpp)
     set_property(TARGET random_test PROPERTY CXX_STANDARD 14)
     set_property(TARGET random_test PROPERTY CXX_STANDARD_REQUIRED On)

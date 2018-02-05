@@ -1,4 +1,4 @@
-#include "int++/intpp.h"
+#include "int++/int++.h"
 #include <catch/catch.hpp>
 #include <cstdint>
 

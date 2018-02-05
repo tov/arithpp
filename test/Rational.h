@@ -1,6 +1,6 @@
 #pragma once
 
-#include <int++/intpp.h>
+#include <int++/int++.h>
 #include <iostream>
 #include <stdexcept>
 
