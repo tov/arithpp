@@ -1,4 +1,4 @@
-#include "arith++/arith++.h"
+#include "int++/intpp.h"
 #include <gmpxx.h>
 #include <rapidcheck.h>
 #include <cstdint>

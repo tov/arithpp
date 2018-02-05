@@ -1,2 +1,3 @@
-# arithpp
-Checked arithmetic for C++.
+# int++
+
+Checked integer arithmetic for C++.
