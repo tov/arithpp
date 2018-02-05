@@ -29,5 +29,5 @@ int factorial(int n)
 ```
 
 [header]:
-    https://github.com/tov/intpp/blob/master/int%2B%2B/int%2B%2B.h
+    https://github.com/tov/intpp/raw/master/int%2B%2B/int%2B%2B.h
 
