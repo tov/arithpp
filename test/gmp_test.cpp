@@ -3,7 +3,7 @@
 #include <rapidcheck.h>
 #include <cstdint>
 
-using namespace arithpp;
+using namespace intpp;
 using namespace std;
 
 using Z = mpz_class;

@@ -2,18 +2,18 @@
 #include <catch/catch.hpp>
 #include <sstream>
 
-using arithpp::Wrapping;
+using intpp::Wrapping;
 using W = Wrapping<int>;
 
-using arithpp::Checked;
+using intpp::Checked;
 using C = Checked<int>;
 
-using arithpp::Saturating;
+using intpp::Saturating;
 using S = Saturating<int>;
 
 TEST_CASE("convert_exn")
 {
-    using arithpp::convert_exn;;
+    using intpp::convert_exn;;
 
     short five = 5;
     CHECK(5 ==  convert_exn<char>(five));
@@ -65,7 +65,7 @@ TEST_CASE("Checked_char")
 }
 
 TEST_CASE("convert_exn_2") {
-    using arithpp::convert_exn;;
+    using intpp::convert_exn;;
 
     // signed to unsigned, narrower, negative
     CHECK_THROWS_AS(convert_exn<unsigned char>(short(-1)), std::overflow_error);
@@ -126,7 +126,7 @@ TEST_CASE("convert_exn_2") {
 }
 
 TEST_CASE("Widen") {
-    using arithpp::convert_widen;
+    using intpp::convert_widen;
 
     short five = 5;
     CHECK(5 ==  convert_widen<short>(five));
@@ -224,7 +224,7 @@ TEST_CASE("Checked_plus") {
 }
 
 TEST_CASE("Checked_unsigned") {
-    using CU = arithpp::Checked<unsigned>;
+    using CU = intpp::Checked<unsigned>;
 
     CHECK(CU(8) ==  CU(3) + CU(5));
     CHECK_THROWS_AS(CU(UINT_MAX) + CU(UINT_MAX), std::overflow_error);

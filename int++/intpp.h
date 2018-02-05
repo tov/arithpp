@@ -4,7 +4,7 @@
 #include <limits>
 #include <stdexcept>
 
-namespace arithpp {
+namespace intpp {
 
 // Make sure we have two's complement numbers, because Wrapping<T> depends on
 // conversion to unsigned and back:

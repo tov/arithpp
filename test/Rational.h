@@ -44,7 +44,7 @@ public:
     long denominator() const { return den_.get(); }
 
 private:
-    using repr_t = arithpp::Checked<long>;
+    using repr_t = intpp::Checked<long>;
     repr_t num_, den_;
     // invariants:
     //   den > 0
