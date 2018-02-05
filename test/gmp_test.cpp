@@ -21,6 +21,20 @@ Z operator<<(const Z& a, unsigned long b)
     return a * result;
 }
 
+template <template <class> class F>
+void apply_to_types()
+{
+    F<char>::go();
+    F<unsigned char>::go();
+    F<signed char>::go();
+    F<short>::go();
+    F<unsigned short>::go();
+    F<int>::go();
+    F<unsigned int>::go();
+    F<long>::go();
+    F<unsigned long>::go();
+}
+
 template <class T>
 struct Check
 {
@@ -86,20 +100,6 @@ struct Check
          return check_against(mc, [=]() { return CT(a) << b; });
      }
 };
-
-template <template <class> class F>
-void apply_to_types()
-{
-    F<char>::go();
-    F<unsigned char>::go();
-    F<signed char>::go();
-    F<short>::go();
-    F<unsigned short>::go();
-    F<int>::go();
-    F<unsigned int>::go();
-    F<long>::go();
-    F<unsigned long>::go();
-}
 
 template <class T>
 struct Check_conversions
@@ -207,10 +207,38 @@ struct Check_operations
     }
 };
 
+template <class T>
+struct Check_comparisons
+{
+    template <class U>
+    struct Loop
+    {
+        static void go()
+        {
+            T a_t;
+            U a_u;
+            string t_s = typeid(a_t).name();
+            string u_s = typeid(a_u).name();
+            string description = "operator<(" + t_s + ", " + u_s + ")";
+
+            rc::check(description,
+                      [&](T a, U b) {
+                          Z ma(a);
+                          Z mb(b);
+                          return (Checked<T>(a) < Checked<U>(b)) == (ma < mb);
+                      });
+        }
+    };
+
+    static void go()
+    {
+        apply_to_types<Loop>();
+    }
+};
+
 int main()
 {
-//    apply_to_types<Check_operations>();
+    apply_to_types<Check_operations>();
     apply_to_types<Check_conversions>();
-
-//    Checked<signed char> x(128);
+    apply_to_types<Check_comparisons>();
 }
