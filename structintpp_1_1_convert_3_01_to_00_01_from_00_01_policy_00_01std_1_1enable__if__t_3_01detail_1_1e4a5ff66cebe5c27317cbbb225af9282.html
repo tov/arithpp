@@ -73,7 +73,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Widening conversions are non-lossy.  
+<p>This specialization implements widening (non-lossy) conversions.  
  <a href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_01detail_1_1e4a5ff66cebe5c27317cbbb225af9282.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="int_09_09_8h_source.html">int++.h</a>&gt;</code></p>
@@ -92,9 +92,9 @@ static constexpr To&#160;</td><td class="memItemRight" valign="bottom"><a class=
 <div class="textblock"><h3>template&lt;class To, class From, template&lt; class &gt; class Policy&gt;<br />
 struct intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt; detail::is_as_wide_as&lt; To, From &gt;()&gt; &gt;</h3>
 
-<p>Widening conversions are non-lossy. </p>
+<p>This specialization implements widening (non-lossy) conversions. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00271">271</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00299">299</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a7d5632c209cb280627866f581457079b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7d5632c209cb280627866f581457079b">&#9670;&nbsp;</a></span>convert()</h2>
@@ -125,8 +125,8 @@ template&lt;class To , class From , template&lt; class &gt; class Policy&gt; </d
 <p>Widens to <code>To</code> from <code>From</code>. </p>
 <p>Because this is a widening, policy <code>Policy</code> is irrelevant. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00277">277</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    {</div><div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>To<span class="keyword">&gt;</span>(from);</div><div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    }</div></div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00305">305</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    {</div><div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>To<span class="keyword">&gt;</span>(from);</div><div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    }</div></div><!-- fragment -->
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
