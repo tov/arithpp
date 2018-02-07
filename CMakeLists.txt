@@ -15,7 +15,7 @@ add_executable(int++_test
         test/test_main.cpp
         test/Rational.cpp)
 
-set_property(TARGET int++_test PROPERTY CXX_STANDARD 14)
+set_property(TARGET int++_test PROPERTY CXX_STANDARD 17)
 set_property(TARGET int++_test PROPERTY CXX_STANDARD_REQUIRED On)
 add_test(Test_int++ int++_test)
 
@@ -27,7 +27,7 @@ if (GMP_FOUND)
     add_executable(random_test
             int++/int++.h
             test/gmp_test.cpp)
-    set_property(TARGET random_test PROPERTY CXX_STANDARD 14)
+    set_property(TARGET random_test PROPERTY CXX_STANDARD 17)
     set_property(TARGET random_test PROPERTY CXX_STANDARD_REQUIRED On)
     target_link_libraries(random_test ${GMP_LIB} ${GMPXX_LIB})
     target_link_libraries(random_test rapidcheck)
