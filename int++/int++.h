@@ -2,6 +2,7 @@
 #define INT_PLUS_PLUS_H_
 
 #include <iostream>
+#include <climits>
 #include <limits>
 #include <stdexcept>
 
@@ -192,7 +193,7 @@ constexpr bool is_as_wide_as()
         return sizeof(B) < sizeof(A);
 
     return false;
-};
+}
 
 /// Does type `A` include values lower than `B_MIN`?
 template<class A, class B>
@@ -203,7 +204,7 @@ constexpr bool goes_lower_than()
     if (std::is_unsigned<B>::value) return true;
 
     return sizeof(A) > sizeof(B);
-};
+}
 
 /// Does type `A` include values higher than `B_MAX`?
 template<class A, class B>
@@ -213,7 +214,7 @@ constexpr bool goes_higher_than()
         return std::is_unsigned<A>::value && std::is_signed<B>::value;
 
     return sizeof(A) > sizeof(B);
-};
+}
 
 /// Gets the minimum value of type `T` in type `Repr`.
 ///
@@ -223,7 +224,7 @@ constexpr Repr
 min_as()
 {
     return static_cast<Repr>(std::numeric_limits<T>::min());
-};
+}
 
 /// Gets the maximum value of type `T` in type `Repr`.
 ///
@@ -233,7 +234,7 @@ constexpr Repr
 max_as()
 {
     return static_cast<Repr>(std::numeric_limits<T>::max());
-};
+}
 
 /// Is `from` too small to fit in type `To`?
 template<class To, class From>
@@ -389,21 +390,21 @@ template <class To, class From>
 constexpr To convert_exn(From from)
 {
     return Convert<To, From, policy::throwing>::convert(from);
-};
+}
 
 /// Convenience function for converting using `policy::saturating`.
 template <class To, class From>
 constexpr To convert_sat(From from)
 {
     return Convert<To, From, policy::saturating>::convert(from);
-};
+}
 
 /// Convenience function that types only for widening conversions.
 template <class To, class From>
 constexpr To convert_widen(From from)
 {
     return Convert<To, From, policy::throwing>::widen(from);
-};
+}
 
 /*
  * CHECKED INTEGERS
