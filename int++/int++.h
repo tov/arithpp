@@ -1,9 +1,10 @@
 #ifndef INT_PLUS_PLUS_H_
 #define INT_PLUS_PLUS_H_
 
-#include <iostream>
 #include <climits>
+#include <iostream>
 #include <limits>
+#include <optional>
 #include <stdexcept>
 
 /// \mainpage int++: checked integers for C++
@@ -410,6 +411,117 @@ constexpr To convert_widen(From from)
  * CHECKED INTEGERS
  */
 
+template <class T>
+std::enable_if_t<std::is_signed_v<T>, std::make_unsigned_t<T>>
+unsigned_abs(T a)
+{
+    if (a == std::numeric_limits<T>::min()) {
+        return 1 + detail::max_as<T, std::make_unsigned_t<T>>();
+    } else if (a < 0) {
+        return -a;
+    } else {
+        return a;
+    }
+}
+
+template <class T>
+constexpr std::enable_if_t<std::is_signed_v<T>, std::optional<T>>
+checked_plus(T a, T b)
+{
+#if __has_builtin(__builtin_add_overflow)
+    T result;
+    return __builtin_add_overflow(a, b, &result) ? std::nullopt : result;
+    }
+#else
+    if (a >= 0 && b > std::numeric_limits<T>::max() - a)
+        return std::nullopt;
+    if (a < 0 && b < std::numeric_limits<T>::min() - a)
+        return std::nullopt;
+    return a + b;
+#endif
+}
+
+template <class T>
+constexpr std::enable_if_t<std::is_unsigned_v<T>, std::optional<T>>
+checked_plus(T a, T b)
+{
+#if __has_builtin(__builtin_add_overflow)
+    T result;
+    return __builtin_add_overflow(a, b, &result) ? std::nullopt : result;
+#else
+    if (b > std::numeric_limits<T>::max() - a)
+        return std::nullopt;
+    return a + b;
+#endif
+}
+
+template <class T>
+constexpr std::enable_if_t<std::is_signed_v<T>, std::optional<T>>
+checked_minus(T a, T b)
+{
+#if __has_builtin(__builtin_sub_overflow)
+    T result;
+    return __builtin_sub_overflow(a, b, &result) ? std::nullopt : result;
+#else
+    if (a >= 0 && b < a - std::numeric_limits<T>::max())
+        return std::nullopt;
+    if (a < 0 && b > a - std::numeric_limits<T>::min())
+        return std::nullopt;
+    return a - b;
+#endif
+}
+
+template <class T>
+constexpr std::enable_if_t<std::is_unsigned_v<T>, std::optional<T>>
+checked_minus(T a, T b)
+{
+#if __has_builtin(__builtin_sub_overflow)
+    T result;
+    return __builtin_sub_overflow(a, b, &result) ? std::nullopt : result;
+#else
+    if (b > a)
+        return std::nullopt;
+    return a - b;
+#endif
+}
+
+template <class T>
+constexpr std::enable_if_t<std::is_signed_v<T>, std::optional<T>>
+checked_times(T a, T b)
+{
+#if __has_builtin(__builtin_mul_overflow)
+    T result;
+    return __builtin_mul_overflow(a, b, &result) ? std::nullopt : result;
+#else
+    if (b != 0) {
+        auto UT_MAX = detail::max_as<T, std::make_unsigned_t<T>>();
+        if (unsigned_abs(a) > UT_MAX / unsigned_abs(b)) {
+            return std::nullopt;
+        }
+    }
+
+    return a * b;
+#endif
+}
+
+template <class T>
+constexpr std::enable_if_t<std::is_unsigned_v<T>, std::optional<T>>
+checked_times(T a, T b)
+{
+#if __has_builtin(__builtin_mul_overflow)
+    T result;
+    return __builtin_mul_overflow(a, b, &result) ? std::nullopt : result;
+#else
+    if (b != 0) {
+        if (a > std::numeric_limits<T>::max() / b) {
+            return std::nullopt;
+        }
+    }
+
+    return a * b;
+#endif
+}
+
 /// `Checked<T, P>` specifies an integer type `T` and a policy `P`. It is
 /// specialized based on signedness and wrapping.
 template <class T,
@@ -493,83 +605,40 @@ public:
     /// Checked addition.
     constexpr Checked operator+(Checked other) const
     {
-#if __has_builtin(__builtin_add_overflow)
-        Checked result;
-        if (__builtin_add_overflow(value_, other.value_, &result.value_)) {
-            if (value_ >= 0)
-                return policy_t::too_large("Checked::operator+(Checked)");
-            else
-                return policy_t::too_small("Checked::operator+(Checked)");
-        } else {
-            return result;
-        }
-#else
-        if (value_ >= 0) {
-            if (other.value_ > T_MAX_ - value_)
-                return policy_t::too_large("Checked::operator+(Checked)");
-        } else {
-            if (other.value_ < T_MIN_ - value_)
-                return policy_t::too_small("Checked::operator+(Checked)");
-        }
+        auto result = checked_plus(value_, other.value_);
 
-        return rebuild_(value_ + other.value_);
-#endif
+        if (result)
+            return *result;
+        else if (value_ > 0)
+            return policy_t::too_large("Checked::operator+(Checked)");
+        else
+            return policy_t::too_small("Checked::operator+(Checked)");
     }
 
     /// Checked subtraction.
     constexpr Checked operator-(Checked other) const
     {
-#if __has_builtin(__builtin_sub_overflow)
-        Checked result;
-        if (__builtin_sub_overflow(value_, other.value_, &result.value_)) {
-            if (value_ >= 0)
-                return policy_t::too_large("Checked::operator-(Checked)");
-            else
-                return policy_t::too_small("Checked::operator-(Checked)");
-        } else {
-            return result;
-        }
-#else
-        if (value_ >= 0) {
-            if (other.value_ < value_ - T_MAX_)
-                return policy_t::too_large("Checked::operator-(Checked)");
-        } else {
-            if (other.value_ > value_ - T_MIN_)
-                return policy_t::too_small("Checked::operator-(Checked)");
-        }
+        auto result = checked_minus(value_, other.value_);
 
-        return rebuild_(value_ - other.value_);
-#endif
+        if (result)
+            return *result;
+        else if (value_ > 0)
+            return policy_t::too_large("Checked::operator-(Checked)");
+        else
+            return policy_t::too_small("Checked::operator-(Checked)");
     }
 
     /// Checked multiplication.
     constexpr Checked operator*(Checked other) const
     {
-        auto overflow = [=]() {
-            if (detail::same_sign(value_, other.value_))
-                return policy_t::too_large("Checked::operator*(Checked)");
-            else
-                return policy_t::too_small("Checked::operator*(Checked)");
-        };
+        auto result = checked_times(value_, other.value_);
 
-#if __has_builtin(__builtin_mul_overflow)
-        Checked result;
-        if (__builtin_mul_overflow(value_, other.value_, &result.value_)) {
-            return overflow();
-        } else {
-            return result;
-        }
-#else
-        // This is slow right now, because it does a division. There are better
-        // ways of doing it, depending on the size of T.
-        if (other.value_ != 0) {
-            if (abs() > unsigned_t(T_MAX_) / other.abs()) {
-                return overflow();
-            }
-        }
-
-        return rebuild_(value_ * other.value_);
-#endif
+        if (result)
+            return *result;
+        else if (detail::same_sign(value_, other.value_))
+            return policy_t::too_large("Checked::operator*(Checked)");
+        else
+            return policy_t::too_small("Checked::operator*(Checked)");
     }
 
     /// Checked division.
@@ -801,50 +870,40 @@ public:
     /// Checked addition.
     constexpr Checked operator+(Checked other) const
     {
-#if __has_builtin(__builtin_add_overflow)
-        Checked result;
-        if (__builtin_add_overflow(value_, other.value_, &result.value_)) {
-            return policy_t::too_large("Checked::operator+(Checked)");
-        } else {
-            return result;
-        }
-#else
-        if (value_ > T_MAX_ - other.value_)
-            return policy_t::too_large("Checked::operator+(Checked)");
+        auto result = checked_plus(value_, other.value_);
 
-        return rebuild_(value_ + other.value_);
-#endif
+        if (result)
+            return *result;
+        else if (value_ > 0)
+            return policy_t::too_large("Checked::operator+(Checked)");
+        else
+            return policy_t::too_small("Checked::operator+(Checked)");
     }
 
     /// Checked subtraction.
     constexpr Checked operator-(Checked other) const
     {
-        if (other.value_ > value_)
-            return policy_t::too_small("Checked::operator-(Checked)");
+        auto result = checked_minus(value_, other.value_);
 
-        return rebuild_(value_ - other.value_);
+        if (result)
+            return *result;
+        else if (value_ > 0)
+            return policy_t::too_large("Checked::operator+(Checked)");
+        else
+            return policy_t::too_small("Checked::operator+(Checked)");
     }
 
     /// Checked multiplication.
     Checked operator*(Checked other) const
     {
-#if __has_builtin(__builtin_mul_overflow)
-        Checked result;
-        if (__builtin_mul_overflow(value_, other.value_, &result.value_)) {
-            return policy_t::too_large("Checked::operator*(Checked)");
-        } else {
-            return result;
-        }
-#else
-        // This is slow right now, because it does a division. There are better
-        // ways of doing it, depending on the size of T.
-        if (other.value_ != 0) {
-            if (value_ > T_MAX_ / other.value_)
-                return policy_t::too_large("Checked::operator*(Checked)");
-        }
+        auto result = checked_times(value_, other.value_);
 
-        return rebuild_(value_ * other.value_);
-#endif
+        if (result)
+            return *result;
+        else if (value_ > 0)
+            return policy_t::too_large("Checked::operator+(Checked)");
+        else
+            return policy_t::too_small("Checked::operator+(Checked)");
     }
 
     /// Checked division.
