@@ -8,5 +8,5 @@ using C = Saturating<long>;
 
 C operation(C a, C b)
 {
-    return a * b;
+    return a + b;
 }
