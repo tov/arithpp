@@ -996,20 +996,24 @@ public:
 template <class T, template <class> class P>
 class Checked<T, P, std::enable_if_t<P<T>::is_wrapping>>
 {
-    // Make sure we have two's complement numbers, because Wrapping<T> depends
-    // on conversion to unsigned and back:
-    static_assert(static_cast<unsigned int>(-3) == UINT_MAX - 2,
-                  "Two's complement check");
-    static_assert(static_cast<int>(UINT_MAX - 2) == -3,
-                  "Two's complement check");
-
 private:
     using policy_t = P<T>;
     using unsigned_t = std::make_unsigned_t<T>;
+
     unsigned_t value_;
 
     template <class U, template <class> class Q, class F>
     friend class Checked;
+
+    // Make sure we have two's complement numbers, because Wrapping<T> depends
+    // on conversion to unsigned and back:
+    static_assert(static_cast<unsigned_t>(T(-3)) ==
+                          std::numeric_limits<unsigned_t>::max() - 2,
+                  "Two's complement check");
+    static_assert(static_cast<T>(
+                          std::numeric_limits<unsigned_t>::max() - 2)
+                  == T(-3),
+                  "Two's complement check");
 
 public:
     /// Non-converting constructor, defaults to 0.
