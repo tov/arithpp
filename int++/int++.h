@@ -52,13 +52,6 @@
 /// Namespace for int++.
 namespace intpp {
 
-// Make sure we have two's complement numbers, because Wrapping<T> depends on
-// conversion to unsigned and back:
-static_assert(static_cast<unsigned int>(-3) == UINT_MAX - 2,
-              "Two's complement check");
-static_assert(static_cast<int>(UINT_MAX - 2) == -3,
-              "Two's complement check");
-
 /*
  * EXCEPTIONS
  */
@@ -1003,6 +996,13 @@ public:
 template <class T, template <class> class P>
 class Checked<T, P, std::enable_if_t<P<T>::is_wrapping>>
 {
+    // Make sure we have two's complement numbers, because Wrapping<T> depends
+    // on conversion to unsigned and back:
+    static_assert(static_cast<unsigned int>(-3) == UINT_MAX - 2,
+                  "Two's complement check");
+    static_assert(static_cast<int>(UINT_MAX - 2) == -3,
+                  "Two's complement check");
+
 private:
     using policy_t = P<T>;
     using unsigned_t = std::make_unsigned_t<T>;
