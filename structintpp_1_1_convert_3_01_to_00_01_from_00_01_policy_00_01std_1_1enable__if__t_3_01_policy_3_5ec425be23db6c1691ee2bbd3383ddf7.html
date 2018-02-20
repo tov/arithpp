@@ -90,7 +90,7 @@ struct intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt; Policy&lt; To &
 
 <p>Wrapping, non-widening conversion. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00372">372</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00366">366</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ac249fb8d1b9d861770c01215d2eced0e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac249fb8d1b9d861770c01215d2eced0e">&#9670;&nbsp;</a></span>convert()</h2>
@@ -120,8 +120,8 @@ template&lt;class To , class From , template&lt; class &gt; class Policy&gt; </d
 
 <p>Converts to <code>To</code> from <code>From</code>, handling bounds errors according to policy <code>Policy</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00378">378</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
-<div class="fragment"><div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    {</div><div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        <span class="keyword">using</span> UFrom = std::make_unsigned_t&lt;From&gt;;</div><div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <span class="keyword">using</span> UTo   = std::make_unsigned_t&lt;From&gt;;</div><div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;</div><div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>To<span class="keyword">&gt;</span>(<span class="keyword">static_cast&lt;</span>UTo<span class="keyword">&gt;</span>(<span class="keyword">static_cast&lt;</span>UFrom<span class="keyword">&gt;</span>(from)));</div><div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    }</div></div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="int_09_09_8h_source.html#l00372">372</a> of file <a class="el" href="int_09_09_8h_source.html">int++.h</a>.</p>
+<div class="fragment"><div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    {</div><div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;        <span class="keyword">using</span> UFrom = std::make_unsigned_t&lt;From&gt;;</div><div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;        <span class="keyword">using</span> UTo   = std::make_unsigned_t&lt;From&gt;;</div><div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;</div><div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>To<span class="keyword">&gt;</span>(<span class="keyword">static_cast&lt;</span>UTo<span class="keyword">&gt;</span>(<span class="keyword">static_cast&lt;</span>UFrom<span class="keyword">&gt;</span>(from)));</div><div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    }</div></div><!-- fragment -->
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
