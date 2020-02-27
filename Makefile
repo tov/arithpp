@@ -1,4 +1,4 @@
-doc: int++/int++.h
+doc: xxint/xxint.hxx
 	doxygen
 
 read_asm: test/read_asm.s
@@ -11,4 +11,4 @@ CXXFLAGS = --std=c++14 -O2 -I.
 upload-doc:
 	make doc
 	ghp-import -n doc/html
-	git push -f https://github.com/tov/intpp.git gh-pages
+	git push -f https://github.com/tov/xxint.git gh-pages

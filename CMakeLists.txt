@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 3.3)
-project(int++ CXX)
-enable_testing()
+project(xxint CXX)
 
-include_directories(.)
-include_directories(3rdparty)
-
-add_subdirectory(3rdparty/rapidcheck)
+add_subdirectory(test)
 
 add_executable(int++_test
         int++/int++.h
