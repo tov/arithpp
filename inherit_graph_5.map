@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node2" href="$structxxint_1_1overflow__div__zero.html" title="Thrown when the operation would divide by 0. " alt="" coords="163,5,292,31"/>
+<area shape="rect" id="node3" href="$structxxint_1_1overflow__too__large.html" title="Thrown when the result would be too large to fit in the required type. " alt="" coords="161,55,295,80"/>
+<area shape="rect" id="node4" href="$structxxint_1_1overflow__too__small.html" title="Thrown when the result would be too small to fit in the required type. " alt="" coords="160,104,295,129"/>
+</map>

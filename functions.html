@@ -5,13 +5,26 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>int++: Class Members</title>
+<title>++int: Class Members</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(initResizable);
+/* @license-end */</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -21,9 +34,24 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">int++
+   <div id="projectname">++int
    </div>
   </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Search" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+</td>
  </tr>
  </tbody>
 </table>
@@ -35,17 +63,23 @@
 var searchBox = new SearchBox("searchBox", "search",false,'Search');
 /* @license-end */
 </script>
-<script type="text/javascript" src="menudata.js"></script>
-<script type="text/javascript" src="menu.js"></script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(function() {
-  initMenu('',true,false,'search.php','Search');
-  $(document).ready(function() { init_search(); });
-});
-/* @license-end */</script>
-<div id="main-nav"></div>
-</div><!-- top -->
+$(document).ready(function(){initNavTree('functions.html','');});
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -65,201 +99,192 @@ $(function() {
 
 <h3><a id="index_a"></a>- a -</h3><ul>
 <li>abs()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a66426ceb53b99a91442d22b148da8767">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#acbcd53154518d84eec28bf2d8a7610f0">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a0da8ad4b074d8e54d931c8f62f3952ac">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a2efabb112aeadb286831f7b8146f599a">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a2efabb112aeadb286831f7b8146f599a">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a9689fd390ada0310a2f10474fb318e55">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_c"></a>- c -</h3><ul>
 <li>Checked()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a093b49f6513ec60be3b49cb0615d7286">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a3a927a16f4ae60ef4c77958b08dda2a8">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a103771b17c39e49a2058f783e939bf60">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a91cf71daccb3ba15db2d0cb8ec1955cf">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#af0ba67b27aa2d531ad7827e971f6c68b">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a91cf71daccb3ba15db2d0cb8ec1955cf">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>convert()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a4ca37b2ca2055eccbe2272aa62ee33b3">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a7b5bc7d4192cc9c1e8807cdfe679a00b">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a5f4989b9f8bdf7261cb00ef90973775a">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_01detail_1_12770b7c834012521b17196d53450b608.html#a4534895976b411e0a783637909704ee5">intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt; detail::goes_lower_than&lt; From, To &gt;() &amp;&amp;!detail::goes_higher_than&lt; From, To &gt;() &amp;&amp;!Policy&lt; To &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_01detail_1_16df24786313a53456e58ab19eee90282.html#aafdd60836293d796de645bfc5bc798d6">intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt; detail::goes_lower_than&lt; From, To &gt;() &amp;&amp;detail::goes_higher_than&lt; From, To &gt;() &amp;&amp;!Policy&lt; To &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_01detail_1_1e4a5ff66cebe5c27317cbbb225af9282.html#a7d5632c209cb280627866f581457079b">intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt; detail::is_as_wide_as&lt; To, From &gt;()&gt; &gt;</a>
-, <a class="el" href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_01_policy_3_5ec425be23db6c1691ee2bbd3383ddf7.html#ac249fb8d1b9d861770c01215d2eced0e">intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt; Policy&lt; To &gt;::is_wrapping &amp;&amp;!detail::is_as_wide_as&lt; To, From &gt;()&gt; &gt;</a>
-, <a class="el" href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_9detail_1_1g154204c8a5fa5706b88df92d35500e6f.html#a982ecb528ced2ad6852da22925ec08ed">intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt;!detail::goes_lower_than&lt; From, To &gt;() &amp;&amp;detail::goes_higher_than&lt; From, To &gt;() &amp;&amp;!Policy&lt; To &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a1e0cc709ef70828946ed2fe8b8d94cab">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a1e0cc709ef70828946ed2fe8b8d94cab">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a1e0cc709ef70828946ed2fe8b8d94cab">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_d"></a>- d -</h3><ul>
 <li>div_zero()
-: <a class="el" href="structintpp_1_1policy_1_1saturating.html#a380743ed2b4581de7a211fcacdc11bcd">intpp::policy::saturating&lt; T &gt;</a>
-, <a class="el" href="structintpp_1_1policy_1_1throwing.html#a7ad922787ffcfeb635f0fd89bee40500">intpp::policy::throwing&lt; T &gt;</a>
-, <a class="el" href="structintpp_1_1policy_1_1wrapping.html#a571c96bd0ad35665a104d2f242affbcb">intpp::policy::wrapping&lt; T &gt;</a>
+: <a class="el" href="structxxint_1_1policy_1_1saturating.html#a697e2154546283eebd6a2147f863f20d">saturating&lt; T &gt;</a>
+, <a class="el" href="structxxint_1_1policy_1_1throwing.html#a697e2154546283eebd6a2147f863f20d">throwing&lt; T &gt;</a>
+, <a class="el" href="structxxint_1_1policy_1_1wrapping.html#a697e2154546283eebd6a2147f863f20d">wrapping&lt; T &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_g"></a>- g -</h3><ul>
 <li>get()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a92d73920f8c690ad5aef8aed1552d3c8">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a6b70343e3bba0542fd2d54e180867a23">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a37fb0581fd2dbba454da6354654638d6">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a5bf79e244abb70674075ddf017e67453">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a5bf79e244abb70674075ddf017e67453">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a5bf79e244abb70674075ddf017e67453">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_i"></a>- i -</h3><ul>
 <li>is_wrapping
-: <a class="el" href="structintpp_1_1policy_1_1saturating.html#ac419041325afd74fd6bcb81bb86ba8a2">intpp::policy::saturating&lt; T &gt;</a>
-, <a class="el" href="structintpp_1_1policy_1_1throwing.html#a8fbffde69c2543a293c1e02385134570">intpp::policy::throwing&lt; T &gt;</a>
-, <a class="el" href="structintpp_1_1policy_1_1wrapping.html#a7fed219839cbd91deeacce773572df62">intpp::policy::wrapping&lt; T &gt;</a>
+: <a class="el" href="structxxint_1_1policy_1_1saturating.html#a76ae8b8685baaa21a1bf892e3e760607">saturating&lt; T &gt;</a>
+, <a class="el" href="structxxint_1_1policy_1_1throwing.html#a76ae8b8685baaa21a1bf892e3e760607">throwing&lt; T &gt;</a>
+, <a class="el" href="structxxint_1_1policy_1_1wrapping.html#a76ae8b8685baaa21a1bf892e3e760607">wrapping&lt; T &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_o"></a>- o -</h3><ul>
 <li>operator &amp;()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a91cb0c6b2d8f5cf5ca34926847ab17c4">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a34dc3f8fcd6347cc6bbd6bff64f342f7">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a0784518fab1974f70d597a0b0a16886f">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a0081d45055043fda9e9250b13bd62f85">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a0081d45055043fda9e9250b13bd62f85">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a0081d45055043fda9e9250b13bd62f85">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator &amp;=()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a815869a67db23b99f2e5d3a19bccc164">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a3cc37c8231a8227c1e562f576c5f9ac5">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a2a7ec68010b928f5120e7e93580d9ffa">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a15043961d9bd66149278e7f933b53675">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a15043961d9bd66149278e7f933b53675">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a15043961d9bd66149278e7f933b53675">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator%()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#ac59afa58206a293ba0532b73610679af">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#adcebbc58848f35aa40a3ab46245a95ff">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a966c571aa46e438939bfb78da812d233">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#adfc47301aace99e347af80fcf90958ee">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#adfc47301aace99e347af80fcf90958ee">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#adfc47301aace99e347af80fcf90958ee">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator%=()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a71fa5020e213b66a2d412f592d96e0ed">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#ae31260790aae3ae654e5c22688240525">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#aad18661b17722a4cbfd31d1184f6af49">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a50441e20fdf5bad395751c87de63c73b">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a50441e20fdf5bad395751c87de63c73b">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a50441e20fdf5bad395751c87de63c73b">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator*()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a62cbd3d486898db01f478ebf62252e83">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a8f412efafe923bf4faf6a88aa3f1bf58">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#ae807696781029ec90431e258bbdadaeb">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#ab369a6585ac102e69eeb3c62302d3b57">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#ab369a6585ac102e69eeb3c62302d3b57">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a8000dc136d7c794beab2c070de70e675">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator*=()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a4382c935b970e45fb344aa397ee09bab">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a34bbb90d57c5946c362f49cc7d0233f6">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a540e2628e329b0049d0212cee8b39de7">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#ad7d454ecef55bde3d96d8f9553b8eeda">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#ad7d454ecef55bde3d96d8f9553b8eeda">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#ad7d454ecef55bde3d96d8f9553b8eeda">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator+()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#ab8dc960398f0400ff1dcb35de7208ed2">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a6ebfc230878f6151f1b18dd04f71c6d7">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#adb7578a4c72bf02780f99d7e4b2fdc8d">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a9a9d5aaa18f3781a655c5fcd724172a5">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a9a9d5aaa18f3781a655c5fcd724172a5">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a9a9d5aaa18f3781a655c5fcd724172a5">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator++()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#adcbdef63cf4abf6fec83e539d3b09f7c">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#ac990903fc83cf1a7ac4aad869d217f26">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a998c4426c3236d89b7eb12025eb1acd4">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a66e924bf620bca6f64e264df2b8db1ad">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a66e924bf620bca6f64e264df2b8db1ad">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a66e924bf620bca6f64e264df2b8db1ad">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator+=()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#aff06ce3a280c415758fcd9a295c8bb95">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a0c9d1641511d97c8c713f4a92a088263">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a4b1cb8ee48068471bdc6580ad5a1049b">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a38d9a283a1cb586b0806cce9a67c46b2">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a38d9a283a1cb586b0806cce9a67c46b2">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a38d9a283a1cb586b0806cce9a67c46b2">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator-()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#aa610c784aa981fac236ef21d298e42a7">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a928014ff37e452535a4255764d97478a">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a304d27c8da46ef48d89377b9aeddae2f">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a902147663f3982127c9a6e89d1199035">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a208cf36eb810257fb335aed2872b7255">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a902147663f3982127c9a6e89d1199035">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator--()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#ae29920f58856e260f52f492ad95600a8">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a7659df02f8be2465def6d787a0358481">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#ad876a0070cef13ad9e6804e1aafcedcc">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#aa09031e82a0270cf33b948325f4d43d4">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#aa09031e82a0270cf33b948325f4d43d4">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#aa09031e82a0270cf33b948325f4d43d4">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator-=()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#add1ba4f2be1c396430f7ee4407e260d9">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a6ba5d3e2021dff32f2e4e27736a98f6b">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a9798c210a74d2649ebcb8387dd95078a">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#abaaf486411e0999fd745d90f5b53e2e7">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#abaaf486411e0999fd745d90f5b53e2e7">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#abaaf486411e0999fd745d90f5b53e2e7">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator/()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#ade593d916118776d382fe7f0f3454dc2">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a38b6655d4dec55c8a6ff411f96aec8d6">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a14d94cb179c96237ee5a0f6df10bff80">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a10dad7f6c804bd38fc947220dfe9be91">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a10dad7f6c804bd38fc947220dfe9be91">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a10dad7f6c804bd38fc947220dfe9be91">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator/=()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a69358e919b1b9312e2f773934351d06c">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a01f5fcd80d7883e6d9c6bdaf75c4220a">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#af247851c6b0ec797409af70c893a03e8">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#afb8e4c46433a9f94407fbe55ee5ad4c6">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#afb8e4c46433a9f94407fbe55ee5ad4c6">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#afb8e4c46433a9f94407fbe55ee5ad4c6">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator&lt;&lt;()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a223cd63e5ff1e73e3c77c36e3ea05663">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a9e5dae0ed92ce88af5f62e59ed5b7a27">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#ab5183765384f116a4cf1e78ce77ef103">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#af43422f45f6e2f75405fba9cee45e000">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#af43422f45f6e2f75405fba9cee45e000">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#af43422f45f6e2f75405fba9cee45e000">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator&lt;&lt;=()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#aab9f3a3432d5cfd8ad27639c25775fda">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#ab5991e1022cca8df6fbc75d629a7df1f">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a3df2b4ff3ccab290c8cdbec33115c90b">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a7439fbcc3ce6b48d87ca1725fa3d61ed">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a7439fbcc3ce6b48d87ca1725fa3d61ed">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a7439fbcc3ce6b48d87ca1725fa3d61ed">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator&gt;&gt;()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a8f95844a041823acf903c8daaa87a8d7">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a5186cb91e70db6b164d67b8d40f0179a">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a889f7de882df2c9c4c4c62489155709d">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a604569d22f98c1cc2f1b3784e2444498">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a604569d22f98c1cc2f1b3784e2444498">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a604569d22f98c1cc2f1b3784e2444498">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator&gt;&gt;=()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#ae6219f6430c8e444b7c374096af96eb5">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a1c41b281b5a2d4d8a413ae98c10b2e3a">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#aae54e47a2118b867572c6ee05319d0d4">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a7ea1991d115fca7006619370802d8447">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a7ea1991d115fca7006619370802d8447">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a7ea1991d115fca7006619370802d8447">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator^()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#ab99126df5cb1512c93bbd5fdfb2a2449">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#aac8a3dcc1e23420397e24b96bd40ccf8">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a5abb84f011b357fbe8b0d713fbdd1d52">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a797d212fa38d7ae87bfa4b090a6cc0f0">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a797d212fa38d7ae87bfa4b090a6cc0f0">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a797d212fa38d7ae87bfa4b090a6cc0f0">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator^=()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#af97e1123efc1c67b85041faab4931025">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a083ec399a72701d234f1f24aa3d110b3">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a653e72b62e50b18b0bd05f4e6edc8852">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#ad8c02429d18449cfca3c9645ac690084">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#ad8c02429d18449cfca3c9645ac690084">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#ad8c02429d18449cfca3c9645ac690084">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator|()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#aa4c8ab366bcb901ac1445cebc1461d45">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#aab82869965f11c4bf100a833bf50608c">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a215b656e5d9ab6fa452b784ede75b89a">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a77ba80e4d6bed52185b6c81070c8a8cd">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a77ba80e4d6bed52185b6c81070c8a8cd">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a77ba80e4d6bed52185b6c81070c8a8cd">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator|=()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a77b271965ba8bccf41c57abe1c44336e">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#a1874289b6b3edf818e4d93530cbd69b0">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a44dd44195edfef914a55e13a333847dc">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#a2079573b68b79bfb868544328d9b6afe">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#a2079573b68b79bfb868544328d9b6afe">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#a2079573b68b79bfb868544328d9b6afe">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 <li>operator~()
-: <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#ac17d4cac94e6685b26eb62348b7ac6e1">intpp::Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_ff1936b543339c28919671691c63756a.html#aa533e53c26311e358d24dfa2b7f415a4">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
-, <a class="el" href="classintpp_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_0eee8d0dba6225bd58961d0e41a0b5bd6.html#a70b6ed1d2a9296ba6cfa2edbff09eda2">intpp::Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+: <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01_p_3_01_t_01_4_1_1is__wrapping_01_4_01_4.html#ac194fa355290d3fc84a9f58316587d94">Checked&lt; T, P, std::enable_if_t&lt; P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__signed_3_01_t_01_9f3bca718a60e8046d670bedbaea3fae.html#ac194fa355290d3fc84a9f58316587d94">Checked&lt; T, P, std::enable_if_t&lt; std::is_signed&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
+, <a class="el" href="classxxint_1_1_checked_3_01_t_00_01_p_00_01std_1_1enable__if__t_3_01std_1_1is__unsigned_3_01_t_01bfbd84bb4895afaa1e6d1195d77a990.html#ac194fa355290d3fc84a9f58316587d94">Checked&lt; T, P, std::enable_if_t&lt; std::is_unsigned&lt; T &gt;::value &amp;&amp;!P&lt; T &gt;::is_wrapping &gt; &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_t"></a>- t -</h3><ul>
 <li>too_large()
-: <a class="el" href="structintpp_1_1policy_1_1saturating.html#a2b6cf263fa607dff3d3a37c3ff1b15a6">intpp::policy::saturating&lt; T &gt;</a>
-, <a class="el" href="structintpp_1_1policy_1_1throwing.html#a35731c5223f15c3042a64a1d5c99e67a">intpp::policy::throwing&lt; T &gt;</a>
+: <a class="el" href="structxxint_1_1policy_1_1saturating.html#ae4a35b2715b70a9ffd37296656e33701">saturating&lt; T &gt;</a>
+, <a class="el" href="structxxint_1_1policy_1_1throwing.html#a3779313dc19238da1eaa65369bb5e09f">throwing&lt; T &gt;</a>
 </li>
 <li>too_small()
-: <a class="el" href="structintpp_1_1policy_1_1saturating.html#ab3c6427e800b845972f402034d329ee0">intpp::policy::saturating&lt; T &gt;</a>
-, <a class="el" href="structintpp_1_1policy_1_1throwing.html#ad79b3e99a9ba50688271c01daca1e21d">intpp::policy::throwing&lt; T &gt;</a>
-</li>
-</ul>
-
-
-<h3><a id="index_w"></a>- w -</h3><ul>
-<li>widen()
-: <a class="el" href="structintpp_1_1_convert_3_01_to_00_01_from_00_01_policy_00_01std_1_1enable__if__t_3_01detail_1_1e4a5ff66cebe5c27317cbbb225af9282.html#a1a253e7116b2e4463fb444244c8eb4e3">intpp::Convert&lt; To, From, Policy, std::enable_if_t&lt; detail::is_as_wide_as&lt; To, From &gt;()&gt; &gt;</a>
+: <a class="el" href="structxxint_1_1policy_1_1saturating.html#a18d9cc523b9d94bf70e051aa27da8867">saturating&lt; T &gt;</a>
+, <a class="el" href="structxxint_1_1policy_1_1throwing.html#ad7641925a02cc1164fceae521fd950f9">throwing&lt; T &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.14
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>
+  </ul>
+</div>
 </body>
 </html>

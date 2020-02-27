@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['throwing',['throwing',['../structintpp_1_1policy_1_1throwing.html',1,'intpp::policy']]],
-  ['too_5flarge',['too_large',['../structintpp_1_1policy_1_1saturating.html#a2b6cf263fa607dff3d3a37c3ff1b15a6',1,'intpp::policy::saturating::too_large()'],['../structintpp_1_1policy_1_1throwing.html#a35731c5223f15c3042a64a1d5c99e67a',1,'intpp::policy::throwing::too_large()']]],
-  ['too_5fsmall',['too_small',['../structintpp_1_1policy_1_1saturating.html#ab3c6427e800b845972f402034d329ee0',1,'intpp::policy::saturating::too_small()'],['../structintpp_1_1policy_1_1throwing.html#ad79b3e99a9ba50688271c01daca1e21d',1,'intpp::policy::throwing::too_small()']]]
+  ['throwing',['throwing',['../structxxint_1_1policy_1_1throwing.html',1,'xxint::policy']]],
+  ['too_5flarge',['too_large',['../structxxint_1_1policy_1_1saturating.html#ae4a35b2715b70a9ffd37296656e33701',1,'xxint::policy::saturating::too_large()'],['../structxxint_1_1policy_1_1throwing.html#a3779313dc19238da1eaa65369bb5e09f',1,'xxint::policy::throwing::too_large()']]],
+  ['too_5fsmall',['too_small',['../structxxint_1_1policy_1_1saturating.html#a18d9cc523b9d94bf70e051aa27da8867',1,'xxint::policy::saturating::too_small()'],['../structxxint_1_1policy_1_1throwing.html#ad7641925a02cc1164fceae521fd950f9',1,'xxint::policy::throwing::too_small()']]]
 ];

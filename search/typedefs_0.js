@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['saturating',['Saturating',['../namespaceintpp.html#a9b11f21499216e11cc67a91381b03c58',1,'intpp']]]
+  ['saturating',['Saturating',['../namespacexxint.html#ae80b7c803dd5b70e6b56bdb43aa643ff',1,'xxint']]]
 ];
